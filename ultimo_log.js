@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Limpeza do hub e correcoes no index: removidos hubs alternativos, card estreito no mobile corrigido, laboratorios discretos, descricao do Scraper de Ar Condicionado corrigida.', dateIso: '2026-05-05T21:35:00-03:00' };
+const LATEST_LOG = { message: 'Index: corrige descricao do Scraper de Ar Condicionado para incluir Dufrio (a ferramenta raspa Dufrio, Frigelar, Leveros e Central Ar).', dateIso: '2026-05-05T21:45:00-03:00' };
