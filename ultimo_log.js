@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Nova Home Premium: integra index-premium.html e preserva redesign modernizado remoto com GSAP, LLMO e tracking.', dateIso: '2026-04-30T17:20:50-03:00' };
+const LATEST_LOG = { message: 'Limpeza do hub e correcoes no index: removidos hubs alternativos, card estreito no mobile corrigido, laboratorios discretos, descricao do Scraper de Ar Condicionado corrigida.', dateIso: '2026-05-05T21:35:00-03:00' };

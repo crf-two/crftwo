@@ -668,14 +668,22 @@
     });
 
     // Dados de atualizações embutidos
-    // Carrega o log dinâmico do Git com cache-buster
+    // Carrega o log dinâmico do Git com cache-buster e dispara loadLastUpdate só após o load
     const logScript = document.createElement('script');
     logScript.src = 'ultimo_log.js?v=' + Date.now();
+    logScript.onload = () => loadLastUpdate();
+    logScript.onerror = () => loadLastUpdate();
     document.head.appendChild(logScript);
 
     // Dados de atualizações embutidos (Fallback)
     const updatesData = {
       "updates": [
+        {
+          "date": "05/05/2026",
+          "time": "21:35",
+          "title": "Limpeza do hub e correções no índex",
+          "description": "Removidos os hubs alternativos (modernizado e premium). Corrigido card estreito no mobile. Cards dos 4 scrapers laboratório (FrioPeças, Polo Ar, STR, Webcontinental) ficaram discretos. Corrigida descrição do Scraper de Ar Condicionado (raspa Frigelar, Leveros e Central Ar — Dufrio foi removido)."
+        },
         {
           "date": "30/04/2026",
           "time": "17:07",
@@ -862,9 +870,10 @@
       }
     }
 
-    // Aguarda um pequeno delay para garantir que o script dinâmico foi processado
+    // loadLastUpdate é disparado pelo onload/onerror do logScript acima.
+    // Mantém um fallback caso o DOM termine antes do script (ex: cache).
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(loadLastUpdate, 300);
+      if (typeof LATEST_LOG !== 'undefined') loadLastUpdate();
     });
 
   </script>
