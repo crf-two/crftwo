@@ -680,6 +680,12 @@
       "updates": [
         {
           "date": "06/05/2026",
+          "time": "19:45",
+          "title": "Scraper STR: extração via VTEX Catalog API",
+          "description": "STR agora tenta primeiro a /api/catalog_system/pub/products/search (JSON estruturado direto) e só cai pros fallbacks __STATE__/DOM se a API vier vazia. Corrigido também o baseUrl (era str.com.br, é strar.com.br). Logs no Console mostram qual estratégia achou os produtos."
+        },
+        {
+          "date": "06/05/2026",
           "time": "19:35",
           "title": "Labs reescritos com o fluxo do Scraper Oficial",
           "description": "FrioPeças, Polo Ar, STR, Webcontinental e ClimaRio agora começam igual ao Scraper Oficial: passos Tipo → BTU → Ciclo a partir da planilha (mesma planilha, mesma lógica de norm/normalizeCiclo). A diferença é que cada lab filtra só as linhas da própria loja. Quando o ciclo é escolhido, o link específico aparece no input com Copiar/Abrir/Renderizar."

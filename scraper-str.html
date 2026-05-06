@@ -151,7 +151,7 @@
       // STR: matching com cuidado para não confundir com palavras que contenham "str".
       // Aceita Site exatamente "str" ou começando com "str" (ex.: "STR Frio").
       matchSite: (siteNorm) => siteNorm === "str" || siteNorm.startsWith("str"),
-      baseUrl:  "https://www.str.com.br"
+      baseUrl:  "https://www.strar.com.br"
     };
 
     const SHEET_URL = "https://opensheet.elk.sh/1ml7XpwZfzM4ElRJb4G62b93VMqUw3jeprTtgxdigiD8/Sheet1";
@@ -345,6 +345,90 @@
       throw new Error("Falha em todos os proxies.");
     }
 
+    // Estratégia primária: VTEX Catalog API (JSON estruturado, sem regex/DOM).
+    // Converte uma URL de busca VTEX (ex: ?map=category-1,category-2&query=/x/y) em
+    // chamada à /api/catalog_system/pub/products/search/x/y?map=c,c.
+    async function extractFromCatalogApi(searchUrl) {
+      let parsed;
+      try { parsed = new URL(searchUrl); } catch(e) { return []; }
+
+      const query = parsed.searchParams.get("query") || "";
+      const map = parsed.searchParams.get("map") || "";
+      const order = parsed.searchParams.get("order") || "";
+
+      if (!query) {
+        console.warn("[STR Catalog API] Sem param 'query' na URL — abortando.");
+        return [];
+      }
+
+      // map=category-1,category-2,category-3 → c,c,c
+      const cMap = map ? map.split(",").map(() => "c").join(",") : "c,c,c";
+
+      const apiUrl = `${STORE.baseUrl}/api/catalog_system/pub/products/search${query}?map=${cMap}` + (order ? `&O=${encodeURIComponent(order)}` : "");
+      console.log("[STR Catalog API] →", apiUrl);
+
+      let raw;
+      try {
+        raw = await tryFetch(apiUrl);
+      } catch(e) {
+        console.error("[STR Catalog API] tryFetch falhou:", e);
+        return [];
+      }
+
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch(e) {
+        console.error("[STR Catalog API] JSON.parse falhou — resposta não é JSON. Tamanho:", raw?.length, "início:", raw?.slice(0, 200));
+        return [];
+      }
+
+      if (!Array.isArray(data)) {
+        console.warn("[STR Catalog API] Resposta não é array. Forma:", typeof data, "chaves:", data && Object.keys(data));
+        return [];
+      }
+
+      const fmt = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+      const products = data.map(p => {
+        const sku = (p.items && p.items[0]) || {};
+        const seller = (sku.sellers && sku.sellers[0]) || {};
+        const offer = seller.commertialOffer || {};
+
+        const img = sku.images?.[0]?.imageUrl || "";
+        const spotNum = Number(offer.SpotPrice ?? 0);
+        const priceNum = Number(offer.Price ?? 0);
+
+        let cash = "Consulte o site";
+        if (spotNum > 0) {
+          cash = fmt.format(spotNum);
+          if (priceNum > spotNum) {
+            const off = Math.round((priceNum - spotNum) / priceNum * 100);
+            if (off > 0) cash += ` Com ${off}% OFF no PIX`;
+          }
+        } else if (priceNum > 0) {
+          cash = fmt.format(priceNum);
+        }
+
+        let parc = "";
+        const installments = offer.Installments || [];
+        if (installments.length > 0) {
+          const best = installments.reduce((a, b) => (a.NumberOfInstallments > b.NumberOfInstallments) ? a : b);
+          parc = `ou ${fmt.format(best.TotalValuePlusInterestRate)} em ${best.NumberOfInstallments}x de ${fmt.format(best.Value)}` + (Number(best.InterestRate) === 0 ? " sem juros" : "");
+        }
+
+        return {
+          name: p.productName,
+          img,
+          cash,
+          parc,
+          link: `${STORE.baseUrl}/${p.linkText}/p`
+        };
+      }).filter(p => p.name);
+
+      console.log(`[STR Catalog API] ${products.length} produto(s) extraído(s).`);
+      return products;
+    }
+
     function extractFromVtexState(html) {
       const stateMatch = html.match(/__STATE__\s*=\s*(\{.*?\});/s) || html.match(/__STATE__\s*=\s*(\{.*?\})<\/script>/s);
       if (!stateMatch) return [];
@@ -410,9 +494,24 @@
       status.style.display = "none";
 
       try {
-        const html = await tryFetch(url);
-        let products = extractFromVtexState(html);
-        if (products.length === 0) products = extractFromDom(html);
+        // Estratégia 1 — VTEX Catalog API (preferida, JSON estruturado)
+        let products = await extractFromCatalogApi(url);
+
+        // Estratégia 2 — regex __STATE__ no HTML
+        if (products.length === 0) {
+          console.log("[STR] Catalog API vazia → tentando __STATE__ no HTML…");
+          const html = await tryFetch(url);
+          console.log(`[STR] HTML recebido (${html?.length} chars).`);
+          products = extractFromVtexState(html);
+          console.log(`[STR __STATE__] ${products.length} produto(s).`);
+
+          // Estratégia 3 — DOM seletores VTEX
+          if (products.length === 0) {
+            console.log("[STR] __STATE__ vazio → tentando DOM…");
+            products = extractFromDom(html);
+            console.log(`[STR DOM] ${products.length} produto(s).`);
+          }
+        }
 
         if (products.length === 0) {
           status.innerText = `Nenhum produto detectado na ${STORE.label}.`;

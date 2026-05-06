@@ -1,1 +1,1 @@
-Labs FrioPecas, Polo Ar, STR, Webcontinental e ClimaRio reescritos com o mesmo fluxo Tipo->BTU->Ciclo do Scraper Oficial. Mesma planilha, mesma logica de filtro, cada lab pega so as linhas da sua loja.
+Scraper STR: extracao via VTEX Catalog API (estrategia primaria), com __STATE__ e DOM como fallbacks. Corrigido tambem o baseUrl (str.com.br -> strar.com.br).

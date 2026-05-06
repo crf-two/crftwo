@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Labs FrioPecas, Polo Ar, STR, Webcontinental e ClimaRio reescritos com o mesmo fluxo Tipo->BTU->Ciclo do Scraper Oficial. Mesma planilha, mesma logica de filtro, cada lab pega so as linhas da sua loja.', dateIso: '2026-05-06T22:35:00+00:00' };
+const LATEST_LOG = { message: 'Scraper STR: extracao via VTEX Catalog API (estrategia primaria), com __STATE__ e DOM como fallbacks. Corrigido tambem o baseUrl (str.com.br -> strar.com.br).', dateIso: '2026-05-06T22:45:00+00:00' };
