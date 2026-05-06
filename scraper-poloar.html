@@ -156,9 +156,9 @@
     const CACHE_KEY = "scraper_sheet_data_v1";
 
     const PROXIES = [
-      "https://api.codetabs.com/v1/proxy?quest=",
+      "https://frigelar-proxy.crftwo.workers.dev/?url=",
       "https://api.allorigins.win/get?url=",
-      "https://frigelar-proxy.crftwo.workers.dev/?url="
+      "https://api.codetabs.com/v1/proxy?quest="
     ];
 
     let sheetData = [];
@@ -380,6 +380,22 @@
       return product?.link || (slug ? `${STORE.baseUrl}/${slug}/p` : STORE.baseUrl);
     }
 
+    function getProductPrice(product) {
+      const sku = product?.items?.[0] || {};
+      const offer = sku.sellers?.[0]?.commertialOffer || {};
+      return Number(offer.SpotPrice || offer.Price || offer.ListPrice || Number.MAX_SAFE_INTEGER);
+    }
+
+    function sortCatalogProducts(products, parsedUrl) {
+      const sort = String(parsedUrl.searchParams.get("sort") || parsedUrl.searchParams.get("order") || "").toLowerCase();
+      const byText = (a, b) => String(a.productName || "").localeCompare(String(b.productName || ""), "pt-BR");
+      const byPrice = (a, b) => getProductPrice(a) - getProductPrice(b);
+      if (sort.includes("price_desc")) return products.sort((a, b) => byPrice(b, a));
+      if (sort.includes("name_desc")) return products.sort((a, b) => byText(b, a));
+      if (sort.includes("name_asc")) return products.sort(byText);
+      return products.sort(byPrice);
+    }
+
     function capacityToSpecificationSegment(value) {
       const decoded = decodeURIComponent(String(value || ""));
       const digits = decoded.replace(/[^\d]/g, "");
@@ -389,7 +405,7 @@
     }
 
     function getTargetCycle(parsedUrl) {
-      const raw = parsedUrl.searchParams.get("ciclo") || selection.ciclo || "";
+      const raw = parsedUrl.searchParams.get("ciclo") || "";
       const normalized = normalizeText(raw);
       if (normalized.includes("quente")) return "quente";
       if (normalized.includes("frio")) return "frio";
@@ -472,8 +488,10 @@
 
       const seen = new Set();
 
-      return rawProducts
-        .filter(product => product && product.productName && productMatchesCycle(product, targetCycle))
+      const filteredProducts = rawProducts
+        .filter(product => product && product.productName && productMatchesCycle(product, targetCycle));
+
+      return sortCatalogProducts(filteredProducts, parsed)
         .map(product => {
           const sku = (product.items && product.items[0]) || {};
           const seller = (sku.sellers && sku.sellers[0]) || {};
