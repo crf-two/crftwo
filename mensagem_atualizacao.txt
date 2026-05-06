@@ -1,1 +1,1 @@
-Index: corrige horario do painel de Ultima Atualizacao (estava 21:35/21:45 chutado, agora puxa do horario real do commit).
+Renomeado: Scraper de Ar Condicionado agora se chama Scraper Oficial. Atualizado card do hub, title e header da pagina.
