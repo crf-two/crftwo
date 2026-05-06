@@ -1,1 +1,1 @@
-Scraper ClimaRio agora tem os botoes Copiar link e Abrir no site, igual aos 4 laboratorios.
+Labs FrioPecas, Polo Ar, STR, Webcontinental e ClimaRio reescritos com o mesmo fluxo Tipo->BTU->Ciclo do Scraper Oficial. Mesma planilha, mesma logica de filtro, cada lab pega so as linhas da sua loja.

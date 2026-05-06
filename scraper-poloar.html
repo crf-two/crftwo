@@ -12,6 +12,7 @@
       --card-bg: rgba(18, 18, 28, 0.9);
       --card-border: rgba(255, 255, 255, 0.08);
       --accent: #ef4444;
+      --accent-rgb: 239, 68, 68;
       --green: #00e676;
       --text: #ffffff;
       --muted: #7a7a9a;
@@ -20,19 +21,31 @@
     body { font-family: "Outfit", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
     .aurora { position: fixed; border-radius: 50%; filter: blur(130px); z-index: 0; pointer-events: none; opacity: 0.15; animation: auroraAnim 20s infinite alternate ease-in-out; }
     .a1 { width: 800px; height: 800px; background: #ef4444; top: -20%; left: -10%; }
-    .a2 { width: 700px; height: 700px; background: #f97316; bottom: -20%; right: -10%; animation-duration: 30s; }
+    .a2 { width: 700px; height: 700px; background: #f59e0b; bottom: -20%; right: -10%; animation-duration: 30s; }
     @keyframes auroraAnim { 0% { transform: scale(1) translate(0,0); } 100% { transform: scale(1.3) translate(100px,-100px); } }
     .btn-back { position: fixed; top: 20px; left: 20px; z-index: 1000; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 10px 20px; border-radius: 40px; text-decoration: none; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
     .btn-back:hover { background: rgba(255,255,255,0.15); transform: translateX(-5px); }
     .container { position: relative; z-index: 1; max-width: 1300px; margin: 0 auto; padding: 100px 24px 120px; }
-    .header-area { text-align: center; margin-bottom: 60px; }
-    .header-area h1 { font-size: 48px; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; font-style: italic; background: linear-gradient(135deg, #ef4444, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+    .header-area { text-align: center; margin-bottom: 40px; }
+    .header-area h1 { font-size: 48px; font-weight: 900; letter-spacing: -2px; text-transform: uppercase; font-style: italic; background: linear-gradient(135deg, #ef4444, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
     .header-area p { font-size: 14px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 3px; }
-    .search-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px; border-radius: var(--radius); backdrop-filter: blur(30px); margin-bottom: 50px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
+    .lab-tag { display: inline-block; background: rgba(var(--accent-rgb), 0.15); border: 1px solid rgba(var(--accent-rgb), 0.4); color: var(--accent); padding: 6px 14px; border-radius: 30px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+
+    .step-section { display: none; flex-direction: column; align-items: center; gap: 18px; animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1) forwards; margin-bottom: 32px; }
+    .step-section.active { display: flex; }
+    .step-section h2 { font-size: 14px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; }
+    .options-grid { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .option-btn { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--card-border); padding: 14px 28px; border-radius: 12px; cursor: pointer; transition: all 0.2s; color: var(--text); font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-family: "Outfit", sans-serif; }
+    .option-btn:hover { border-color: var(--accent); background: rgba(var(--accent-rgb), 0.08); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.1); }
+    .option-btn.selected { background: rgba(var(--accent-rgb), 0.15); border-color: var(--accent); box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.25); color: #fff; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+    .search-box { background: var(--card-bg); border: 1px solid var(--card-border); padding: 40px; border-radius: var(--radius); backdrop-filter: blur(30px); margin-bottom: 50px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); opacity: 0.55; pointer-events: none; transition: opacity 0.4s ease; }
+    .search-box.ready { opacity: 1; pointer-events: auto; }
     .input-group { position: relative; }
     .input-label { font-size: 11px; color: var(--muted); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; }
     .url-input { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); padding: 20px 24px; border-radius: 16px; color: #fff; font-family: inherit; font-size: 14px; outline: none; transition: 0.3s; }
-    .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1); }
+    .url-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.1); }
     .source-tag { font-size: 10px; color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 8px; display: block; }
     .link-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
     .btn-link-action { flex: 1; min-width: 140px; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border); color: #fff; padding: 12px 16px; border-radius: 12px; font-family: inherit; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; text-align: center; text-decoration: none; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
@@ -40,11 +53,12 @@
     .btn-link-action.copied { background: rgba(0,230,118,0.15); border-color: rgba(0,230,118,0.5); color: var(--green); }
     .btn-link-action[disabled], .btn-link-action[aria-disabled="true"] { opacity: 0.35; pointer-events: none; }
     .btn-action { background: var(--accent); color: #fff; border: none; padding: 20px; border-radius: 16px; font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.4s; display: flex; align-items: center; justify-content: center; gap: 12px; }
-    .btn-action:hover { background: #dc2626; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(239, 68, 68, 0.3); }
+    .btn-action:hover { background: #dc2626; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(var(--accent-rgb), 0.3); }
     .btn-action:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+
     .results-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
     .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius); overflow: hidden; backdrop-filter: blur(20px); display: flex; flex-direction: column; transition: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-    .card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(239, 68, 68, 0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+    .card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(var(--accent-rgb), 0.4); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
     .card-img { width: 100%; aspect-ratio: 1; background: #fff; display: flex; align-items: center; justify-content: center; padding: 30px; position: relative; border-bottom: 1px solid var(--card-border); }
     .card-img img { max-width: 100%; max-height: 100%; object-fit: contain; transition: 0.5s; }
     .card:hover .card-img img { transform: scale(1.1); }
@@ -56,14 +70,26 @@
     .price-parc { font-size: 13px; color: var(--muted); font-weight: 600; margin-top: 6px; }
     .card-btn { display: block; width: 100%; padding: 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--card-border); border-radius: 12px; color: #fff; text-decoration: none; text-align: center; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 18px; transition: 0.3s; }
     .card-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
     .loading-area { display: none; text-align: center; padding: 60px; }
-    .spin { width: 50px; height: 50px; border: 5px solid rgba(239, 68, 68, 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 25px; }
+    .spin { width: 50px; height: 50px; border: 5px solid rgba(var(--accent-rgb), 0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 25px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .msg { text-align: center; padding: 80px 20px; color: var(--muted); font-size: 18px; font-weight: 600; }
-    .lab-tag { display: inline-block; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: var(--accent); padding: 6px 14px; border-radius: 30px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 18px; }
+    .msg { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 16px; font-weight: 600; }
+
+    .sync-status { position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: rgba(18,18,28,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 30px; display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.4s ease; }
+    .sync-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .sync-status.loading .sync-dot { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation: pulse-dot 1s infinite alternate; }
+    .sync-status.success .sync-dot { background: #00e676; box-shadow: 0 0 10px #00e676; }
+    .sync-status.error .sync-dot { background: #ff5252; box-shadow: 0 0 10px #ff5252; }
+    @keyframes pulse-dot { from { opacity: 0.4; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
   </style>
 </head>
 <body>
+
+  <div id="sync-status" class="sync-status loading">
+    <div class="sync-dot"></div>
+    <span id="sync-text">Conectando</span>
+  </div>
 
   <div class="aurora a1"></div>
   <div class="aurora a2"></div>
@@ -75,16 +101,29 @@
 
   <div class="container">
     <div class="header-area">
-      <span class="lab-tag">Laboratório · Hi-Wall 9000 BTU Frio</span>
+      <span class="lab-tag">Laboratório</span>
       <h1>Scraper Polo Ar</h1>
-      <p>Aprendendo a extrair</p>
+      <p>Selecione tipo, BTU e ciclo</p>
     </div>
 
-    <div class="search-box">
+    <div id="step-tipo" class="step-section active">
+      <h2>Selecione o Tipo</h2>
+      <div class="options-grid" id="tipo-options"></div>
+    </div>
+    <div id="step-btus" class="step-section">
+      <h2>Selecione os BTUs</h2>
+      <div class="options-grid" id="btu-options"></div>
+    </div>
+    <div id="step-ciclo" class="step-section">
+      <h2>Selecione o Ciclo</h2>
+      <div class="options-grid" id="ciclo-options"></div>
+    </div>
+
+    <div id="search-box" class="search-box">
       <div class="input-group">
-        <span class="input-label">URL base (Hi-Wall 9000 Só Frio · planilha)</span>
-        <input type="text" id="urlInput" class="url-input" placeholder="Carregando link da planilha…">
-        <span id="sourceTag" class="source-tag">Sincronizando planilha…</span>
+        <span class="input-label">Link da Polo Ar (vindo da planilha)</span>
+        <input type="text" id="urlInput" class="url-input" placeholder="Selecione tipo, BTU e ciclo acima…">
+        <span id="sourceTag" class="source-tag">Aguardando seleção…</span>
         <div class="link-actions">
           <button type="button" id="copyBtn" class="btn-link-action" disabled>📋 Copiar link</button>
           <a id="openBtn" class="btn-link-action" target="_blank" rel="noopener" aria-disabled="true">↗ Abrir no site</a>
@@ -102,7 +141,7 @@
     </div>
 
     <div id="results" class="results-grid"></div>
-    <div id="status" class="msg">Pronto para extrair. Aguardando link da planilha.</div>
+    <div id="status" class="msg"></div>
   </div>
 
   <script>
@@ -114,6 +153,7 @@
     };
 
     const SHEET_URL = "https://opensheet.elk.sh/1ml7XpwZfzM4ElRJb4G62b93VMqUw3jeprTtgxdigiD8/Sheet1";
+    const CACHE_KEY = "scraper_sheet_data_v1";
 
     const PROXIES = [
       "https://api.codetabs.com/v1/proxy?quest=",
@@ -121,41 +161,169 @@
       "https://frigelar-proxy.crftwo.workers.dev/?url="
     ];
 
-    const norm = (s) => String(s || "").toLowerCase().replace(/[\s\-_.]/g, "");
-    const normCiclo = (c) => String(c || "").toLowerCase().trim().replace(/^só\s+/, "");
+    let sheetData = [];
+    let selection = { tipo: "", btu: "", ciclo: "" };
+    let sheetLoadPromise = null;
 
-    async function loadSheetLink() {
+    const norm = (s) => String(s || "").toLowerCase().replace(/[\s\-_.]/g, "");
+    const normalizeCiclo = (c) => String(c || "").toLowerCase().trim().replace(/^só\s+/, "");
+    const sortBTUs = (a, b) => {
+      const getVal = (s) => parseInt(String(s).replace(/[.,]/g, "").match(/\d+/) || [0], 10);
+      return getVal(a) - getVal(b);
+    };
+    const formatBTU = (btu) => String(btu).replace(/\b(\d+)\b/g, m => m.length >= 4 ? m.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : m);
+    const formatCiclo = (ciclo) => String(ciclo).toLowerCase().trim() === "frio" ? "Só Frio" : ciclo;
+
+    async function loadData() {
+      const syncStatus = document.getElementById("sync-status");
+      const syncText = document.getElementById("sync-text");
+
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        try { sheetData = JSON.parse(cached); } catch(e) {}
+        if (sheetData.length) renderTipos();
+      }
+
+      sheetLoadPromise = (async () => {
+        try {
+          const r = await fetch(SHEET_URL);
+          const fresh = await r.json();
+          if (JSON.stringify(sheetData) !== JSON.stringify(fresh)) {
+            sheetData = fresh;
+            localStorage.setItem(CACHE_KEY, JSON.stringify(sheetData));
+            renderTipos();
+          }
+          syncStatus.className = "sync-status success";
+          syncText.innerText = "Conectado";
+        } catch(e) {
+          console.error("Erro ao carregar planilha", e);
+          syncStatus.className = "sync-status error";
+          syncText.innerText = "Falha na planilha";
+        }
+      })();
+
+      if (!sheetData.length) await sheetLoadPromise;
+      if (sheetData.length) renderTipos();
+    }
+
+    function getStoreRows() {
+      return sheetData.filter(i => i && i.Site && norm(i.Site).includes(STORE.sheetMatch));
+    }
+
+    function renderTipos() {
+      const c = document.getElementById("tipo-options"); c.innerHTML = "";
+      const rows = getStoreRows();
+      const tipos = [...new Set(rows.map(i => i.Tipo).filter(Boolean))];
+      if (tipos.length === 0) {
+        c.innerHTML = `<div class="msg">Nenhum tipo cadastrado para ${STORE.label} na planilha.</div>`;
+        return;
+      }
+      tipos.forEach(t => {
+        const b = document.createElement("button");
+        b.className = "option-btn" + (selection.tipo === t ? " selected" : "");
+        b.innerText = t;
+        b.onclick = () => selectTipo(t);
+        c.appendChild(b);
+      });
+    }
+
+    function renderOptions(id, opts, cb, current, formatter) {
+      const c = document.getElementById(id); c.innerHTML = "";
+      opts.forEach(o => {
+        const b = document.createElement("button");
+        b.className = "option-btn" + (current === o ? " selected" : "");
+        b.innerText = formatter ? formatter(o) : o;
+        b.onclick = () => cb(o);
+        c.appendChild(b);
+      });
+    }
+
+    function selectTipo(t) {
+      selection.tipo = t;
+      selection.btu = "";
+      selection.ciclo = "";
+      renderTipos();
+      const rows = getStoreRows().filter(i => i.Tipo === t);
+      const btus = [...new Set(rows.map(i => i.BTUs))].sort(sortBTUs);
+      renderOptions("btu-options", btus, selectBTU, selection.btu, formatBTU);
+      document.getElementById("step-btus").classList.add("active");
+      document.getElementById("step-ciclo").classList.remove("active");
+      resetReady();
+      setTimeout(() => document.getElementById("step-btus").scrollIntoView({behavior: 'smooth', block: 'center'}), 80);
+    }
+
+    function selectBTU(b) {
+      selection.btu = b;
+      selection.ciclo = "";
+      const rows = getStoreRows().filter(i => i.Tipo === selection.tipo);
+      const btus = [...new Set(rows.map(i => i.BTUs))].sort(sortBTUs);
+      renderOptions("btu-options", btus, selectBTU, selection.btu, formatBTU);
+      const ciclos = [...new Set(getStoreRows().filter(i => i.Tipo === selection.tipo && i.BTUs === b).map(i => i.Ciclo))];
+      renderOptions("ciclo-options", ciclos, selectCiclo, selection.ciclo, formatCiclo);
+      document.getElementById("step-ciclo").classList.add("active");
+      resetReady();
+      setTimeout(() => document.getElementById("step-ciclo").scrollIntoView({behavior: 'smooth', block: 'center'}), 80);
+    }
+
+    function selectCiclo(c) {
+      selection.ciclo = c;
+      const ciclos = [...new Set(getStoreRows().filter(i => i.Tipo === selection.tipo && i.BTUs === selection.btu).map(i => i.Ciclo))];
+      renderOptions("ciclo-options", ciclos, selectCiclo, selection.ciclo, formatCiclo);
+      findStoreLink();
+    }
+
+    function findStoreLink() {
+      const cicloAlvo = normalizeCiclo(selection.ciclo);
+      const row = getStoreRows().find(i =>
+        i.Tipo === selection.tipo &&
+        i.BTUs === selection.btu &&
+        normalizeCiclo(i.Ciclo) === cicloAlvo
+      );
       const tag = document.getElementById("sourceTag");
       const input = document.getElementById("urlInput");
       const btn = document.getElementById("renderBtn");
-      try {
-        const r = await fetch(SHEET_URL);
-        const data = await r.json();
-        const row = data.find(i =>
-          i && i.Site && norm(i.Site).includes(STORE.sheetMatch) &&
-          String(i.Tipo).toLowerCase() === "hiwall" &&
-          String(i.BTUs) === "9000" &&
-          normCiclo(i.Ciclo) === "frio"
-        );
-        if (row && row.Link) {
-          input.value = row.Link;
-          tag.innerText = `✓ Link carregado: ${row.Site} · ${row.Tipo} · ${row.BTUs} · ${row.Ciclo}`;
-          tag.style.color = "var(--green)";
-          btn.disabled = false;
-          enableLinkActions(row.Link);
-          document.getElementById("status").innerText = "Pronto para extrair. Clique em Renderizar.";
-        } else {
-          tag.innerText = "⚠ Nenhuma linha 'Hiwall 9000 Frio' para esta loja na planilha.";
-          tag.style.color = "#f59e0b";
-          input.placeholder = "Cole manualmente uma URL da loja…";
-          btn.disabled = false;
-        }
-      } catch (e) {
-        console.error("Falha ao ler planilha:", e);
-        tag.innerText = "⚠ Falha ao ler planilha — cole o link manualmente.";
-        tag.style.color = "#f59e0b";
+      const box = document.getElementById("search-box");
+
+      if (row && row.Link) {
+        input.value = row.Link;
+        tag.innerText = `✓ ${row.Site} · ${row.Tipo} · ${formatBTU(row.BTUs)} · ${formatCiclo(row.Ciclo)}`;
+        tag.style.color = "var(--green)";
         btn.disabled = false;
+        enableLinkActions(row.Link);
+        box.classList.add("ready");
+        setTimeout(() => box.scrollIntoView({behavior: 'smooth', block: 'center'}), 80);
+      } else {
+        input.value = "";
+        tag.innerText = `⚠ Sem link cadastrado para ${STORE.label} · ${selection.tipo} · ${selection.btu} · ${selection.ciclo}`;
+        tag.style.color = "#f59e0b";
+        btn.disabled = true;
+        disableLinkActions();
       }
+    }
+
+    function resetReady() {
+      const box = document.getElementById("search-box");
+      box.classList.remove("ready");
+      document.getElementById("urlInput").value = "";
+      document.getElementById("sourceTag").innerText = "Aguardando seleção…";
+      document.getElementById("sourceTag").style.color = "var(--accent)";
+      document.getElementById("renderBtn").disabled = true;
+      disableLinkActions();
+    }
+
+    function enableLinkActions(url) {
+      const copyBtn = document.getElementById("copyBtn");
+      const openBtn = document.getElementById("openBtn");
+      copyBtn.disabled = false;
+      openBtn.href = url;
+      openBtn.removeAttribute("aria-disabled");
+    }
+    function disableLinkActions() {
+      const copyBtn = document.getElementById("copyBtn");
+      const openBtn = document.getElementById("openBtn");
+      copyBtn.disabled = true;
+      openBtn.removeAttribute("href");
+      openBtn.setAttribute("aria-disabled", "true");
     }
 
     async function tryFetch(targetUrl) {
@@ -245,7 +413,7 @@
         if (products.length === 0) products = extractFromDom(html);
 
         if (products.length === 0) {
-          status.innerText = `Nenhum produto detectado na ${STORE.label}. O site pode usar estrutura não-VTEX, hidratação client-side ou bloqueio anti-bot. Próximo passo: inspecionar HTML retornado.`;
+          status.innerText = `Nenhum produto detectado na ${STORE.label}.`;
           status.style.display = "block";
         } else {
           const unique = products.reduce((acc, current) => {
@@ -270,20 +438,12 @@
         }
       } catch(e) {
         console.error(e);
-        status.innerText = "Erro crítico ao acessar o site. Tente novamente em instantes.";
+        status.innerText = "Erro crítico ao acessar o site.";
         status.style.display = "block";
       } finally {
         loader.style.display = "none";
         btn.disabled = false;
       }
-    }
-
-    function enableLinkActions(url) {
-      const copyBtn = document.getElementById("copyBtn");
-      const openBtn = document.getElementById("openBtn");
-      copyBtn.disabled = false;
-      openBtn.href = url;
-      openBtn.removeAttribute("aria-disabled");
     }
 
     document.getElementById("copyBtn").addEventListener("click", async () => {
@@ -303,7 +463,7 @@
     });
 
     document.getElementById("renderBtn").addEventListener("click", runScraper);
-    loadSheetLink();
+    loadData();
   </script>
 </body>
 </html>
