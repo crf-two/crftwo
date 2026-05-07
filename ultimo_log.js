@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Limpeza: removidos metadados Git acidentais da extensao e test_script.html.', dateIso: '2026-05-07T11:23:00-03:00' };
+const LATEST_LOG = { message: 'Hub modernizado Codex simplificado e mais proximo do index oficial.', dateIso: '2026-05-07T14:52:00-03:00' };

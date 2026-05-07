@@ -1,8 +1,7 @@
 /*
   Codex Modern JS
-  Static, dependency-free orchestration for GitHub Pages. The page keeps the
-  original hub links, adds search/filter ergonomics, and mounts the approved
-  cinematic labs constellation only when requested.
+  Mantem a pagina estatica e rapida no GitHub Pages. A UI principal segue o
+  index oficial; a camada "uau" fica isolada no overlay dos laboratorios.
 */
 
 (() => {
@@ -20,10 +19,7 @@
   };
 
   const ICONS = {
-    beaker: `<svg viewBox="0 0 24 24"><path d="M9 3v6l-5 9a2 2 0 0 0 1.7 3h12.6a2 2 0 0 0 1.7-3l-5-9V3"/><line x1="9" y1="3" x2="15" y2="3"/><line x1="6" y1="14" x2="18" y2="14"/></svg>`
-  };
-
-  const TOOL_ICONS = {
+    beaker: `<svg viewBox="0 0 24 24"><path d="M9 3v6l-5 9a2 2 0 0 0 1.7 3h12.6a2 2 0 0 0 1.7-3l-5-9V3"/><line x1="9" y1="3" x2="15" y2="3"/><line x1="6" y1="14" x2="18" y2="14"/></svg>`,
     box: `<svg viewBox="0 0 24 24"><path d="m21 8-9-5-9 5 9 5 9-5Z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>`,
     grid: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18"></path><path d="M9 21V9"></path></svg>`,
     check: `<svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`,
@@ -37,10 +33,10 @@
   };
 
   const GROUPS = [
-    { id: "all", label: "Tudo", short: "Tudo", color: "#4facfe" },
-    { id: "camara", label: "Câmara fria", short: "Câmara", title: "Câmara <em>Fria</em>", num: "01 · Seção", color: "#10b981" },
-    { id: "ar", label: "Ar-condicionado", short: "Ar", title: "Ar <em>Condicionado</em>", num: "02 · Inteligência", color: "#f59e0b" },
-    { id: "outros", label: "Outras rotinas", short: "Outros", title: "Outras <em>Rotinas</em>", num: "03 · Operação", color: "#8b5cf6" }
+    { id: "all", label: "Tudo", color: "#4facfe" },
+    { id: "camara", label: "Câmara Fria", title: "Soluções em <em>Câmara Fria</em>", num: "01 · seção", color: "#10b981" },
+    { id: "ar", label: "Ar Condicionado", title: "Soluções em <em>Ar Condicionado</em>", num: "02 · inteligência", color: "#f59e0b" },
+    { id: "outros", label: "Outras Ferramentas", title: "Outras <em>Ferramentas</em>", num: "03 · operação", color: "#8b5cf6" }
   ];
 
   const TOOLS = [
@@ -49,7 +45,7 @@
       group: "camara",
       title: "Simulador de gabinete 3D",
       titleHtml: "Simulador de <em>Gabinete 3D</em>",
-      copy: "Dimensione câmaras, visualize volumes e apoie a montagem do orçamento técnico.",
+      copy: "Visualização 3D e cálculo de painéis PIR/EPS para câmaras.",
       href: "simulador-gabinete.html",
       color: "#4facfe",
       meta: "Projeto técnico",
@@ -61,31 +57,29 @@
       group: "camara",
       title: "Plano de corte",
       titleHtml: "Plano de <em>Corte</em>",
-      copy: "Organize painéis PIR/EPS e reduza perda de chapa na preparação do projeto.",
+      copy: "Otimização de cortes de painéis EPS/PIR para melhor aproveitamento das chapas de 12m.",
       href: "plano-corte.html",
       color: "#f97316",
       meta: "Painéis 12m",
-      icon: "grid",
-      size: "wide"
+      icon: "grid"
     },
     {
       id: "checklist",
       group: "camara",
       title: "Checklist câmaras frias",
       titleHtml: "Checklist <em>Câmaras Frias</em>",
-      copy: "Colete dados do cliente e gere PDF com briefing completo para orçamento.",
+      copy: "Formulário passo a passo com geração de PDF para orçamento de câmara frigorífica.",
       href: "CheckList.html",
       color: "#10b981",
       meta: "PDF técnico",
-      icon: "check",
-      size: "wide"
+      icon: "check"
     },
     {
       id: "scraper",
       group: "ar",
       title: "Scraper oficial",
       titleHtml: "Scraper <em>Oficial</em>",
-      copy: "Compare preços em tempo real entre Dufrio, Frigelar, Leveros, Central Ar e Polo Ar.",
+      copy: "Comparação de preços em tempo real entre Dufrio, Frigelar, Leveros, Central Ar e Polo Ar.",
       href: "scraper-ar.html",
       color: "#f59e0b",
       meta: "Concorrência",
@@ -95,21 +89,20 @@
     {
       id: "comparador",
       group: "ar",
-      title: "Comparador de ar",
+      title: "Comparador de ar-condicionado",
       titleHtml: "Comparador de <em>Ar</em>",
-      copy: "Avalie ofertas e discrepâncias de preço com leitura direta para tomada de decisão.",
+      copy: "Análise de preços da concorrência em tempo real para leitura comercial rápida.",
       href: "comparador-ar.html",
       color: "#6366f1",
       meta: "Análise",
-      icon: "sliders",
-      size: "wide"
+      icon: "sliders"
     },
     {
       id: "precos-vivo",
       group: "ar",
       title: "Preços ao vivo",
       titleHtml: "Preços ao <em>Vivo</em>",
-      copy: "Visualize produtos capturados pela extensão nas abas abertas das lojas.",
+      copy: "Visualiza em cards os produtos raspados pela extensão das abas abertas nas lojas.",
       href: "precos-ao-vivo.html",
       color: "#00e676",
       meta: "Extensão",
@@ -121,7 +114,7 @@
       group: "ar",
       title: "Precificação SKU's",
       titleHtml: "Precificação <em>SKU's</em>",
-      copy: "Calcule valores de SKU no 365 usando a referência comercial do site.",
+      copy: "Calculadora para precificar SKU's no 365 usando o valor de referência do site.",
       href: "precificacao-ar.html",
       color: "#0ea5e9",
       meta: "Margem",
@@ -132,7 +125,7 @@
       group: "ar",
       title: "Laboratórios de scraper",
       titleHtml: "Laboratórios de <em>Scraper</em>",
-      copy: "Bancada experimental — scrapers individuais por loja. Onde refinamos antes de promover ao Oficial.",
+      copy: "Scrapers individuais por loja para testar ajustes antes de levar ao Scraper Oficial.",
       href: "#laboratorios",
       color: "#22c55e",
       meta: "8 ambientes",
@@ -146,7 +139,7 @@
       group: "outros",
       title: "Cotação express",
       titleHtml: "Cotação <em>Express</em>",
-      copy: "Monte orçamentos rápidos de infraestrutura de ar-condicionado.",
+      copy: "Orçamento rápido para infraestrutura de ar-condicionado.",
       href: "cotacoes.html",
       color: "#8b5cf6",
       meta: "Comercial",
@@ -157,24 +150,23 @@
       group: "outros",
       title: "Extração de códigos",
       titleHtml: "Extração de <em>Códigos</em>",
-      copy: "Extraia códigos com quantidade em estoque e acelere conferências internas.",
+      copy: "Extração de códigos com quantidade em estoque para conferências internas.",
       href: "itens-quantidade.html",
       color: "#d946ef",
       meta: "Estoque",
-      icon: "filter",
-      size: "wide"
+      icon: "filter"
     },
     {
       id: "download",
       group: "outros",
       title: "Baixar projeto",
       titleHtml: "Baixar <em>Projeto</em>",
-      copy: "Faça download do pacote completo do projeto e da extensão.",
+      copy: "Download do pacote completo do projeto e dos arquivos da extensão.",
       href: "https://github.com/crftwoo/thiago.luz.dufrio/archive/refs/heads/main.zip",
       color: "#94a3b8",
       meta: "ZIP",
       icon: "download",
-      download: true
+      action: "download"
     }
   ];
 
@@ -184,51 +176,42 @@
   };
 
   const $ = (selector, scope = document) => scope.querySelector(selector);
-  const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
   const normalize = (value) => String(value || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
 
   function init() {
-    renderNavigation();
+    renderFilters();
     renderTools();
+    hydrateLastUpdate();
     bindEvents();
-    hydrateMeta();
   }
 
-  function renderNavigation() {
-    const segment = $("#segmentControl");
-    const rail = $("#railNav");
-    const dock = $("#mobileDock");
-
-    const makeButton = (group, className) => `
-      <button class="${className}${group.id === state.filter ? " is-active" : ""}" type="button"
-        data-filter="${group.id}" style="--segment-color: ${group.color}; --tab-color: ${group.color}; --dock-color: ${group.color}">
-        ${className === "rail-tab" ? group.short : group.label}
-      </button>`;
-
-    segment.innerHTML = GROUPS.map((group) => makeButton(group, "segment-button")).join("");
-    rail.innerHTML = GROUPS.map((group) => makeButton(group, "rail-tab")).join("");
-    dock.innerHTML = GROUPS.map((group) => makeButton(group, "dock-button")).join("") +
-      `<button class="dock-button" type="button" data-open-labs style="--dock-color: #22c55e">Labs</button>`;
+  function renderFilters() {
+    $("#segmentControl").innerHTML = GROUPS.map((group) => `
+      <button class="segment-button${group.id === state.filter ? " is-active" : ""}" type="button"
+        data-filter="${group.id}" style="--segment-color:${group.color}">
+        ${group.label}
+      </button>
+    `).join("");
   }
 
   function renderTools() {
-    const board = $("#toolsGrid");
     const filtered = getFilteredTools();
-    const visibleGroups = GROUPS.filter((group) => group.id !== "all")
+    const visibleGroups = GROUPS
+      .filter((group) => group.id !== "all")
       .map((group) => ({ ...group, tools: filtered.filter((tool) => tool.group === group.id) }))
       .filter((group) => group.tools.length);
 
-    board.innerHTML = visibleGroups.map((group) => `
+    $("#toolsBoard").innerHTML = visibleGroups.map((group) => `
       <section class="tool-section" data-section="${group.id}">
-        <div class="section-head">
+        <div class="section-title-row">
           <div>
             <div class="section-num">${group.num}</div>
             <h2 class="section-title">${group.title}</h2>
           </div>
-          <span>${group.tools.length} ${group.tools.length === 1 ? "ferramenta" : "ferramentas"}</span>
+          <span class="section-count">${group.tools.length} ${group.tools.length === 1 ? "ferramenta" : "ferramentas"}</span>
         </div>
         <div class="tool-grid">
           ${group.tools.map(renderToolCard).join("")}
@@ -238,42 +221,23 @@
 
     $("#emptyState").hidden = filtered.length > 0;
     $("#resultCount").textContent = `${filtered.length} de ${TOOLS.length} ferramentas visíveis`;
-    $("#toolCount").textContent = TOOLS.length;
-    $("#labCount").textContent = DATA.labs.length;
   }
 
   function renderToolCard(tool) {
-    const size = tool.size === "hero" ? " is-hero" : tool.size === "wide" ? " is-wide" : "";
-    const iconMarkup = tool.icon === "beaker" ? ICONS.beaker : TOOL_ICONS[tool.icon];
-
-    if (tool.action === "labs") {
-      return `
-        <a class="tool-card labs-portal${size}"
-           data-id="${tool.id}"
-           href="#"
-           data-action="labs"
-           style="--card-color:${tool.color}">
-          <div class="labs-orbit">
-            <div class="labs-orbit-ring"></div>
-            <div class="labs-orbit-ring"></div>
-            <div class="labs-orbit-ring"></div>
-          </div>
-          <div class="tool-head">
-            <div class="tool-icon">${iconMarkup}</div>
-            <span class="tool-badge">${tool.badge}</span>
-          </div>
-          <div>
-            <h3 class="tool-title">${tool.titleHtml}</h3>
-            <p class="tool-desc">${tool.copy}</p>
-          </div>
-          <span class="tool-meta">${tool.meta}</span>
-        </a>
-      `;
-    }
+    const sizeClass = tool.size === "hero" ? " is-hero" : tool.size === "wide" ? " is-wide" : "";
+    const iconMarkup = ICONS[tool.icon] || ICONS.file;
+    const action = tool.action ? ` data-action="${tool.action}"` : "";
 
     return `
-      <a class="tool-card${size}" href="${tool.href}" data-id="${tool.id}" ${tool.download ? 'data-action="download"' : ""}
-        style="--card-color: ${tool.color}">
+      <a class="tool-card${sizeClass}${tool.action === "labs" ? " labs-portal" : ""}"
+        href="${tool.href}" data-id="${tool.id}"${action} style="--card-color:${tool.color}">
+        ${tool.action === "labs" ? `
+          <div class="labs-orbit" aria-hidden="true">
+            <div class="labs-orbit-ring"></div>
+            <div class="labs-orbit-ring"></div>
+            <div class="labs-orbit-ring"></div>
+          </div>
+        ` : ""}
         <span class="tool-top">
           <span class="tool-icon" aria-hidden="true">${iconMarkup}</span>
           ${tool.badge ? `<span class="tool-badge">${tool.badge}</span>` : ""}
@@ -302,80 +266,49 @@
       renderTools();
     });
 
-    $("#toolsGrid").addEventListener("mousemove", (event) => {
+    document.addEventListener("click", (event) => {
+      const filterButton = event.target.closest("[data-filter]");
       const card = event.target.closest(".tool-card");
-      if (!card) return;
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-      card.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-    });
 
-    document.addEventListener("click", onCardClick);
+      if (filterButton) {
+        state.filter = filterButton.dataset.filter;
+        renderFilters();
+        renderTools();
+        return;
+      }
+
+      if (card?.dataset.action === "labs") {
+        event.preventDefault();
+        Constellation.open();
+        return;
+      }
+
+      if (card?.dataset.action === "download" && !window.confirm("Baixar o pacote completo do projeto?")) {
+        event.preventDefault();
+      }
+    });
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") Constellation.close();
     });
-
-    window.addEventListener("scroll", updateDockVisibility, { passive: true });
-    updateDockVisibility();
   }
 
-  function onCardClick(event) {
-    const filterButton = event.target.closest("[data-filter]");
-    const labsButton = event.target.closest("[data-open-labs]");
-    const card = event.target.closest(".tool-card");
-
-    if (filterButton) {
-      setFilter(filterButton.dataset.filter);
-      return;
-    }
-
-    if (labsButton) {
-      event.preventDefault();
-      Constellation.open();
-      return;
-    }
-
-    if (!card) return;
-
-    if (card.dataset.action === "labs") {
-      event.preventDefault();
-      Constellation.open();
-      return;
-    }
-
-    if (card.dataset.action === "download" && !window.confirm("Baixar o pacote completo do projeto?")) {
-      event.preventDefault();
-    }
-  }
-
-  function setFilter(filter) {
-    state.filter = filter;
-    renderNavigation();
-    renderTools();
-  }
-
-  function hydrateMeta() {
+  function hydrateLastUpdate() {
     const target = $("#lastUpdate");
     try {
       if (typeof LATEST_LOG !== "undefined" && LATEST_LOG?.dateIso) {
-        const date = new Date(LATEST_LOG.dateIso);
-        const formatted = date.toLocaleString("pt-BR", {
+        const formatted = new Date(LATEST_LOG.dateIso).toLocaleString("pt-BR", {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
           hour: "2-digit",
           minute: "2-digit"
         });
-        target.textContent = `Última sincronização: ${formatted} - ${LATEST_LOG.message}`;
+        target.textContent = `${formatted} - ${LATEST_LOG.message}`;
       }
     } catch (error) {
       target.textContent = "Hub sincronizado com o projeto.";
     }
-  }
-
-  function updateDockVisibility() {
-    $("#mobileDock").classList.toggle("is-visible", window.scrollY > 460);
   }
 
   const Constellation = (() => {
@@ -438,10 +371,10 @@
 
       overlay.querySelector(".constellation-close").addEventListener("click", close);
 
-      overlay.querySelectorAll(".satellite").forEach((sat) => {
-        sat.addEventListener("click", (event) => {
+      overlay.querySelectorAll(".satellite").forEach((satellite) => {
+        satellite.addEventListener("click", (event) => {
           event.preventDefault();
-          warpTo(sat.getAttribute("href"));
+          warpTo(satellite.getAttribute("href"));
         });
       });
 
@@ -455,17 +388,19 @@
     }
 
     function open() {
-      const o = ensureOverlay();
+      const currentOverlay = ensureOverlay();
       document.body.style.overflow = "hidden";
-      o.style.display = "block";
-      requestAnimationFrame(() => o.classList.add("is-open"));
+      currentOverlay.style.display = "block";
+      requestAnimationFrame(() => currentOverlay.classList.add("is-open"));
     }
 
     function close() {
       if (!overlay) return;
       overlay.classList.remove("is-open");
       document.body.style.overflow = "";
-      setTimeout(() => { if (overlay) overlay.style.display = "none"; }, 1200);
+      setTimeout(() => {
+        if (overlay) overlay.style.display = "none";
+      }, 1200);
     }
 
     function onDown(event) {
@@ -499,7 +434,9 @@
       flash.className = "warp-flash";
       document.body.appendChild(flash);
       requestAnimationFrame(() => flash.classList.add("is-firing"));
-      setTimeout(() => { window.location.href = href; }, 280);
+      setTimeout(() => {
+        window.location.href = href;
+      }, 280);
     }
 
     return { open, close };

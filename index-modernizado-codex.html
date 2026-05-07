@@ -4,85 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workspace Dufrio - Hub Modernizado Codex</title>
-  <meta name="description" content="Hub modernizado de ferramentas Dufrio para câmara fria, ar-condicionado e rotinas comerciais.">
+  <meta name="description" content="Hub modernizado e limpo de ferramentas Dufrio.">
   <meta name="theme-color" content="#050505">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Instrument+Serif:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="assets/codex-modern/codex-modern.css">
 </head>
 <body>
-  <a class="skip-link" href="#toolsGrid">Ir para ferramentas</a>
+  <a class="skip-link" href="#toolsBoard">Ir para ferramentas</a>
 
-  <div class="app-shell">
-    <aside class="side-rail" aria-label="Navegação principal">
-      <a class="brand-mark" href="./" aria-label="Voltar ao hub atual">
+  <div class="aurora aurora-1" aria-hidden="true"></div>
+  <div class="aurora aurora-2" aria-hidden="true"></div>
+  <div class="aurora aurora-3" aria-hidden="true"></div>
+
+  <main class="dashboard-container">
+    <header class="header">
+      <div class="header-text">
+        <p class="header-kicker">Workspace Dufrio</p>
+        <h1>Hub de Ferramentas</h1>
+        <p>Central de acesso para câmara fria, ar-condicionado e rotinas comerciais.</p>
+      </div>
+
+      <a class="logo-container" href="./" aria-label="Abrir hub oficial atual">
         <img src="img/logo_dufrio.jpg" alt="Dufrio" loading="eager">
       </a>
-      <nav class="rail-nav" id="railNav"></nav>
-      <button class="rail-action" type="button" data-open-labs aria-label="Abrir laboratórios de scraper">
-        <span class="rail-action-icon" aria-hidden="true">LAB</span>
-        <span>Labs</span>
-      </button>
-    </aside>
+    </header>
 
-    <main class="workspace" id="main">
-      <header class="hero-panel">
-        <div class="hero-copy">
-          <p class="eyebrow">Atelier · Workspace Dufrio · 2026</p>
-          <h1 class="hero-title">Onde precisão<br><span class="accent">encontra</span> direção.</h1>
-          <p class="hero-lede">Bem-vindo ao <em>Atelier Dufrio</em>: um painel direto para câmara fria, inteligência comercial em ar-condicionado e rotinas que precisam funcionar sem atrito.</p>
+    <section class="command-panel" aria-label="Busca e filtros">
+      <label class="search-field" for="toolSearch">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+        <input id="toolSearch" type="search" autocomplete="off" placeholder="Buscar ferramenta, loja ou rotina">
+      </label>
 
-          <div class="command-bar" role="search">
-            <label class="search-field" for="toolSearch">
-              <span aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
-              </span>
-              <input id="toolSearch" type="search" autocomplete="off" placeholder="Buscar ferramenta, loja ou rotina">
-            </label>
-            <button class="primary-command" type="button" data-open-labs>
-              <span aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M4 19V5"></path><path d="M20 19V5"></path><path d="M8 8h8"></path><path d="M8 12h8"></path><path d="M8 16h8"></path></svg>
-              </span>
-              Laboratórios
-            </button>
-          </div>
-        </div>
+      <div class="segment-control" id="segmentControl" aria-label="Filtrar ferramentas"></div>
+    </section>
 
-        <div class="cinema-stage" aria-label="Área reservada para vídeo ou renderização 3D">
-          <div class="stage-frame">
-            <!-- Placeholder leve para render/video: simula profundidade 3D sem biblioteca pesada. -->
-            <div class="mock-3d-object" aria-hidden="true"></div>
-            <img src="img/hi_wall.png" alt="" aria-hidden="true">
-            <div class="stage-overlay">
-              <span>Placeholder 3D / vídeo</span>
-              <strong>Frame técnico <em>em cena</em></strong>
-            </div>
-          </div>
-          <div class="stage-metrics" aria-label="Resumo do hub">
-            <div><strong id="toolCount">11</strong><span>ferramentas</span></div>
-            <div><strong>3</strong><span>frentes</span></div>
-            <div><strong id="labCount">8</strong><span>labs</span></div>
-          </div>
-        </div>
-      </header>
+    <div class="status-line">
+      <span><span class="status-dot" aria-hidden="true"></span>Sistemas operacionais e online</span>
+      <span id="resultCount">Carregando ferramentas...</span>
+    </div>
 
-      <section class="filter-strip" aria-label="Filtros de ferramentas">
-        <div class="segment-control" id="segmentControl"></div>
-        <p class="result-count" id="resultCount">Carregando ferramentas...</p>
-      </section>
+    <section class="tools-board" id="toolsBoard" aria-live="polite"></section>
+    <div class="empty-state" id="emptyState" hidden>Nenhuma ferramenta encontrada.</div>
 
-      <section class="tools-board" id="toolsGrid" aria-live="polite"></section>
-      <div class="empty-state" id="emptyState" hidden>Nenhuma ferramenta encontrada.</div>
-
-      <footer class="page-footer">
-        <span class="live-dot" aria-hidden="true"></span>
+    <footer class="meta-footer">
+      <div>
+        <strong>Última atualização</strong>
         <span id="lastUpdate">Hub sincronizado com o projeto.</span>
-      </footer>
-    </main>
-  </div>
-
-  <nav class="mobile-dock" id="mobileDock" aria-label="Acesso rápido mobile"></nav>
+      </div>
+      <a href="https://github.com/crftwoo/thiago.luz.dufrio">Ver no GitHub</a>
+    </footer>
+  </main>
 
   <script src="ultimo_log.js" defer></script>
   <script src="assets/codex-modern/codex-modern.js" defer></script>

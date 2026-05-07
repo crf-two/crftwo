@@ -1,1 +1,1 @@
-Limpeza: removidos metadados Git acidentais da extensao e test_script.html.
+Hub modernizado Codex simplificado e mais proximo do index oficial.
