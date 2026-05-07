@@ -1,0 +1,14 @@
+# Evita versionar metadados Git copiados por engano dentro da extensao.
+extensao/HEAD
+extensao/config
+extensao/description
+extensao/hooks/
+extensao/info/
+extensao/logs/
+extensao/objects/
+extensao/packed-refs
+extensao/refs/
+extensao/index
+
+# Sobras locais de teste/debug.
+test_script.html

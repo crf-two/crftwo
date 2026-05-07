@@ -1,1 +1,1 @@
-Fusao visual: Codex recebe tipografia editorial, constelacao 3D dos labs e detalhes do Antigravity.
+Limpeza: removidos metadados Git acidentais da extensao e test_script.html.
