@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Dufrio | Innovation Workspace</title>
+  <title>Dufrio | Hub de Inovação</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Fonte Premium: Outfit garante uma leitura elegante e ultra-moderna -->
@@ -528,7 +528,7 @@
   <div class="rich-media-placeholder">
     <div class="mock-3d-object"></div>
     <div class="rich-media-label">
-      <h2>Ecosystem Matrix</h2>
+      <h2>Matriz do Ecossistema</h2>
       <p>Espaço reservado para Frame 3D Interativo (Scroll-linked)</p>
     </div>
   </div>
@@ -537,7 +537,7 @@
     
     <!-- CÂMARA FRIA -->
     <div class="section-header">
-      <h3>Cold Storage Architecture</h3>
+      <h3>Arquitetura de Câmara Fria</h3>
       <div class="section-line"></div>
     </div>
     <div class="bento-grid" id="gridCamara">
@@ -546,7 +546,7 @@
 
     <!-- AR CONDICIONADO -->
     <div class="section-header">
-      <h3>HVAC Intelligence</h3>
+      <h3>Inteligência de Ar Condicionado</h3>
       <div class="section-line"></div>
     </div>
     <div class="bento-grid" id="gridAr">
@@ -555,7 +555,7 @@
 
     <!-- OUTROS -->
     <div class="section-header">
-      <h3>Utility Systems</h3>
+      <h3>Sistemas Utilitários</h3>
       <div class="section-line"></div>
     </div>
     <div class="bento-grid" id="gridOutros">
@@ -566,7 +566,7 @@
 
   <footer>
     <div class="status-badge">
-      <div class="dot"></div> Systems Operational & Synced
+      <div class="dot"></div> Sistemas Operacionais e Sincronizados
     </div>
     <p style="color: var(--text-muted); font-size: 0.9rem;">
       Criado por <strong>Thiago Luz</strong> <br>
@@ -578,7 +578,7 @@
   <div class="labs-takeover" id="labsModal">
     <div class="labs-header">
       <div class="labs-title-group">
-        <h2>Scraper Labs Environment</h2>
+        <h2>Ambiente de Laboratórios Scraper</h2>
         <p>Ambientes isolados para desenvolvimento e validação de data-scraping.</p>
       </div>
       <button class="btn-close" id="btnCloseLabs">
@@ -614,86 +614,86 @@
     const tools = [
       // CATEGORY: CÂMARA FRIA
       { 
-        nome: "3D Cabinet Simulator", 
+        nome: "Simulador 3D de Gabinetes", 
         desc: "Renderização espacial interativa e parametrização avançada de painéis PIR/EPS para engenharia de câmaras frigoríficas.", 
         url: "simulador-gabinete.html", 
         icone: icons.box3D, color: "#4facfe", category: "camara", size: "span-2 row-2" 
       },
       { 
-        nome: "Cutting Plan Optimization", 
-        desc: "Algoritmo de nesting para maximização de aproveitamento em chapas de 12 metros, reduzindo desperdício material.", 
+        nome: "Otimização de Plano de Corte", 
+        desc: "Algoritmo de nesting para maximização de aproveitamento em chapas de 12 metros, reduzindo desperdício de material.", 
         url: "plano-corte.html", 
         icone: icons.corte, color: "#f97316", category: "camara", size: "span-2" 
       },
       { 
-        nome: "Checklist & PDF Engine", 
-        desc: "Fluxo dinâmico de coleta de dados gerando propostas técnicas formatadas em tempo real.", 
+        nome: "Gerador de Propostas Técnicas", 
+        desc: "Fluxo dinâmico de coleta de dados gerando propostas técnicas e orçamentos em PDF em tempo real.", 
         url: "CheckList.html", 
         icone: icons.checklist, color: "#10b981", category: "camara", size: "span-2" 
       },
 
       // CATEGORY: AR CONDICIONADO
       { 
-        nome: "Master Web Scraper", 
-        desc: "Motor de extração em tempo real. Cross-analysis de pricing contra grandes players do mercado HVAC.", 
+        nome: "Motor Web Scraper Oficial", 
+        desc: "Motor de extração em tempo real. Análise cruzada de preços contra os maiores players do mercado de HVAC.", 
         url: "scraper-ar.html", 
         icone: icons.scraper, color: "#f59e0b", category: "ar", size: "span-2 row-2" 
       },
       { 
-        nome: "Pricing Comparator UI", 
-        desc: "Dashboard analítico para benchmarking de concorrência com atualizações de latência ultrabaixa.", 
+        nome: "Dashboard Comparador", 
+        desc: "Painel analítico para benchmarking de concorrência com atualizações de latência ultrabaixa.", 
         url: "comparador-ar.html", 
         icone: icons.comparar, color: "#6366f1", category: "ar", size: "span-2" 
       },
       { 
-        nome: "Live Pricing Feed", 
-        desc: "Integração via extensão para visualização instantânea de drops de preço em abas ativas.", 
+        nome: "Feed de Preços ao Vivo", 
+        desc: "Integração via extensão para visualização instantânea de quedas de preço em abas ativas do navegador.", 
         url: "precos-ao-vivo.html", 
         badge: "Beta", icone: icons.vivo, color: "#00e676", category: "ar", size: "" 
       },
       { 
-        nome: "SKU Pricing Calculator", 
-        desc: "Calculadora de margem e precificação reversa sincronizada com dados on-site.", 
+        nome: "Calculadora de Precificação Inteligente", 
+        desc: "Ferramenta de cálculo de margem e precificação reversa sincronizada com dados em tempo real do site.", 
         url: "precificacao-ar.html", 
         icone: icons.precificar, color: "#0ea5e9", category: "ar", size: "" 
       },
       { 
-        nome: "Scraper Laboratories", 
-        desc: "Ambientes isolados para teste e validação de scraping por loja específica.", 
+        nome: "Laboratórios de Scraping", 
+        desc: "Ambientes isolados para desenvolvimento, testes e validação de raspagem por loja específica.", 
         url: "#labs", 
-        badge: "Internal", icone: icons.labs, color: "#ec4899", category: "ar", size: "span-2", action: "openLabs" 
+        badge: "Interno", icone: icons.labs, color: "#ec4899", category: "ar", size: "span-2", action: "openLabs" 
       },
 
       // CATEGORY: OUTROS
       { 
-        nome: "Express Quotation", 
-        desc: "Sistema de orçamentação acelerada para infraestrutura e instalação de equipamentos.", 
+        nome: "Cotação Expressa", 
+        desc: "Sistema de orçamentação acelerada focado em infraestrutura e instalação de equipamentos.", 
         url: "cotacoes.html", 
         icone: icons.cotar, color: "#8b5cf6", category: "outros", size: "span-2" 
       },
       { 
-        nome: "Stock Data Extraction", 
-        desc: "Filtro massivo de SKUs baseado em disponibilidade sistêmica e cruzamento de dados.", 
+        nome: "Extrator Analítico de Estoque", 
+        desc: "Filtro massivo de SKUs baseado em disponibilidade sistêmica e cruzamento de grandes volumes de dados.", 
         url: "itens-quantidade.html", 
         icone: icons.filtro, color: "#d946ef", category: "outros", size: "" 
       },
       { 
-        nome: "Source Code Download", 
-        desc: "Acesso direto ao repositório master para deploy da extensão local.", 
+        nome: "Download do Repositório", 
+        desc: "Acesso direto e seguro ao código-fonte da extensão para implantação e uso local.", 
         url: "https://github.com/crftwoo/thiago.luz.dufrio/archive/refs/heads/main.zip", 
         icone: icons.download, color: "#94a3b8", category: "outros", size: "" 
       }
     ];
 
     const labsData = [
-      { nome: "ClimaRio Engine", url: "scraper-climario.html", color: "#f59e0b" },
-      { nome: "Frigelar Parser", url: "scraper-frigelar.html", color: "#00a859" },
-      { nome: "Leveros Extractor", url: "scraper-leveros.html", color: "#ff6b00" },
-      { nome: "Central Ar Module", url: "scraper-centralar.html", color: "#ec4899" },
-      { nome: "Dufrio Core", url: "scraper-dufrio.html", color: "#007bff" },
-      { nome: "FrioPeças Node", url: "scraper-friopecas.html", color: "#2563eb" },
-      { nome: "Polo Ar Bridge", url: "scraper-poloar.html", color: "#ef4444" },
-      { nome: "WebContinental Sync", url: "scraper-webcontinental.html", color: "#14b8a6" }
+      { nome: "Motor ClimaRio", url: "scraper-climario.html", color: "#f59e0b" },
+      { nome: "Extrator Frigelar", url: "scraper-frigelar.html", color: "#00a859" },
+      { nome: "Raspador Leveros", url: "scraper-leveros.html", color: "#ff6b00" },
+      { nome: "Módulo Central Ar", url: "scraper-centralar.html", color: "#ec4899" },
+      { nome: "Core Dufrio", url: "scraper-dufrio.html", color: "#007bff" },
+      { nome: "Agente FrioPeças", url: "scraper-friopecas.html", color: "#2563eb" },
+      { nome: "Ponte Polo Ar", url: "scraper-poloar.html", color: "#ef4444" },
+      { nome: "Sincronizador WebContinental", url: "scraper-webcontinental.html", color: "#14b8a6" }
     ];
 
     /**
@@ -714,7 +714,7 @@
         if (tool.action !== 'openLabs') {
           card.href = tool.url;
           // Efeito de clique no download
-          if (tool.nome === "Source Code Download") {
+          if (tool.nome === "Download do Repositório") {
             card.onclick = (e) => {
               if(!confirm('Iniciar o download do pacote da extensão?')) e.preventDefault();
             }
@@ -778,9 +778,9 @@
             <div class="lab-dot"></div>
             <h4>${lab.nome}</h4>
           </div>
-          <p>Ambiente focado em testes de selectors e parser logic para a fonte de dados específica.</p>
+          <p>Ambiente focado em testes de seletores e lógica de extração para a fonte de dados específica.</p>
           <div class="lab-action">
-            Acessar Terminal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            Acessar Laboratório <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </div>
         `;
         labsGrid.appendChild(node);
