@@ -1,1 +1,1 @@
-Hub modernizado Codex simplificado e mais proximo do index oficial.
+Limpeza: removidos index-modernizado-codex.html e assets dedicados; mantido apenas o hub oficial.
