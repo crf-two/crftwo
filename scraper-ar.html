@@ -62,6 +62,7 @@
     .store-badge.store-dufrio { background: linear-gradient(135deg, #004a99, #007bff); border-color: #007bff; }
     .store-badge.store-friopecas { background: linear-gradient(135deg, #005ca8, #2563eb); border-color: rgba(37,99,235,0.55); }
     .store-badge.store-webcontinental { background: linear-gradient(135deg, #0f766e, #14b8a6); border-color: rgba(20,184,166,0.55); }
+    .store-badge.store-climario { background: linear-gradient(135deg, #b45309, #f59e0b); border-color: rgba(245,158,11,0.55); }
     .store-badge.store-poloar { background: linear-gradient(135deg, #004f9f, #ef3b2d); border-color: rgba(239,59,45,0.55); }
 
     /* FOTO */
@@ -208,6 +209,7 @@
     .filter-btn.store-centralar.active { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.5); color: #ec4899; box-shadow: 0 0 10px rgba(236,72,153,0.2); }
     .filter-btn.store-friopecas.active { background: rgba(37,99,235,0.2); border-color: rgba(37,99,235,0.5); color: #60a5fa; box-shadow: 0 0 10px rgba(37,99,235,0.2); }
     .filter-btn.store-webcontinental.active { background: rgba(20,184,166,0.2); border-color: rgba(20,184,166,0.5); color: #2dd4bf; box-shadow: 0 0 10px rgba(20,184,166,0.2); }
+    .filter-btn.store-climario.active { background: rgba(245,158,11,0.2); border-color: rgba(245,158,11,0.5); color: #fbbf24; box-shadow: 0 0 10px rgba(245,158,11,0.2); }
     .filter-btn.store-poloar.active { background: rgba(239,59,45,0.2); border-color: rgba(239,59,45,0.5); color: #ef4444; box-shadow: 0 0 10px rgba(239,59,45,0.2); }
 
     /* SYNC STATUS */
@@ -1479,6 +1481,319 @@
     }
 
 
+    async function scrapeClimario(url) {
+      const STORE_URL = "https://www.climario.com.br";
+      const API_PROXIES = [
+        "https://frigelar-proxy.crftwo.workers.dev/?url=",
+        "https://api.codetabs.com/v1/proxy?quest=",
+        "https://api.allorigins.win/get?url="
+      ];
+
+      const normalizeText = (value) => String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      const normText = (value) => normalizeText(value).replace(/[\s\-_.]/g, "");
+      const formatCurrency = (value) => new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      }).format(value).replace(/\u00a0/g, " ");
+      const pathParts = (value) => String(value || "")
+        .replace(/^\/+|\/+$/g, "")
+        .split("/")
+        .map(part => part.trim())
+        .filter(Boolean);
+      const getOrderParam = (parsedUrl) => {
+        const order = parsedUrl.searchParams.get("order") || parsedUrl.searchParams.get("O") || "";
+        const value = String(order).toLowerCase();
+        if (value.includes("desc")) return "OrderByPriceDESC";
+        if (value.includes("topsale")) return "OrderByTopSaleDESC";
+        return "OrderByPriceASC";
+      };
+      const getTypeSlug = () => {
+        const type = normText(selection?.tipo || "");
+        if (type.includes("piso")) return "ar-condicionado-piso-teto";
+        if (type.includes("cassete")) return "ar-condicionado-cassete";
+        if (type.includes("hiwall") || type.includes("hi")) return "ar-condicionado-hi-wall-inverter";
+        return "";
+      };
+      const isKnownTypeSlug = (segment) => {
+        const value = normText(segment);
+        return value.includes("arcondicionadohiwall") ||
+               value.includes("arcondicionadopisoteto") ||
+               value.includes("arcondicionadocassete");
+      };
+      const buildCatalogApiUrls = (searchUrl) => {
+        let parsed;
+        try { parsed = new URL(searchUrl); } catch(e) { return []; }
+
+        const queryParts = pathParts(parsed.searchParams.get("query") || parsed.pathname || "/");
+        const initialParts = pathParts(parsed.searchParams.get("initialQuery"));
+        const mapParts = String(parsed.searchParams.get("map") || "")
+          .split(",")
+          .map(part => part.trim())
+          .filter(Boolean);
+
+        let baseParts = initialParts.length
+          ? [...initialParts]
+          : queryParts.slice(0, Math.min(2, queryParts.length));
+        const extraParts = queryParts.slice(baseParts.length);
+        const extraMaps = mapParts.slice(baseParts.length);
+
+        const allParts = [...baseParts, ...extraParts];
+        const hasTypeInUrl = allParts.some(isKnownTypeSlug);
+        const typeSlug = getTypeSlug();
+
+        // Alguns links ClimaRio trazem BTU/ciclo sem explicitar a categoria.
+        // A selecao do usuario completa apenas esse tipo, mantendo os filtros da URL da planilha.
+        if (!hasTypeInUrl && typeSlug && normText(baseParts[0]).includes("arcondicionado")) {
+          baseParts = [baseParts[0], typeSlug, ...baseParts.slice(1)];
+        }
+
+        const groups = [];
+        extraParts.forEach((segment, index) => {
+          const key = normText(extraMaps[index] || `extra-${index}`);
+          const value = normText(segment);
+          if (!segment || key.includes("ciclo") || value.includes("quentefrio")) return;
+          if (isKnownTypeSlug(segment) && baseParts.some(part => normText(part) === value)) return;
+
+          let group = groups.find(item => item.key === key);
+          if (!group) {
+            group = { key, values: [] };
+            groups.push(group);
+          }
+          group.values.push(segment);
+        });
+
+        const combinations = groups.length
+          ? groups.reduce((acc, group) => acc.flatMap(combo => group.values.map(value => [...combo, value])), [[]])
+          : [[]];
+
+        const order = getOrderParam(parsed);
+        const seen = new Set();
+        return combinations
+          .map(combo => [...baseParts, ...combo].filter(Boolean))
+          .filter(parts => parts.length)
+          .map(parts => {
+            const path = parts.map(part => encodeURIComponent(part)).join("/");
+            const map = parts.map(() => "c").join(",");
+            return `${STORE_URL}/api/catalog_system/pub/products/search/${path}?map=${map}&O=${order}`;
+          })
+          .filter(apiUrl => {
+            if (seen.has(apiUrl)) return false;
+            seen.add(apiUrl);
+            return true;
+          });
+      };
+      const getCycleFilterFromUrl = (searchUrl) => {
+        let parsed;
+        try { parsed = new URL(searchUrl); } catch(e) { return ""; }
+
+        const parts = pathParts(parsed.searchParams.get("query") || parsed.pathname || "/");
+        const maps = String(parsed.searchParams.get("map") || "").split(",").map(item => item.trim());
+        const cycleIndex = maps.findIndex(map => normText(map).includes("ciclo"));
+        const segment = cycleIndex >= 0 ? parts[cycleIndex] : parts.find(part => normText(part).includes("quentefrio"));
+        const value = normText(segment);
+        if (value.includes("quente")) return "quente";
+        if (value.includes("frio")) return "frio";
+        return "";
+      };
+      const extractBtuValues = (value) => {
+        const text = normText(value);
+        const values = [];
+        const re = /(\d{1,3})000btu/g;
+        let match;
+        while ((match = re.exec(text)) !== null) values.push(Number(match[1]) * 1000);
+        return values;
+      };
+      const getBtuFiltersFromUrl = (searchUrl) => {
+        let parsed;
+        try { parsed = new URL(searchUrl); } catch(e) { return []; }
+
+        const parts = pathParts(parsed.searchParams.get("query") || parsed.pathname || "/");
+        return [...new Set(parts.flatMap(extractBtuValues))];
+      };
+      const productMatchesAirConditioner = (product) => normText(product.productName || "").includes("arcondicionado");
+      const productMatchesBtuFilter = (product, btuFilters) => {
+        if (!btuFilters.length) return true;
+        const haystack = [
+          product.productName || "",
+          ...(product.categories || []),
+          ...(product["Capacidade de Climatização"] || []),
+          ...(product["Capacidade de Climatizacao"] || []),
+          ...(product["Capacidade BTU/h"] || [])
+        ].join(" ");
+        const productBtus = extractBtuValues(haystack);
+        return productBtus.some(value => btuFilters.includes(value));
+      };
+      const productMatchesCycleFilter = (product, cycleFilter) => {
+        if (!cycleFilter) return true;
+        const haystack = normText([
+          product.productName || "",
+          ...(product.Ciclo || []),
+          ...(product["Ciclo do Ar Condicionado"] || [])
+        ].join(" "));
+
+        if (cycleFilter === "quente") return haystack.includes("quente");
+        if (cycleFilter === "frio") return haystack.includes("frio") && !haystack.includes("quente");
+        return true;
+      };
+      const fetchApiText = async (targetUrl) => {
+        let lastError = null;
+        for (const proxy of API_PROXIES) {
+          try {
+            const resp = await fetch(proxy + encodeURIComponent(targetUrl), { cache: "no-store" });
+            if (!resp.ok && resp.status !== 206) throw new Error("HTTP " + resp.status);
+
+            if (proxy.includes("allorigins")) {
+              const json = await resp.json();
+              if (json && json.contents) return json.contents;
+              throw new Error("Resposta sem contents");
+            }
+
+            return await resp.text();
+          } catch(e) {
+            lastError = e;
+          }
+        }
+        throw lastError || new Error("Falha na API VTEX ClimaRio");
+      };
+      const fetchCatalogProducts = async (apiUrl) => {
+        const products = [];
+        for (let from = 0; from < 300; from += 50) {
+          const to = from + 49;
+          const sep = apiUrl.includes("?") ? "&" : "?";
+          const raw = await fetchApiText(`${apiUrl}${sep}_from=${from}&_to=${to}&_=${Date.now()}`);
+          let data;
+          try { data = JSON.parse(raw); } catch(e) { break; }
+          if (!Array.isArray(data) || data.length === 0) break;
+          products.push(...data);
+          if (data.length < 50) break;
+        }
+        return products;
+      };
+      const getPixPrice = (offer) => {
+        const installments = Array.isArray(offer?.Installments) ? offer.Installments : [];
+        const pix = installments.find(item => normText(`${item.PaymentSystemName || ""} ${item.Name || ""}`).includes("pix") && Number(item.NumberOfInstallments || 1) === 1)
+          || installments.find(item => normText(`${item.PaymentSystemName || ""} ${item.Name || ""}`).includes("pix"));
+        const installmentValue = Number(pix?.Value || pix?.TotalValuePlusInterestRate || 0);
+        if (installmentValue > 0) return installmentValue;
+
+        const options = offer?.PaymentOptions?.installmentOptions || [];
+        const pixOption = options.find(option => normText(option?.paymentName).includes("pix"));
+        const pixInstallment = pixOption?.installments?.find(item => Number(item.count || 0) === 1)
+          || pixOption?.installments?.[0];
+        const cents = Number(pixInstallment?.total || pixInstallment?.value || 0);
+        return cents > 0 ? cents / 100 : 0;
+      };
+      const getProductOffer = (product) => {
+        const candidates = [];
+        const items = Array.isArray(product.items) ? product.items : [];
+        for (const sku of items) {
+          const sellers = Array.isArray(sku.sellers) ? sku.sellers : [];
+          for (const seller of sellers) {
+            const offer = seller?.commertialOffer || {};
+            const price = Number(offer.Price || offer.SpotPrice || offer.ListPrice || 0);
+            const quantity = Number(offer.AvailableQuantity ?? 1);
+            if (price > 0 && offer.IsAvailable !== false && quantity > 0) {
+              candidates.push({ sku, offer, sortPrice: getPixPrice(offer) || price });
+            }
+          }
+        }
+        candidates.sort((a, b) => a.sortPrice - b.sortPrice);
+        return candidates[0] || null;
+      };
+      const formatInstallment = (offer) => {
+        const installments = Array.isArray(offer?.Installments) ? offer.Installments : [];
+        const credit = installments.filter(item =>
+          Number(item.NumberOfInstallments || 0) > 1 &&
+          Number(item.InterestRate || 0) === 0 &&
+          normText(item.PaymentSystemGroupName || "").includes("creditcard")
+        );
+        const pool = credit.length ? credit : installments.filter(item => Number(item.NumberOfInstallments || 0) > 1);
+        if (!pool.length) return "";
+
+        const best = pool.reduce((a, b) =>
+          Number(a.NumberOfInstallments || 0) > Number(b.NumberOfInstallments || 0) ? a : b
+        );
+        const count = Number(best.NumberOfInstallments || 0);
+        const value = Number(best.Value || 0);
+        const total = Number((value * count).toFixed(2));
+        if (!count || !total || !value) return "";
+
+        return `ou ${formatCurrency(total)} até ${count}x de ${formatCurrency(value)}`;
+      };
+      const buildProductLink = (product) => {
+        if (product.link) return product.link;
+        return product.linkText ? `${STORE_URL}/${product.linkText}/p` : STORE_URL;
+      };
+      const getSortPrice = (product) => {
+        const productOffer = getProductOffer(product);
+        if (!productOffer) return Number.MAX_SAFE_INTEGER;
+        const { offer } = productOffer;
+        return Number(getPixPrice(offer) || offer.Price || offer.SpotPrice || offer.ListPrice || Number.MAX_SAFE_INTEGER);
+      };
+      const sortCatalogProducts = (products, searchUrl) => {
+        let parsed;
+        try { parsed = new URL(searchUrl); } catch(e) { return products; }
+        const desc = getOrderParam(parsed) === "OrderByPriceDESC";
+        return products.sort((a, b) => desc ? getSortPrice(b) - getSortPrice(a) : getSortPrice(a) - getSortPrice(b));
+      };
+
+      try {
+        const apiUrls = buildCatalogApiUrls(url);
+        const cycleFilter = getCycleFilterFromUrl(url);
+        const btuFilters = getBtuFiltersFromUrl(url);
+        const rawProducts = [];
+
+        for (const apiUrl of apiUrls) {
+          try {
+            rawProducts.push(...await fetchCatalogProducts(apiUrl));
+          } catch(e) {
+            console.warn("ClimaRio Catalog API falhou:", apiUrl, e);
+          }
+        }
+
+        const seen = new Set();
+        const uniqueProducts = rawProducts
+          .filter(product =>
+            product &&
+            product.productName &&
+            productMatchesAirConditioner(product) &&
+            productMatchesBtuFilter(product, btuFilters) &&
+            productMatchesCycleFilter(product, cycleFilter)
+          )
+          .filter(product => {
+            const id = product.productId || product.linkText || product.productName;
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          });
+
+        return sortCatalogProducts(uniqueProducts, url)
+          .map(product => {
+            const productOffer = getProductOffer(product);
+            if (!productOffer) return null;
+
+            const { sku, offer } = productOffer;
+            const pixPrice = getPixPrice(offer);
+            const basePrice = Number(offer.SpotPrice || offer.Price || offer.ListPrice || 0);
+            const cash = pixPrice > 0 ? pixPrice : basePrice;
+
+            return {
+              title: product.productName,
+              image: sku.images?.[0]?.imageUrl || "",
+              spot: cash > 0 ? `${formatCurrency(cash)} à vista` : "Consulte o site",
+              install: formatInstallment(offer),
+              link: buildProductLink(product),
+              discount: 0
+            };
+          })
+          .filter(Boolean);
+      } catch(e) { console.error("ClimaRio erro:", e); return []; }
+    }
+
+
 
 
     async function startScraping() {
@@ -1525,13 +1840,15 @@
         const poloArLink   = links.find(l => l.Site && norm(l.Site).includes("poloar"));
         const friopecasLink = links.find(l => l.Site && norm(l.Site).includes("friopecas"));
         const webcontinentalLink = links.find(l => l.Site && norm(l.Site).includes("webcontinental"));
+        const climarioLink = links.find(l => l.Site && norm(l.Site).includes("climario"));
         console.log("📋 Match das lojas:", {
           frigelar: frigelarLink ? `✓ "${frigelarLink.Site}"` : "✗ nenhum",
           leveros:  leverosLink  ? `✓ "${leverosLink.Site}"`  : "✗ nenhum",
           dufrio:   dufrioLink   ? `✓ "${dufrioLink.Site}"`   : "✗ nenhum",
           poloAr:   poloArLink   ? `✓ "${poloArLink.Site}"`   : "✗ nenhum",
           friopecas: friopecasLink ? `✓ "${friopecasLink.Site}"` : "✗ nenhum",
-          webcontinental: webcontinentalLink ? `✓ "${webcontinentalLink.Site}"` : "✗ nenhum"
+          webcontinental: webcontinentalLink ? `✓ "${webcontinentalLink.Site}"` : "✗ nenhum",
+          climario: climarioLink ? `✓ "${climarioLink.Site}"` : "✗ nenhum"
         });
 
         document.getElementById("loading-msg").innerText = "BUSCANDO LOJAS...";
@@ -1582,6 +1899,14 @@
           scrapePromises.push(
             scrapeWebcontinental(webcontinentalLink.Link).then(products => {
               return products.map(p => ({...p, storeName: "WebContinental"}));
+            })
+          );
+        }
+
+        if (climarioLink && climarioLink.Link) {
+          scrapePromises.push(
+            scrapeClimario(climarioLink.Link).then(products => {
+              return products.map(p => ({...p, storeName: "ClimaRio"}));
             })
           );
         }
@@ -1691,6 +2016,7 @@
             if (storeKey === "central ar") btn.classList.add("store-centralar");
             if (storeKey === "friopecas") btn.classList.add("store-friopecas");
             if (storeKey === "webcontinental") btn.classList.add("store-webcontinental");
+            if (storeKey === "climario") btn.classList.add("store-climario");
             if (storeKey === "polo ar") btn.classList.add("store-poloar");
         }
         btn.innerText = item;
@@ -1751,7 +2077,7 @@
         "https://images.weserv.nl/?url=" + encodeURIComponent(cleanUrl),
         "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(cleanUrl)
       ];
-      const urls = (store === "frigelar" || store === "central ar" || store === "friopecas" || store === "webcontinental")
+      const urls = (store === "frigelar" || store === "central ar" || store === "friopecas" || store === "webcontinental" || store === "climario")
         ? [...proxied, cleanUrl]
         : [cleanUrl, ...proxied];
       return [...new Set(urls)];
@@ -1850,6 +2176,7 @@
       if (storeKey === "central ar") badge.classList.add("store-centralar");
       if (storeKey === "friopecas") badge.classList.add("store-friopecas");
       if (storeKey === "webcontinental") badge.classList.add("store-webcontinental");
+      if (storeKey === "climario") badge.classList.add("store-climario");
       if (storeKey === "polo ar") badge.classList.add("store-poloar");
       badge.textContent = store;
 

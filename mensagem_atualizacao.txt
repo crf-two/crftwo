@@ -1,1 +1,1 @@
-Lab ClimaRio: renderização de ofertas via link exato da planilha.
+Scraper Oficial: ClimaRio integrada como nova loja no grid de resultados.

@@ -741,7 +741,7 @@
     const svgScraper = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 11 10 13 14 9"/></svg>`;
 
     const SCRAPER_LABS = [
-      { nome: "SCRAPER CLIMARIO", desc: "Extração direta de produtos do site ClimaRio via URL.", arquivo: "scraper-climario.html", color: "#f59e0b", official: false },
+      { nome: "SCRAPER CLIMARIO", desc: "Extração direta de produtos do site ClimaRio via URL.", arquivo: "scraper-climario.html", color: "#f59e0b", official: true },
       { nome: "SCRAPER FRIGELAR", desc: "Extração isolada dos links Frigelar da planilha.", arquivo: "scraper-frigelar.html", color: "#00a859", official: true },
       { nome: "SCRAPER LEVEROS", desc: "Extração isolada dos links Leveros da planilha.", arquivo: "scraper-leveros.html", color: "#ff6b00", official: true },
       { nome: "SCRAPER CENTRAL AR", desc: "Extração isolada dos links Central Ar da planilha.", arquivo: "scraper-centralar.html", color: "#ec4899", official: true },
@@ -759,7 +759,7 @@
       { nome: "CHECKLIST CÂMARAS FRIAS - GERAR PDF", desc: "Formulário passo-a-passo. Geração de PDF para orçamento de câmara frigorífica.", arquivo: "CheckList.html", icone: svgChecklist, color: "#10b981", slug: "checklist", category: "camara" },
       
       // Ar Condicionado
-      { nome: "SCRAPER OFICIAL", desc: "Comparação de preços em tempo real entre Dufrio, Frigelar, Leveros, Central Ar, Polo Ar, FrioPeças e WebContinental.", arquivo: "scraper-ar.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>`, color: "#f59e0b", slug: "scraper", category: "ar" },
+      { nome: "SCRAPER OFICIAL", desc: "Comparação de preços em tempo real entre Dufrio, Frigelar, Leveros, Central Ar, Polo Ar, FrioPeças, WebContinental e ClimaRio.", arquivo: "scraper-ar.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>`, color: "#f59e0b", slug: "scraper", category: "ar" },
       { nome: "COMPARADOR DE AR-CONDICIONADO", desc: "Análise de preços da concorrência em tempo real.", arquivo: "comparador-ar.html", icone: svgComparar, color: "#6366f1", slug: "comparador", category: "ar" },
       { nome: "PREÇOS AO VIVO", badge: "Em Produção", desc: "Visualiza em cards os produtos raspados pela extensão das abas abertas nas lojas.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`, color: "#00e676", slug: "precos-vivo", category: "ar" },
       { nome: "PRECIFICAÇÃO SKU'S (SITE)", desc: "Calculadora para precificar SKU's no 365 com o valor do site.", arquivo: "precificacao-ar.html", icone: svgPrecificar, color: "#0ea5e9", slug: "precificacao", category: "ar" },
@@ -893,6 +893,12 @@
     // Dados de atualizações embutidos (Fallback)
     const updatesData = {
       "updates": [
+        {
+          "date": "08/05/2026",
+          "time": "17:06",
+          "title": "ClimaRio no Scraper Oficial",
+          "description": "O Scraper Oficial agora também traz cards da ClimaRio junto das demais lojas, usando o link exato da planilha para renderizar imagem, título, preço à vista, parcelamento e link do produto."
+        },
         {
           "date": "08/05/2026",
           "time": "16:53",
