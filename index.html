@@ -472,6 +472,45 @@
       background: rgba(255,255,255,0.075);
     }
 
+    .lab-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .lab-card-status {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text-muted);
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .lab-card-status.is-official {
+      color: #00e676;
+      background: rgba(0,230,118,0.12);
+      border-color: rgba(0,230,118,0.42);
+      box-shadow: 0 0 20px rgba(0,230,118,0.08);
+    }
+
+    .lab-card-status.is-lab {
+      color: #f59e0b;
+      background: rgba(245,158,11,0.1);
+      border-color: rgba(245,158,11,0.35);
+    }
+
     .lab-card .icon-box {
       width: 42px;
       height: 42px;
@@ -702,14 +741,14 @@
     const svgScraper = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><polyline points="8 11 10 13 14 9"/></svg>`;
 
     const SCRAPER_LABS = [
-      { nome: "SCRAPER CLIMARIO", desc: "Extração direta de produtos do site ClimaRio via URL.", arquivo: "scraper-climario.html", color: "#f59e0b" },
-      { nome: "SCRAPER FRIGELAR", desc: "Extração isolada dos links Frigelar da planilha.", arquivo: "scraper-frigelar.html", color: "#00a859" },
-      { nome: "SCRAPER LEVEROS", desc: "Extração isolada dos links Leveros da planilha.", arquivo: "scraper-leveros.html", color: "#ff6b00" },
-      { nome: "SCRAPER CENTRAL AR", desc: "Extração isolada dos links Central Ar da planilha.", arquivo: "scraper-centralar.html", color: "#ec4899" },
-      { nome: "SCRAPER DUFRIO", desc: "Extração isolada dos links Dufrio da planilha.", arquivo: "scraper-dufrio.html", color: "#007bff" },
-      { nome: "SCRAPER FRIOPEÇAS", desc: "Extração de produtos do site FrioPeças a partir do link da planilha.", arquivo: "scraper-friopecas.html", color: "#2563eb" },
-      { nome: "SCRAPER POLO AR", desc: "Extração de produtos do site Polo Ar a partir do link da planilha.", arquivo: "scraper-poloar.html", color: "#ef4444" },
-      { nome: "SCRAPER WEBCONTINENTAL", desc: "Extração de produtos do site Webcontinental a partir do link da planilha.", arquivo: "scraper-webcontinental.html", color: "#14b8a6" }
+      { nome: "SCRAPER CLIMARIO", desc: "Extração direta de produtos do site ClimaRio via URL.", arquivo: "scraper-climario.html", color: "#f59e0b", official: false },
+      { nome: "SCRAPER FRIGELAR", desc: "Extração isolada dos links Frigelar da planilha.", arquivo: "scraper-frigelar.html", color: "#00a859", official: true },
+      { nome: "SCRAPER LEVEROS", desc: "Extração isolada dos links Leveros da planilha.", arquivo: "scraper-leveros.html", color: "#ff6b00", official: true },
+      { nome: "SCRAPER CENTRAL AR", desc: "Extração isolada dos links Central Ar da planilha.", arquivo: "scraper-centralar.html", color: "#ec4899", official: true },
+      { nome: "SCRAPER DUFRIO", desc: "Extração isolada dos links Dufrio da planilha.", arquivo: "scraper-dufrio.html", color: "#007bff", official: true },
+      { nome: "SCRAPER FRIOPEÇAS", desc: "Extração de produtos do site FrioPeças a partir do link da planilha.", arquivo: "scraper-friopecas.html", color: "#2563eb", official: false },
+      { nome: "SCRAPER POLO AR", desc: "Extração de produtos do site Polo Ar a partir do link da planilha.", arquivo: "scraper-poloar.html", color: "#ef4444", official: true },
+      { nome: "SCRAPER WEBCONTINENTAL", desc: "Extração de produtos do site Webcontinental a partir do link da planilha.", arquivo: "scraper-webcontinental.html", color: "#14b8a6", official: false }
     ];
 
     // Nomes estritamente idênticos solicitados pelo usuário
@@ -783,8 +822,9 @@
           <div class="labs-grid">
             ${SCRAPER_LABS.map(lab => `
               <a class="lab-card" href="${lab.arquivo}" style="--lab-color: ${lab.color}">
-                <div>
+                <div class="lab-card-top">
                   <div class="icon-box">${svgScraper}</div>
+                  <span class="lab-card-status ${lab.official ? 'is-official' : 'is-lab'}">${lab.official ? '✓ No oficial' : 'Lab'}</span>
                 </div>
                 <div>
                   <div class="lab-card-title">${lab.nome}</div>
@@ -853,6 +893,12 @@
     // Dados de atualizações embutidos (Fallback)
     const updatesData = {
       "updates": [
+        {
+          "date": "08/05/2026",
+          "time": "08:44",
+          "title": "Status oficial nos labs de scraper",
+          "description": "Os cards dos Laboratórios de Scraper agora indicam quais lojas já estão integradas ao Scraper Oficial e quais seguem apenas como laboratório."
+        },
         {
           "date": "08/05/2026",
           "time": "08:07",

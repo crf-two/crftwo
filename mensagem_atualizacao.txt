@@ -1,1 +1,1 @@
-Lab FrioPecas: removidos indisponiveis e respeitado ciclo do link da planilha.
+Hub: labs de scraper agora indicam quais lojas ja estao no Scraper Oficial.
