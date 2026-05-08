@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Scraper Oficial: WebContinental integrada como nova loja no grid de resultados.', dateIso: '2026-05-08T11:08:00-03:00' };
+const LATEST_LOG = { message: 'Lab ClimaRio: renderização de ofertas via link exato da planilha.', dateIso: '2026-05-08T16:53:00-03:00' };

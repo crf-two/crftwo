@@ -1,1 +1,1 @@
-Scraper Oficial: WebContinental integrada como nova loja no grid de resultados.
+Lab ClimaRio: renderização de ofertas via link exato da planilha.
