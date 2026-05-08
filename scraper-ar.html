@@ -403,6 +403,7 @@
       tipos.forEach(t => {
         const b = document.createElement("button");
         b.className = "option-btn tipo-btn" + (selection.tipo === t ? " selected" : "");
+        b.dataset.value = t;
 
         let imgName = t;
         if (t === "Hiwall" || t === "Hi Wall") imgName = "Hi Wall";
@@ -461,10 +462,7 @@
       selection.btu = "";
       selection.ciclo = "";
 
-      lockGrid("tipo-options", t, b => {
-        const span = b.querySelector("span");
-        return span ? span.innerText : "";
-      });
+      lockGrid("tipo-options", t, b => b.dataset.value);
       bounceSelected("tipo-options");
 
       document.getElementById("step-ciclo").classList.remove("active");
@@ -502,8 +500,7 @@
       selection.btu = b;
       selection.ciclo = "";
 
-      const labelB = formatBTU(b);
-      lockGrid("btu-options", labelB, btn => btn.innerText.trim());
+      lockGrid("btu-options", b, btn => btn.dataset.value);
       bounceSelected("btu-options");
 
       document.getElementById("step-resultados").classList.remove("active");
@@ -530,8 +527,7 @@
       }
 
       selection.ciclo = c;
-      const labelC = formatCiclo(c);
-      lockGrid("ciclo-options", labelC, btn => btn.innerText.trim());
+      lockGrid("ciclo-options", c, btn => btn.dataset.value);
       bounceSelected("ciclo-options");
 
       document.getElementById("loading-results").style.display = "flex";
@@ -549,6 +545,7 @@
       opts.forEach(o => {
         const b = document.createElement("button");
         b.className = "option-btn" + (currentSelection === o ? " selected" : "");
+        b.dataset.value = o;
         b.innerText = formatter ? formatter(o) : o;
         b.onclick = () => cb(o);
         c.appendChild(b);
