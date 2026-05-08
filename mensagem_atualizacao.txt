@@ -1,1 +1,1 @@
-Scraper Oficial: FrioPecas integrada como nova loja no grid de resultados.
+Lab WebContinental: ofertas renderizadas com preco, parcelamento, imagem e link com skuId.

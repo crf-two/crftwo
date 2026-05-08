@@ -165,8 +165,12 @@
     let selection = { tipo: "", btu: "", ciclo: "" };
     let sheetLoadPromise = null;
 
-    const norm = (s) => String(s || "").toLowerCase().replace(/[\s\-_.]/g, "");
-    const normalizeCiclo = (c) => String(c || "").toLowerCase().trim().replace(/^só\s+/, "");
+    const normalizeText = (s) => String(s || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+    const norm = (s) => normalizeText(s).replace(/[\s\-_.]/g, "");
+    const normalizeCiclo = (c) => normalizeText(c).trim().replace(/^so\s+/, "");
     const sortBTUs = (a, b) => {
       const getVal = (s) => parseInt(String(s).replace(/[.,]/g, "").match(/\d+/) || [0], 10);
       return getVal(a) - getVal(b);
@@ -393,6 +397,287 @@
       return products;
     }
 
+    // A WebContinental usa VTEX, mas os aliases do link público
+    // (capacidade-btus, tecnologia) não funcionam diretamente na API.
+    // Aqui traduzimos esses aliases para os IDs reais das especificações.
+    const API_PROXIES = [
+      "https://api.codetabs.com/v1/proxy?quest=",
+      "https://frigelar-proxy.crftwo.workers.dev/?url=",
+      "https://api.allorigins.win/get?url="
+    ];
+
+    const SPEC_MAP = {
+      capacidadebtus: "specificationFilter_248",
+      tecnologia: "specificationFilter_153"
+    };
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+      }).format(value).replace(/\u00a0/g, " ");
+    }
+
+    function pathParts(value) {
+      return String(value || "")
+        .replace(/^\/+|\/+$/g, "")
+        .split("/")
+        .map(part => part.trim())
+        .filter(Boolean);
+    }
+
+    function getOrderParam(parsedUrl) {
+      const order = parsedUrl.searchParams.get("order") || parsedUrl.searchParams.get("O") || "";
+      return String(order).toLowerCase().includes("desc") ? "OrderByPriceDESC" : "OrderByPriceASC";
+    }
+
+    function specValueFromSlug(segment, key) {
+      const decoded = decodeURIComponent(String(segment || "").replace(/\+/g, " "));
+      if (key === "capacidadebtus") {
+        const digits = decoded.replace(/[^\d]/g, "");
+        return digits ? `${digits} BTUS` : decoded;
+      }
+      if (key === "tecnologia" && norm(decoded).includes("inverter")) return "Inverter";
+      return decoded
+        .split("-")
+        .filter(Boolean)
+        .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+        .join(" ");
+    }
+
+    function getCycleFilterFromUrl(searchUrl) {
+      let parsed;
+      try { parsed = new URL(searchUrl); } catch(e) { return ""; }
+
+      const parts = pathParts(parsed.pathname);
+      const maps = String(parsed.searchParams.get("map") || "").split(",").map(item => item.trim());
+      const cycleIndex = maps.findIndex(map => norm(map) === "ciclodoarcondicionado");
+      const segment = cycleIndex >= 0 ? parts[cycleIndex] : parts.find(part => norm(part).includes("quentefrio"));
+      const value = norm(segment);
+      if (value.includes("quente")) return "quente";
+      if (value.includes("frio")) return "frio";
+      return "";
+    }
+
+    function buildCatalogApiUrl(searchUrl) {
+      let parsed;
+      try { parsed = new URL(searchUrl); } catch(e) { return ""; }
+
+      const parts = pathParts(parsed.pathname);
+      const maps = String(parsed.searchParams.get("map") || "").split(",").map(item => item.trim());
+      const finalParts = [];
+      const finalMaps = [];
+      let categoryCount = 0;
+
+      parts.forEach((segment, index) => {
+        const key = norm(maps[index]);
+        if (!key) return;
+
+        if (key === "c" || key.startsWith("category")) {
+          finalParts.push(segment);
+          finalMaps.push("c");
+          categoryCount += 1;
+          return;
+        }
+
+        if (SPEC_MAP[key]) {
+          finalParts.push(specValueFromSlug(segment, key));
+          finalMaps.push(SPEC_MAP[key]);
+        }
+      });
+
+      // Algumas linhas antigas usam só category-3 no link público.
+      // A API precisa do caminho completo da categoria para não cair em busca genérica.
+      if (categoryCount === 1 && norm(finalParts[0]).startsWith("arcondicionado")) {
+        finalParts.unshift("climatizacao", "ar-condicionado");
+        finalMaps.unshift("c", "c");
+      }
+
+      if (!finalParts.length) return "";
+
+      const path = finalParts.map(part => encodeURIComponent(part)).join("/");
+      const map = finalMaps.join(",");
+      return `${STORE.baseUrl}/api/catalog_system/pub/products/search/${path}?map=${map}&O=${getOrderParam(parsed)}`;
+    }
+
+    async function fetchApiText(targetUrl) {
+      let lastError = null;
+      for (const proxy of API_PROXIES) {
+        try {
+          const resp = await fetch(proxy + encodeURIComponent(targetUrl), { cache: "no-store" });
+          if (!resp.ok && resp.status !== 206) throw new Error("HTTP " + resp.status);
+
+          if (proxy.includes("allorigins")) {
+            const json = await resp.json();
+            if (json && json.contents) return json.contents;
+            throw new Error("Resposta sem contents");
+          }
+
+          return await resp.text();
+        } catch(e) {
+          lastError = e;
+        }
+      }
+      throw lastError || new Error("Falha na API VTEX WebContinental");
+    }
+
+    async function fetchCatalogProducts(apiUrl) {
+      const products = [];
+      for (let from = 0; from < 300; from += 50) {
+        const to = from + 49;
+        const sep = apiUrl.includes("?") ? "&" : "?";
+        const raw = await fetchApiText(`${apiUrl}${sep}_from=${from}&_to=${to}&_=${Date.now()}`);
+        let data;
+        try { data = JSON.parse(raw); } catch(e) { break; }
+        if (!Array.isArray(data) || data.length === 0) break;
+        products.push(...data);
+        if (data.length < 50) break;
+      }
+      return products;
+    }
+
+    function productMatchesCycleFilter(product, cycleFilter) {
+      if (!cycleFilter) return true;
+      const title = norm(product.productName || "");
+      const haystack = norm([
+        product.productName || "",
+        ...(product["Ciclo do Ar Condicionado"] || []),
+        ...(product.Ciclo || [])
+      ].join(" "));
+
+      if (cycleFilter === "quente") return title.includes("quente") || (!title.includes("frio") && haystack.includes("quente"));
+      if (cycleFilter === "frio") return title.includes("frio") && !title.includes("quente");
+      return true;
+    }
+
+    function getPixPrice(offer) {
+      const installments = Array.isArray(offer?.Installments) ? offer.Installments : [];
+      const pix = installments.find(item => norm(`${item.PaymentSystemName || ""} ${item.Name || ""}`).includes("pix") && Number(item.NumberOfInstallments || 1) === 1)
+        || installments.find(item => norm(`${item.PaymentSystemName || ""} ${item.Name || ""}`).includes("pix"));
+      const value = Number(pix?.Value || pix?.TotalValuePlusInterestRate || 0);
+      return value > 0 ? value : 0;
+    }
+
+    function getProductOffer(product) {
+      const candidates = [];
+      const items = Array.isArray(product.items) ? product.items : [];
+      for (const sku of items) {
+        const sellers = Array.isArray(sku.sellers) ? sku.sellers : [];
+        for (const seller of sellers) {
+          const offer = seller?.commertialOffer || {};
+          const price = Number(offer.Price || offer.SpotPrice || offer.ListPrice || 0);
+          const quantity = Number(offer.AvailableQuantity ?? 1);
+          if (price > 0 && offer.IsAvailable !== false && quantity > 0) {
+            candidates.push({ sku, offer, sortPrice: getPixPrice(offer) || price });
+          }
+        }
+      }
+      candidates.sort((a, b) => a.sortPrice - b.sortPrice);
+      return candidates[0] || null;
+    }
+
+    function formatInstallment(offer) {
+      const installments = Array.isArray(offer?.Installments) ? offer.Installments : [];
+      const credit = installments.filter(item =>
+        Number(item.NumberOfInstallments || 0) > 1 &&
+        Number(item.InterestRate || 0) === 0 &&
+        norm(item.PaymentSystemGroupName || "").includes("creditcard")
+      );
+      const pool = credit.length ? credit : installments.filter(item => Number(item.NumberOfInstallments || 0) > 1);
+      if (!pool.length) return "";
+
+      const best = pool.reduce((a, b) =>
+        Number(a.NumberOfInstallments || 0) > Number(b.NumberOfInstallments || 0) ? a : b
+      );
+      const count = Number(best.NumberOfInstallments || 0);
+      const total = Number(best.TotalValuePlusInterestRate || (Number(best.Value || 0) * count));
+      const value = Number(best.Value || (total / count));
+      if (!count || !total || !value) return "";
+
+      return `ou ${formatCurrency(total)} até ${count}x de ${formatCurrency(value)}`;
+    }
+
+    function buildProductLink(product, sku) {
+      const base = product.link || (product.linkText ? `${STORE.baseUrl}/${product.linkText}/p` : STORE.baseUrl);
+      const clean = base.startsWith("http") ? base : STORE.baseUrl + base;
+      const skuId = sku?.itemId || sku?.sku;
+      if (!skuId || clean.includes("skuId=")) return clean;
+      return `${clean}${clean.includes("?") ? "&" : "?"}skuId=${encodeURIComponent(skuId)}`;
+    }
+
+    function mapCatalogProduct(product) {
+      const productOffer = getProductOffer(product);
+      if (!productOffer) return null;
+
+      const { sku, offer } = productOffer;
+      const pixPrice = getPixPrice(offer);
+      const basePrice = Number(offer.Price || offer.SpotPrice || offer.ListPrice || 0);
+      const cash = pixPrice > 0 ? pixPrice : basePrice;
+
+      return {
+        name: product.productName,
+        img: sku.images?.[0]?.imageUrl || "",
+        cash: cash > 0 ? `${formatCurrency(cash)} à vista` : "Consulte o site",
+        parc: formatInstallment(offer),
+        link: buildProductLink(product, sku)
+      };
+    }
+
+    async function scrapeCatalog(searchUrl) {
+      const apiUrl = buildCatalogApiUrl(searchUrl);
+      if (!apiUrl) return [];
+
+      const cycleFilter = getCycleFilterFromUrl(searchUrl);
+      const rawProducts = await fetchCatalogProducts(apiUrl);
+      const seen = new Set();
+
+      return rawProducts
+        .filter(product => product && product.productName && productMatchesCycleFilter(product, cycleFilter))
+        .filter(product => {
+          const id = product.productId || product.linkText || product.productName;
+          if (seen.has(id)) return false;
+          seen.add(id);
+          return true;
+        })
+        .map(mapCatalogProduct)
+        .filter(Boolean);
+    }
+
+    function extractFromJsonLd(html) {
+      const products = [];
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll('script[type="application/ld+json"]').forEach(script => {
+        let data;
+        try { data = JSON.parse(script.textContent || ""); } catch(e) { return; }
+        if (data?.["@type"] !== "ItemList" || !Array.isArray(data.itemListElement)) return;
+
+        data.itemListElement.forEach(entry => {
+          const item = entry.item || {};
+          const offer = item.offers || {};
+          const offers = Array.isArray(offer.offers) ? offer.offers : [];
+          const inStock = offers.some(o => /instock/i.test(String(o.availability || "")));
+          if (!item.name || !inStock) return;
+
+          const low = Number(offer.lowPrice || offers[0]?.price || 0);
+          const high = Number(offer.highPrice || offers[0]?.price || low || 0);
+          const sku = item.sku || offers[0]?.sku || "";
+          const baseLink = item["@id"] || STORE.baseUrl;
+          const link = sku && !baseLink.includes("skuId=")
+            ? `${baseLink}${baseLink.includes("?") ? "&" : "?"}skuId=${encodeURIComponent(sku)}`
+            : baseLink;
+
+          products.push({
+            name: item.name,
+            img: Array.isArray(item.image) ? item.image[0] : item.image,
+            cash: low > 0 ? `${formatCurrency(low)} à vista` : "Consulte o site",
+            parc: high > 0 ? `ou ${formatCurrency(high)} até 10x de ${formatCurrency(high / 10)}` : "",
+            link
+          });
+        });
+      });
+      return products;
+    }
+
     async function runScraper() {
       const url = document.getElementById("urlInput").value.trim();
       const results = document.getElementById("results");
@@ -408,9 +693,13 @@
       status.style.display = "none";
 
       try {
-        const html = await tryFetch(url);
-        let products = extractFromVtexState(html);
-        if (products.length === 0) products = extractFromDom(html);
+        let products = await scrapeCatalog(url);
+        if (products.length === 0) {
+          const html = await tryFetch(url);
+          products = extractFromJsonLd(html);
+          if (products.length === 0) products = extractFromVtexState(html);
+          if (products.length === 0) products = extractFromDom(html);
+        }
 
         if (products.length === 0) {
           status.innerText = `Nenhum produto detectado na ${STORE.label}.`;
@@ -428,7 +717,7 @@
               <div class="card-body">
                 <div class="card-title" title="${p.name}">${p.name}</div>
                 <div class="price-box">
-                  <div class="price-cash">${p.cash}<span class="price-label">à vista</span></div>
+                  <div class="price-cash">${p.cash}</div>
                   <div class="price-parc">${p.parc || ""}</div>
                 </div>
                 <a href="${p.link}" target="_blank" class="card-btn">Ver na ${STORE.label}</a>
