@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Hub reorganizado com seções principais, Laboratório de Scrapers e Ferramentas Ocultas no index.', dateIso: '2026-05-11T17:55:00-03:00' };
+const LATEST_LOG = { message: 'Ajusta responsividade mobile do Hub principal e consolida AGENTS.md', dateIso: '2026-05-11T21:30:00-03:00' };
