@@ -36,14 +36,19 @@ HTML, CSS, JavaScript, ajustes visuais, responsividade, textos, scrapers, docume
 }
 ```
 
-### Atualização de `mensagem_atualizacao.txt` NÃO substitui o `updatesData`
+### Três arquivos precisam ser atualizados em TODO commit
 
-Os dois precisam ser atualizados em todo commit:
-- `mensagem_atualizacao.txt` (uma linha curta resumindo)
-- `updatesData` dentro do `index.html` (nova entrada no topo)
+A área "Última atualização" do Hub lê de `ultimo_log.js` (`LATEST_LOG`) como prioridade — só cai pro `updatesData` se `LATEST_LOG` não existir. Por isso:
+
+1. **`ultimo_log.js`** — atualizar `LATEST_LOG` com `message` (a mesma do commit) e `dateIso` (timestamp ISO real do commit, ex.: `2026-05-11T21:30:00-03:00`). Sem isso, o Hub continua mostrando a atualização antiga mesmo que `updatesData` esteja correto.
+2. **`mensagem_atualizacao.txt`** — uma linha curta resumindo a alteração.
+3. **`updatesData` dentro do `index.html`** — nova entrada no topo do array `updates`.
+
+> ⚠️ Em ambiente Windows, o `Enviar_GitHub.bat` regenera o `ultimo_log.js` automaticamente. **Fora desse fluxo (Linux, CI, sandbox de IA), o arquivo precisa ser atualizado à mão.**
 
 ### ✅ Checklist obrigatório antes de comitar
 
+- [ ] **`ultimo_log.js`** foi atualizado com `message` e `dateIso` reais do commit?
 - [ ] O `index.html` foi atualizado no objeto `updatesData`?
 - [ ] A nova entrada está no topo do array `updates`?
 - [ ] A `date` está no formato `DD/MM/AAAA`?
@@ -53,7 +58,7 @@ Os dois precisam ser atualizados em todo commit:
 - [ ] O `mensagem_atualizacao.txt` foi atualizado?
 - [ ] O commit corresponde ao que aparece na "Última atualização" do Hub?
 
-**Se o `updatesData` não foi atualizado, a tarefa está incompleta.**
+**Se qualquer um dos três (`ultimo_log.js`, `updatesData`, `mensagem_atualizacao.txt`) não foi atualizado, a tarefa está incompleta.**
 
 ---
 
