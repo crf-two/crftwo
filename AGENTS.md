@@ -1,0 +1,340 @@
+# AGENTS.md — Regras permanentes do Hub de Ferramentas Dufrio
+
+Este arquivo é o **manual principal do projeto** para qualquer agente de IA (Claude, Codex, Cursor, etc.) ou sessão de desenvolvimento que trabalhe neste repositório. Leia este documento antes de qualquer alteração.
+
+---
+
+## 🚨 Regra principal obrigatória — Última atualização do Hub
+
+**Toda alteração no projeto exige atualização da área "Última atualização" exibida no `index.html`.**
+
+Essa regra vale para qualquer tipo de alteração, sem exceção:
+HTML, CSS, JavaScript, ajustes visuais, responsividade, textos, scrapers, documentação, `AGENTS.md`, `mensagem_atualizacao.txt`, ou qualquer outro arquivo do projeto.
+
+**Nenhum commit deve ser feito sem atualizar essa área.**
+
+### Como atualizar
+
+1. Localize o objeto `updatesData` dentro do `<script>` do `index.html`.
+2. Adicione uma **nova entrada no topo** do array `updates`.
+3. **Nunca** apague o histórico anterior. **Nunca** substitua a última entrada antiga.
+4. Sempre adicione a nova entrada **acima** das demais.
+5. Use a **data real** da alteração no formato `DD/MM/AAAA`.
+6. Use o **horário real** do commit no formato `HH:MM`.
+7. Crie um `title` curto e claro.
+8. Crie uma `description` objetiva explicando o que foi alterado.
+9. A informação exibida no Hub precisa representar o último commit feito.
+
+### Exemplo de entrada
+
+```js
+{
+  date: "11/05/2026",
+  time: "14:35",
+  title: "Responsividade mobile do Hub",
+  description: "Ajustes no layout mobile do index, mantendo o visual do Hub e a navegação das ferramentas."
+}
+```
+
+### Atualização de `mensagem_atualizacao.txt` NÃO substitui o `updatesData`
+
+Os dois precisam ser atualizados em todo commit:
+- `mensagem_atualizacao.txt` (uma linha curta resumindo)
+- `updatesData` dentro do `index.html` (nova entrada no topo)
+
+### ✅ Checklist obrigatório antes de comitar
+
+- [ ] O `index.html` foi atualizado no objeto `updatesData`?
+- [ ] A nova entrada está no topo do array `updates`?
+- [ ] A `date` está no formato `DD/MM/AAAA`?
+- [ ] O `time` está no formato `HH:MM`?
+- [ ] O `title` resume bem a alteração?
+- [ ] A `description` explica objetivamente o que foi feito?
+- [ ] O `mensagem_atualizacao.txt` foi atualizado?
+- [ ] O commit corresponde ao que aparece na "Última atualização" do Hub?
+
+**Se o `updatesData` não foi atualizado, a tarefa está incompleta.**
+
+---
+
+## Projeto
+
+- **Repositório:** https://github.com/crftwoo/thiago.luz.dufrio
+- **Ferramenta publicada:** https://crftwoo.github.io/thiago.luz.dufrio/index.html
+
+Este projeto é o **Hub de Ferramentas Dufrio**, uma aplicação web estática publicada via GitHub Pages, com recursos para vendas, orçamentos, análise de mercado, scrapers, precificação, câmara fria e apoio operacional.
+
+---
+
+## Mapa do projeto para agentes de IA
+
+O `index.html` é a página principal e funciona como **porta de entrada** para todas as ferramentas.
+
+### Estrutura geral
+
+| Arquivo | Descrição |
+|---|---|
+| `index.html` | Página principal do Hub: cards das ferramentas, seções principais, área de última atualização, telas centrais (Ferramentas Ocultas e Laboratório de Scrapers). |
+| `simulador-gabinete.html` | Simulador 3D de Câmara Fria. |
+| `plano-corte.html` | Otimizador de Corte de Painéis PIR/EPS. |
+| `CheckList.html` | Checklist Câmaras Frias — Gerar PDF. |
+| `scraper-ar.html` | Scraper Oficial. |
+| `comparador-ar.html` | Comparador de Preços de Ar-Condicionado. |
+| `precificacao-ar.html` | Precificação de SKUs — Site x 365. |
+| `cotacoes.html` | Cotação Express — Infraestrutura. |
+| `precos-ao-vivo.html` | Preços ao Vivo (usado com a extensão). |
+| `itens-quantidade.html` | Extrator de Códigos. |
+| `scraper-store-lab.js` | Script compartilhado dos laboratórios/scrapers por loja. |
+| `scraper-*.html` | Páginas individuais dos scrapers/laboratórios por loja. |
+| `img/` | Imagens, logos e recursos visuais. |
+| `extensao/` | Arquivos da extensão usada junto com algumas ferramentas. |
+| `mensagem_atualizacao.txt` | Resumo curto da última alteração (usado no fluxo de commit). |
+| `Enviar_GitHub.bat` | Script para enviar alterações ao GitHub. |
+| `Atualizar_do_GitHub.bat` | Script para atualizar o projeto local a partir do GitHub. |
+| `worker-novo.js` | Infraestrutura/proxy — **não remover**. |
+
+### Telas centrais do index
+
+- **Ferramentas Ocultas:** acessada por **clique triplo na logo da Dufrio**.
+- **Laboratório de Scrapers:** abre como tela central dentro do `index.html` e lista os scrapers individuais.
+
+Algumas ferramentas ficam visíveis no Hub e outras só dentro de Ferramentas Ocultas.
+
+---
+
+## Regra geral de alteração
+
+1. Analise antes de alterar.
+2. Entenda exatamente o escopo pedido.
+3. Não altere nada fora do escopo.
+4. Preserve funcionalidades existentes.
+5. Preserve links, rotas, cálculos, scrapers, integrações e comportamento das ferramentas.
+6. Preserve o estilo visual base do Hub, salvo pedido explícito.
+7. Evite refatorações desnecessárias.
+8. Não remova cards, telas, links ou ferramentas sem pedido explícito.
+9. Faça mudanças pequenas, objetivas e seguras.
+
+---
+
+## Fluxo obrigatório antes de alterar
+
+- Leia os arquivos necessários.
+- Identifique exatamente onde a mudança deve ser feita.
+- Não mexa em arquivos não relacionados.
+- Não refatore código sem necessidade.
+- Não mude lógica se o pedido for apenas visual, textual ou responsivo.
+
+## Fluxo obrigatório durante a alteração
+
+- Faça mudanças pontuais.
+- Mantenha mobile e desktop funcionando.
+- Evite rolagem horizontal no mobile.
+- Não quebre layout existente.
+- Não remova funcionalidades existentes.
+- Não altere links, rotas ou nomes de arquivos sem pedido explícito.
+- Preserve scripts e integrações existentes.
+
+## Fluxo obrigatório depois de alterar
+
+- Revise os arquivos modificados.
+- Confira se os links continuam funcionando.
+- Confira se botões e navegação continuam funcionando.
+- Confira se o layout mobile não quebrou.
+- Confira se o desktop não piorou.
+- Verifique se somente os arquivos necessários foram alterados.
+
+---
+
+## Como agentes de IA devem editar este projeto
+
+1. Primeiro, ler o `AGENTS.md`.
+2. Depois, identificar quais arquivos estão relacionados ao pedido do usuário.
+3. Abrir e analisar os arquivos antes de editar.
+4. Fazer somente a alteração solicitada.
+5. Evitar refatorações amplas.
+6. Não alterar nomes de arquivos, links ou rotas sem pedido explícito.
+7. Não remover funcionalidades existentes.
+8. Não quebrar compatibilidade mobile.
+9. Manter o layout o mais próximo possível do `index.html`.
+10. Quando a mudança for visual, ajustar preferencialmente por CSS e media queries.
+11. Quando a mudança for textual, não mexer em lógica.
+12. Quando a mudança envolver scrapers, ter cuidado para não quebrar seletores, links, filtros, proxies ou integrações.
+
+---
+
+## Como comitar e publicar alterações
+
+1. Após alterar os arquivos, revisar o diff.
+2. Confirmar que só arquivos necessários foram modificados.
+3. Atualizar o `index.html` no objeto `updatesData` (regra principal acima).
+4. Atualizar `mensagem_atualizacao.txt` com uma frase curta resumindo a alteração.
+5. Fazer commit com mensagem clara.
+6. Usar preferencialmente o script `Enviar_GitHub.bat` para seguir o fluxo do projeto.
+7. Depois do push, conferir a ferramenta publicada no GitHub Pages.
+8. Sempre enviar ao usuário o link clicável da ferramenta publicada.
+
+### Branch protection / push direto no main
+
+O push direto no `main` retorna **HTTP 403** por causa de branch protection. Fluxo correto:
+
+1. Criar branch separada (`codex/<descrição>`).
+2. Fazer as alterações.
+3. Commitar e push na branch.
+4. Abrir Pull Request com base `main`.
+5. Mergear o PR via API com `merge_method=squash`.
+
+Em ferramentas MCP/GitHub:
+- Criar PR com `mcp__github__create_pull_request`.
+- Fazer merge com `mcp__github__merge_pull_request` e `merge_method=squash`.
+
+### Exemplos de mensagens de commit
+
+- Ajusta responsividade mobile do Hub principal
+- Melhora layout mobile do Scraper Oficial
+- Corrige textos e organização dos cards do Hub
+- Ajusta visual mobile da Cotação Express
+- Atualiza regras permanentes do projeto
+
+---
+
+## Conferência da ferramenta publicada
+
+Depois do commit/merge, conferir se a alteração refletiu no GitHub Pages.
+
+**Link principal (sempre enviar):**
+https://crftwoo.github.io/thiago.luz.dufrio/index.html
+
+Se a alteração foi em página interna, **enviar também** o link direto. Páginas comuns:
+
+- https://crftwoo.github.io/thiago.luz.dufrio/scraper-ar.html
+- https://crftwoo.github.io/thiago.luz.dufrio/comparador-ar.html
+- https://crftwoo.github.io/thiago.luz.dufrio/precificacao-ar.html
+- https://crftwoo.github.io/thiago.luz.dufrio/cotacoes.html
+- https://crftwoo.github.io/thiago.luz.dufrio/simulador-gabinete.html
+- https://crftwoo.github.io/thiago.luz.dufrio/plano-corte.html
+- https://crftwoo.github.io/thiago.luz.dufrio/CheckList.html
+- https://crftwoo.github.io/thiago.luz.dufrio/itens-quantidade.html
+- https://crftwoo.github.io/thiago.luz.dufrio/precos-ao-vivo.html
+
+---
+
+## Modelo obrigatório de resposta final ao usuário
+
+Ao terminar qualquer tarefa, responder neste formato:
+
+**Resumo:**
+- descrever brevemente o que foi alterado.
+
+**Arquivos modificados:**
+- listar os arquivos alterados.
+
+**Commit:**
+- informar a mensagem do commit.
+- confirmar se o commit foi feito.
+
+**Publicação:**
+- confirmar se a ferramenta publicada foi conferida.
+- enviar o link principal: https://crftwoo.github.io/thiago.luz.dufrio/index.html
+
+**Link direto:**
+- se a alteração foi em página interna, enviar o link direto da página alterada.
+
+**Observações:**
+- informar qualquer coisa que não pôde ser conferida ou qualquer cuidado importante.
+
+---
+
+## Regra de autonomia para agentes de IA
+
+Quando o usuário pedir uma alteração clara, **executar a tarefa sem ficar pedindo confirmações desnecessárias**.
+
+Só fazer pergunta se:
+- o pedido estiver ambíguo;
+- houver risco de apagar ou quebrar algo importante;
+- existirem duas decisões de produto claramente diferentes;
+- a alteração puder afetar funcionamento, dados, links, scrapers ou rotas.
+
+Para ajustes simples de layout, responsividade, texto ou padronização visual:
+seguir o `AGENTS.md`, aplicar a melhor solução e entregar com commit.
+
+---
+
+## Cuidados específicos deste projeto
+
+- O `index.html` é a porta de entrada do Hub.
+- O Hub usa layout escuro, cards glass/bento, efeito aurora e visual moderno.
+- Preservar o estilo visual existente.
+- Preservar as telas centrais do `index.html` (Ferramentas Ocultas e Laboratório de Scrapers).
+- Preservar o **clique triplo na logo da Dufrio** para abrir Ferramentas Ocultas.
+- Preservar links dos cards.
+- Preservar os scrapers.
+- Preservar os cálculos das ferramentas.
+- Preservar o botão "Voltar ao Hub" nas páginas internas.
+- Preservar a área de "Última atualização" e o rodapé, salvo pedido explícito.
+
+---
+
+## Prioridade visual do projeto
+
+Sempre que fizer ajustes visuais, responsivos ou de layout, **priorizar que todas as páginas fiquem o mais parecidas possível com o `index.html`**.
+
+O `index.html` é a referência visual principal do projeto. Ao alterar qualquer ferramenta interna, manter coerência com o index em:
+
+- fundo escuro (`#050505`);
+- efeito aurora (3 manchas animadas: azul `#3b82f6`, roxa `#8b5cf6`, verde-esmeralda `#10b981`);
+- cards em estilo glass/bento;
+- bordas arredondadas;
+- tipografia (`Outfit` / `Inter`);
+- espaçamentos;
+- botões;
+- títulos e subtítulos;
+- botão "Voltar ao Hub";
+- comportamento mobile;
+- hierarquia visual;
+- sensação geral de produto único.
+
+Evitar que cada página pareça um sistema diferente. Quando houver dúvida de layout, usar o `index.html` como padrão visual.
+
+---
+
+## Arquivos que NÃO devem ser excluídos
+
+Nunca excluir sem autorização explícita:
+
+- `worker-novo.js`
+- `mensagem_atualizacao.txt`
+- `Enviar_GitHub.bat`
+- `Atualizar_do_GitHub.bat`
+
+---
+
+## Responsividade
+
+### Mobile
+
+- Evitar rolagem horizontal.
+- Manter cards legíveis.
+- Garantir boa área de toque.
+- Manter botão X visível em telas centrais.
+- Garantir rolagem interna em modais/painéis.
+- Evitar textos cortados.
+- Evitar elementos estourando a largura da tela.
+- Preservar a experiência de toque (evitar hovers exagerados).
+
+### Desktop
+
+- Não piorar o layout existente.
+- Manter grid, espaçamentos e hierarquia visual.
+- Preservar hover e estética atual, salvo pedido explícito.
+
+---
+
+## Regra final
+
+Se houver dúvida entre fazer uma alteração grande ou preservar o comportamento atual, **preserve o comportamento atual**.
+
+Faça somente o que foi pedido.
+
+---
+
+*Documento consolidado a partir do `.antigravity_skills.md` original (criado em 28/04/2026). Regras expandidas e centralizadas neste AGENTS.md para reconhecimento por agentes de IA modernos.*
