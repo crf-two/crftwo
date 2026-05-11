@@ -1,1 +1,1 @@
-Corrige Ultima Atualizacao do Hub (ultimo_log.js)
+Ajusta responsividade mobile do Otimizador de Corte

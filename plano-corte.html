@@ -28,6 +28,7 @@
       color: var(--text-main);
       padding: 40px 20px;
       margin: 0;
+      overflow-x: hidden;
     }
 
     .container { position: relative; z-index: 10; 
@@ -202,6 +203,99 @@
       color: var(--text-secondary);
       font-weight: 800;
     }
+
+    /* Aurora extra (verde-esmeralda) alinhada ao Hub */
+    .aurora-3 {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(150px);
+      z-index: -1;
+      opacity: 0.15;
+      background: #10b981;
+      top: 40%;
+      left: 40%;
+      animation: auroraAnim 25s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
+
+    /* Defensivo: textos longos e containers flex */
+    h1, .sub-title, h3, button, td, th {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .container, .box, .copybox, .decision { min-width: 0; }
+    .table-responsive { -webkit-overflow-scrolling: touch; }
+
+    /* ===== MOBILE / TABLET ===== */
+    @media (max-width: 900px) {
+      body { padding: 30px 16px; }
+      h1 { font-size: 26px; letter-spacing: -0.5px; }
+      .sub-title { font-size: 11px; padding-bottom: 18px; margin-bottom: 24px; }
+      .box, .decision, .copybox { padding: 22px 18px; border-radius: 16px; }
+      .box { margin-top: 18px; }
+      h3 { margin-bottom: 12px; }
+
+      /* iOS: >=16px evita zoom no foco */
+      textarea, select, input {
+        font-size: 16px !important;
+        padding: 14px 16px;
+      }
+      textarea { padding: 16px; border-radius: 10px; }
+
+      /* Botões: largura total e quebra de texto liberada */
+      button {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 13px;
+        white-space: normal;
+        line-height: 1.3;
+      }
+
+      /* Tabela editável: células compactas mas tocáveis */
+      th, td { padding: 10px 8px; font-size: 11px; }
+      th { font-size: 10px; letter-spacing: 0.5px; }
+      #editTable input, #editTable select { padding: 8px 6px; font-size: 14px !important; }
+
+      /* Tabela de resultado: garante scroll horizontal só dentro do wrapper */
+      .table-responsive { margin: 14px -4px 0; padding: 0 4px; }
+      .table-responsive table { min-width: 480px; }
+
+      /* Botão flutuante "Voltar ao Hub" um pouco maior pra mobile */
+      .btn-voltar-global { padding: 6px 12px; font-size: 10px; top: 12px; left: 12px; }
+      .btn-voltar-global svg { width: 14px; height: 14px; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 24px 12px; }
+      h1 { font-size: 22px; }
+      .sub-title { font-size: 10px; padding-bottom: 14px; margin-bottom: 20px; letter-spacing: 0.8px; }
+      .box, .decision, .copybox { padding: 18px 14px; border-radius: 14px; }
+      .box { margin-top: 14px; }
+      .table-responsive table { min-width: 420px; }
+      th, td { padding: 9px 6px; }
+      .aurora-3, .aurora { opacity: 0.22 !important; }
+    }
+
+    /* Hover só em desktop (touch não fica "stuck") */
+    @media (hover: hover) and (pointer: fine) {
+      button:hover {
+        background: var(--green);
+        color: #ffffff;
+        border-color: var(--green);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(16, 46, 130, 0.15);
+      }
+    }
+    @media (hover: none) {
+      button:hover { transform: none; box-shadow: none; }
+      button:active {
+        background: var(--green);
+        color: #ffffff;
+        border-color: var(--green);
+      }
+    }
   </style>
 </head>
 
@@ -215,6 +309,7 @@
     </style>
     <div class="aurora" style="position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(120px);z-index:-1;opacity:0.25;background:#3b82f6;top:-10%;left:-10%;animation:auroraAnim 15s infinite alternate ease-in-out;pointer-events:none;"></div>
     <div class="aurora" style="position:fixed;width:600px;height:600px;border-radius:50%;filter:blur(120px);z-index:-1;opacity:0.25;background:#8b5cf6;bottom:-10%;right:-5%;animation:auroraAnim 20s infinite alternate ease-in-out;pointer-events:none;"></div>
+    <div class="aurora-3"></div>
 
 
 <!-- BOTAO VOLTAR FLUTUANTE GLOBAL -->
