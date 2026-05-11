@@ -1,1 +1,1 @@
-Hub reorganizado com seções principais, Laboratório de Scrapers e Ferramentas Ocultas no index.
+Corrige fundo do Simulador 3D com auroras do Hub
