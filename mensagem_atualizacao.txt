@@ -1,1 +1,1 @@
-Corrige fundo do Simulador 3D com auroras do Hub
+Ajusta responsividade mobile do Hub principal e consolida AGENTS.md
