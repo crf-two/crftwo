@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#050505">
-    <title>Simulador de Gabinete 3D</title>
+    <title>Simulador 3D de Câmara Fria</title>
     <!-- Fontes -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Three.js -->
@@ -275,34 +275,36 @@
         @media (max-width: 900px) {
             body {
                 flex-direction: column;
-                overflow: hidden;        /* o sidebar interno scrolla, página não */
-                height: 100vh;
-                height: 100dvh;
+                overflow-y: auto;          /* a página inteira rola */
+                overflow-x: hidden;
+                height: auto;
+                min-height: 100vh;
+                min-height: 100dvh;
             }
 
-            /* Canvas vai PRIMEIRO (em cima), sidebar embaixo */
-            #canvas-container {
-                order: 1;
-                flex-grow: 0;
-                width: 100%;
-                height: 45vh;
-                height: 45dvh;
-                min-height: 280px;
-                flex-shrink: 0;
-                border-bottom: 1px solid var(--border);
-                background: #050505 !important;
-            }
-
+            /* CONTROLES em cima, CANVAS embaixo */
             #sidebar {
-                order: 2;
+                order: 1;
                 width: 100%;
                 height: auto;
-                flex: 1 1 auto;
-                min-height: 0;
-                padding: 18px 16px 28px;
+                padding: 18px 16px 22px;
                 border-right: none;
+                overflow: visible;         /* scroll vai pra página, não pro sidebar */
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+
+            #canvas-container {
+                order: 2;
+                flex-grow: 0;
+                width: 100%;
+                height: 55vh;
+                height: 55dvh;
+                min-height: 320px;
+                flex-shrink: 0;
                 border-top: 1px solid var(--border);
-                -webkit-overflow-scrolling: touch;
+                background: #050505 !important;
+                position: relative;
             }
 
             .header h1 { font-size: 22px; letter-spacing: -0.5px; }
@@ -356,16 +358,13 @@
             .header h1 { font-size: 20px; }
         }
 
-        /* Modo paisagem em celular: 3D ocupa metade horizontal, sidebar a outra metade */
+        /* Modo paisagem em celular: split lado-a-lado (sidebar à esquerda, 3D à direita) */
         @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
-            body { flex-direction: row; }
-            #canvas-container {
-                order: 0;
-                width: 55%;
+            body {
+                flex-direction: row;
+                overflow: hidden;
                 height: 100vh;
                 height: 100dvh;
-                border-bottom: none;
-                border-right: 1px solid var(--border);
             }
             #sidebar {
                 order: 1;
@@ -373,7 +372,16 @@
                 height: 100vh;
                 height: 100dvh;
                 border-top: none;
+                border-right: 1px solid var(--border);
                 padding: 14px 14px 24px;
+                overflow-y: auto;
+            }
+            #canvas-container {
+                order: 2;
+                width: 55%;
+                height: 100vh;
+                height: 100dvh;
+                border-top: none;
             }
         }
     </style>
@@ -387,10 +395,10 @@
         <div class="header">
             <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: #fff; text-decoration: none; font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; opacity: 0.8;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Menu Principal
+                Voltar ao Hub
             </a>
-            <h1>Gabinete 3D</h1>
-            <p>Simulador 3D (Câmaras-frias)</p>
+            <h1>Simulador 3D de Câmara Fria</h1>
+            <p>Visualize a câmara fria em 3D e gere o cálculo de painéis para orçamento.</p>
         </div>
 
         <div class="toggle-container active" id="toggle-medidas">
@@ -542,6 +550,7 @@
                     document.getElementById('card-isolamento').classList.add('hidden');
                     document.getElementById('btn-calcular').classList.add('hidden');
                     document.getElementById('resultado').classList.add('hidden');
+                    window._jaScrollouMobile = false; // permite rolar de novo na proxima vez
                 }
             }, 300);
         }
@@ -626,6 +635,12 @@
 
             fitCameraToRoom();
             if (exibirRelatorio) atualizarRelatorio(numTeto, totalP, L, C, altP, temPiso, Lef);
+
+            // Mobile: na primeira vez que o 3D aparece, rola pra mostrar.
+            if (!window._jaScrollouMobile && window.matchMedia('(max-width: 900px)').matches) {
+                window._jaScrollouMobile = true;
+                setTimeout(() => container.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+            }
         }
 
         function atualizarRelatorio(nT, totalP, L, C, aP, temP, Lef) {
