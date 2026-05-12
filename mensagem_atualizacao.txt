@@ -1,1 +1,1 @@
-AGENTS.md: leitura obrigatória em todo acesso e atualização apenas com regras pertinentes.
+Integra extensão ao Hub com Mini Hub e Busca Ar
