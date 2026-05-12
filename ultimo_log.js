@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'AGENTS.md: regra obrigatória para sincronizar com o GitHub antes de alterar arquivos.', dateIso: '2026-05-12T10:48:00-03:00' };
+const LATEST_LOG = { message: 'Scraper Oficial: centralização dos botões selecionados de tipo, BTU e ciclo no mobile.', dateIso: '2026-05-12T10:55:00-03:00' };

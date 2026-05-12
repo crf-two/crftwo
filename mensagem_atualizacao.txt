@@ -1,1 +1,1 @@
-AGENTS.md: regra obrigatória para sincronizar com o GitHub antes de alterar arquivos.
+Scraper Oficial: centralização dos botões selecionados de tipo, BTU e ciclo no mobile.
