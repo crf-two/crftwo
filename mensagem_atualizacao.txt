@@ -1,1 +1,1 @@
-Documenta fluxo de publicação por PR no AGENTS.md
+Corrige largura do popup da extensão

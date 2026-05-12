@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Documenta fluxo de publicação por PR no AGENTS.md', dateIso: '2026-05-12T15:15:05-03:00' };
+const LATEST_LOG = { message: 'Corrige largura do popup da extensão', dateIso: '2026-05-12T15:26:05-03:00' };
