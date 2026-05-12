@@ -659,6 +659,79 @@
       white-space: nowrap;
     }
 
+    .install-guide {
+      margin-top: 18px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      color: var(--text-muted);
+      overflow: hidden;
+    }
+
+    .install-guide summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      color: var(--text-main);
+      cursor: pointer;
+      list-style: none;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .install-guide summary::-webkit-details-marker { display: none; }
+
+    .install-guide summary::after {
+      content: "+";
+      color: #94a3b8;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .install-guide[open] summary::after { content: "−"; }
+
+    .install-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 0 16px 14px;
+    }
+
+    .install-guide strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .install-guide ol {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .install-guide li {
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .install-guide p {
+      margin: 0;
+      padding: 12px 16px 14px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
     @media (max-width: 768px) {
       .labs-overlay {
         padding: 12px;
@@ -694,6 +767,7 @@
       }
       .labs-grid { grid-template-columns: 1fr; gap: 12px; }
       .lab-card { min-height: auto; padding: 16px; }
+      .install-guide-grid { grid-template-columns: 1fr; gap: 12px; }
     }
 
     @media (max-width: 480px) {
@@ -907,13 +981,13 @@
       { nome: "Scraper Oficial", desc: "Scraper principal para buscar preços dos concorrentes, organizar ofertas de ar-condicionado e apoiar decisões comerciais.", arquivo: "scraper-ar.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>`, color: "#f59e0b", slug: "scraper", category: "ar" },
       { nome: "Comparador de Preços de Ar-Condicionado", desc: "Ferramenta para comparar ofertas de ar-condicionado e apoiar decisões comerciais.", arquivo: "comparador-ar.html", icone: svgComparar, color: "#6366f1", slug: "comparador", category: "ar" },
       { nome: "Precificação de SKU’s — Site x 365", desc: "Calcule o desconto proporcional entre SKU’s e ajuste os preços no 365 com base no valor praticado no site, apoiando a precificação de itens compostos como Hi Wall, Piso Teto e K7.", arquivo: "precificacao-ar.html", icone: svgPrecificar, color: "#0ea5e9", slug: "precificacao", category: "ar" },
-      { nome: "Cotação Express — Infraestrutura", desc: "Gere orçamentos rápidos de infraestrutura para instalação de ar-condicionado.", arquivo: "cotacoes.html", icone: svgCotar, color: "#8b5cf6", slug: "cotacao", category: "ar" },
       { nome: "Laboratório de Scrapers", badge: "Laboratório", desc: "Área de testes para validar os scrapers individuais antes de usar no Scraper Oficial.", arquivo: "#laboratorios", icone: svgScraper, color: "#22c55e", slug: "scraper-labs", category: "ar", isLabGroup: true },
 
       // Ferramentas Ocultas
-      { nome: "Preços ao Vivo", badge: "Em Produção", desc: "Painel interno para visualizar ofertas capturadas pela extensão.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`, color: "#00e676", slug: "precos-vivo", category: "hidden" },
       { nome: "Extrator de Códigos", desc: "Cole uma lista e extraia automaticamente os códigos com quantidade em estoque.", arquivo: "itens-quantidade.html", icone: svgFiltro, color: "#d946ef", slug: "extracao", category: "hidden" },
-      { nome: "Baixar Projeto", desc: "Download do projeto completo, incluindo a extensão.", arquivo: "https://github.com/crftwoo/thiago.luz.dufrio/archive/refs/heads/main.zip", icone: svgDownload, color: "#94a3b8", isDownload: true, slug: "download", category: "hidden" }
+      { nome: "Preços ao Vivo", badge: "Em Produção", desc: "Painel interno para visualizar ofertas capturadas pela extensão.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`, color: "#00e676", slug: "precos-vivo", category: "hidden" },
+      { nome: "Cotação Express — Infraestrutura", desc: "Gere orçamentos rápidos de infraestrutura para instalação de ar-condicionado.", arquivo: "cotacoes.html", icone: svgCotar, color: "#8b5cf6", slug: "cotacao", category: "hidden" },
+      { nome: "Baixar Extensão", desc: "Baixe a extensão do Hub para instalar no Chrome ou Edge.", arquivo: "hub-dufrio-extensao.zip", downloadName: "hub-dufrio-extensao.zip", icone: svgDownload, color: "#94a3b8", isDownload: true, slug: "download", category: "hidden" }
     ];
 
     function openToolItem(f) {
@@ -923,9 +997,9 @@
         return;
       }
       if (f.isDownload) {
-        if (confirm(`Baixar projeto completo, incluindo a extensão?`)) {
+        if (confirm(`Baixar extensão do Hub Dufrio?`)) {
           const l = document.createElement("a");
-          l.href = f.arquivo; l.download = "extensao-dufrio.zip";
+          l.href = f.arquivo; l.download = f.downloadName || "hub-dufrio-extensao.zip";
           document.body.appendChild(l); l.click(); l.remove();
         }
         return;
@@ -1039,10 +1113,36 @@
                   <div class="lab-card-title">${tool.nome}</div>
                   <div class="lab-card-desc">${tool.desc}</div>
                 </div>
-                <div class="lab-card-meta">Abrir ferramenta</div>
+                <div class="lab-card-meta">${tool.isDownload ? 'Baixar arquivo' : 'Abrir ferramenta'}</div>
               </a>
             `).join('')}
           </div>
+          <details class="install-guide">
+            <summary>Como instalar</summary>
+            <div class="install-guide-grid">
+              <div>
+                <strong>Chrome</strong>
+                <ol>
+                  <li>Baixe e descompacte a extensão.</li>
+                  <li>Acesse chrome://extensions.</li>
+                  <li>Ative o Modo do desenvolvedor.</li>
+                  <li>Clique em "Carregar sem compactação".</li>
+                  <li>Selecione a pasta da extensão que contém o manifest.json.</li>
+                </ol>
+              </div>
+              <div>
+                <strong>Edge</strong>
+                <ol>
+                  <li>Baixe e descompacte a extensão.</li>
+                  <li>Acesse edge://extensions.</li>
+                  <li>Ative o Modo de desenvolvedor.</li>
+                  <li>Clique em "Carregar sem pacote" ou "Load unpacked".</li>
+                  <li>Selecione a pasta da extensão que contém o manifest.json.</li>
+                </ol>
+              </div>
+            </div>
+            <p>O arquivo .zip precisa ser descompactado antes. O navegador carrega a pasta descompactada, não o .zip diretamente.</p>
+          </details>
         </div>
       `;
       overlay.addEventListener('click', (event) => {
@@ -1124,6 +1224,12 @@
     // Dados de atualizações embutidos (Fallback)
     const updatesData = {
       "updates": [
+        {
+          "date": "12/05/2026",
+          "time": "15:09",
+          "title": "Extensão Mini Hub",
+          "description": "A extensão foi integrada ao Hub com tela inicial, Mini Hub, Busca Ar preservada, painel lateral redesenhado e download exclusivo da extensão."
+        },
         {
           "date": "12/05/2026",
           "time": "11:02",

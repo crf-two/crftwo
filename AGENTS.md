@@ -364,6 +364,18 @@ seguir o `AGENTS.md`, aplicar a melhor solução e entregar com commit.
 
 ---
 
+## Cuidados específicos da extensão
+
+- A extensão fica em `extensao/` e deve continuar integrada ao Hub sem expor ferramentas ocultas.
+- O popup da extensão tem duas entradas principais: **Mini Hub** e **Busca Ar**.
+- A **Busca Ar** precisa continuar preservada: carregamento da planilha, seleção de Tipo, BTUs, Ciclo, botões das lojas, filtros, erros e limpeza de filtros.
+- Links abertos pelo popup da extensão devem usar `chrome.tabs.create({ url, active: false })` para abrir em nova aba em segundo plano, sem substituir a aba atual.
+- O **Mini Hub** da extensão deve mostrar somente ferramentas principais permitidas. Não incluir Ferramentas Ocultas, Laboratório de Scrapers, scrapers individuais, Preços ao Vivo, Extrator de Códigos, Cotação Express ou download da extensão.
+- O painel lateral injetado no site da Dufrio depende de `extensao/content.js`. Para ajustes visuais, preferir alterar apenas `extensao/content.css` e preservar captura de produtos, Copiar Lista, clique no texto, clique na imagem, storage e comunicação com o Hub.
+- O download da extensão no menu oculto do Hub deve baixar apenas o pacote da pasta `extensao/`, com `manifest.json` diretamente na raiz ao descompactar.
+
+---
+
 ## Prioridade visual do projeto
 
 Sempre que fizer ajustes visuais, responsivos ou de layout, **priorizar que todas as páginas fiquem o mais parecidas possível com o `index.html`**.
