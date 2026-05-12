@@ -1,1 +1,1 @@
-Scraper Oficial: filtros rápidos por qualidade de marca adicionados em Marcas Encontradas.
+AGENTS.md: regra obrigatória para sincronizar com o GitHub antes de alterar arquivos.

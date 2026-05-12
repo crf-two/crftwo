@@ -84,6 +84,31 @@ A área "Última atualização" do Hub lê de `ultimo_log.js` (`LATEST_LOG`) com
 
 ---
 
+## 🚨 Regra principal obrigatória — Sincronizar com o GitHub antes de alterar
+
+**Antes de qualquer edição, todo agente precisa reler o estado real do GitHub.**
+
+Este projeto pode ser alterado por outra IA, outro computador ou outro navegador poucas horas antes. Por isso, nenhum agente deve trabalhar confiando apenas na cópia local antiga.
+
+### Passos obrigatórios antes de editar
+
+1. Rodar `git status -sb` para ver se há alterações locais.
+2. Rodar `git fetch origin --prune` para buscar o estado mais recente do GitHub.
+3. Conferir `git log --oneline --decorate --max-count=10 origin/main` para entender os últimos commits publicados.
+4. Conferir se o branch local está atrás do `origin/main`.
+5. Se estiver atrás, atualizar a base local antes de editar, usando `git pull --ff-only` quando possível ou rebase cuidadoso quando houver trabalho local.
+6. Se houver alterações locais não commitadas, preservar essas alterações e entender se são do usuário antes de qualquer merge, rebase, stash ou commit.
+7. Nunca sobrescrever, apagar ou reverter trabalho recente de outra IA ou do usuário sem pedido explícito.
+8. Só começar a alteração depois de confirmar que a base local representa o estado mais recente do GitHub.
+
+### Regra de segurança
+
+Se aparecer commit remoto novo, branch nova relevante ou conflito entre trabalho local e remoto, pare e entenda antes de editar. O objetivo é sempre somar a nova mudança por cima do que já foi publicado, sem perder o que foi feito em outro PC ou por outra IA.
+
+**Nenhum commit deve ser feito a partir de uma base local desatualizada.**
+
+---
+
 ## Projeto
 
 - **Repositório:** https://github.com/crftwoo/thiago.luz.dufrio
@@ -101,6 +126,8 @@ O `index.html` é a página principal e funciona como **porta de entrada** para 
 
 | Arquivo | Descrição |
 |---|---|
+| `AGENTS.md` | Manual principal com regras permanentes do projeto para qualquer agente de IA. |
+| `.gitignore` | Lista sobras locais e metadados que não devem ser versionados. |
 | `index.html` | Página principal do Hub: cards das ferramentas, seções principais, área de última atualização, telas centrais (Ferramentas Ocultas e Laboratório de Scrapers). |
 | `simulador-gabinete.html` | Simulador 3D de Câmara Fria. |
 | `plano-corte.html` | Otimizador de Corte de Painéis PIR/EPS. |
@@ -116,6 +143,7 @@ O `index.html` é a página principal e funciona como **porta de entrada** para 
 | `img/` | Imagens, logos e recursos visuais. |
 | `extensao/` | Arquivos da extensão usada junto com algumas ferramentas. |
 | `mensagem_atualizacao.txt` | Resumo curto da última alteração (usado no fluxo de commit). |
+| `ultimo_log.js` | Log lido pelo Hub para exibir a última atualização publicada. |
 | `Enviar_GitHub.bat` | Script para enviar alterações ao GitHub. |
 | `Atualizar_do_GitHub.bat` | Script para atualizar o projeto local a partir do GitHub. |
 | `worker-novo.js` | Infraestrutura/proxy — **não remover**. |
@@ -145,6 +173,7 @@ Algumas ferramentas ficam visíveis no Hub e outras só dentro de Ferramentas Oc
 
 ## Fluxo obrigatório antes de alterar
 
+- Sincronize com o GitHub seguindo a regra principal acima.
 - Leia os arquivos necessários.
 - Identifique exatamente onde a mudança deve ser feita.
 - Não mexa em arquivos não relacionados.
