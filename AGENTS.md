@@ -410,7 +410,7 @@ seguir o `AGENTS.md`, aplicar a melhor solução e entregar com commit.
 - Preservar os cálculos das ferramentas.
 - Preservar o botão "Voltar ao Hub" nas páginas internas.
 - Preservar a área de "Última atualização" e o rodapé, salvo pedido explícito.
-- Na Busca Ar da extensão e no Scraper Oficial, os seletores de Tipo, BTUs e Ciclo devem aparecer imediatamente com opções padrão enquanto a planilha sincroniza em segundo plano. Não voltar para tela vazia de carregamento antes desses botões.
+- Na Busca Ar da extensão e no Scraper Oficial, os filtros aparecem em etapas progressivas: o seletor de Tipo aparece imediatamente (com opções padrão enquanto a planilha sincroniza em segundo plano); o de BTUs só aparece após escolher o Tipo; o de Ciclo só após escolher os BTUs; e as lojas só após escolher o Ciclo. A planilha continua carregando em background e as opções reais substituem os fallbacks quando o fetch termina. Não voltar para tela vazia de carregamento antes do Tipo.
 
 ---
 

@@ -1052,11 +1052,21 @@
     }
 
     function refreshChoiceOptions() {
-      document.getElementById("step-btus").classList.add("active");
-      document.getElementById("step-ciclo").classList.add("active");
+      const showBtus = !!selection.tipo;
+      const showCiclo = !!selection.tipo && !!selection.btu;
+      document.getElementById("step-btus").classList.toggle("active", showBtus);
+      document.getElementById("step-ciclo").classList.toggle("active", showCiclo);
       renderTipos();
-      renderOptions("btu-options", getBTUOptions(), selectBTU, selection.btu, formatBTU);
-      renderOptions("ciclo-options", getCicloOptions(), selectCiclo, selection.ciclo, formatCiclo);
+      if (showBtus) {
+        renderOptions("btu-options", getBTUOptions(), selectBTU, selection.btu, formatBTU);
+      } else {
+        document.getElementById("btu-options").innerHTML = "";
+      }
+      if (showCiclo) {
+        renderOptions("ciclo-options", getCicloOptions(), selectCiclo, selection.ciclo, formatCiclo);
+      } else {
+        document.getElementById("ciclo-options").innerHTML = "";
+      }
     }
 
     function renderTipos() {

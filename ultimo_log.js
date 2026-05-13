@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Mostra filtros da Busca Ar antes da planilha', dateIso: '2026-05-12T16:13:20-03:00' };
+const LATEST_LOG = { message: 'Corrige fluxo em etapas da Busca Ar', dateIso: '2026-05-12T19:17:10-03:00' };

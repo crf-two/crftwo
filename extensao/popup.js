@@ -190,7 +190,7 @@ async function initBuscaAr() {
     tipoRow.className = "chip-row chip-row-type";
 
     const btusGroup = document.createElement("div");
-    btusGroup.className = "filter-group";
+    btusGroup.className = "filter-group hidden";
     const btusLabel = document.createElement("div");
     btusLabel.className = "filter-label";
     btusLabel.textContent = "BTUs";
@@ -198,7 +198,7 @@ async function initBuscaAr() {
     btusRow.className = "chip-row";
 
     const cicloGroup = document.createElement("div");
-    cicloGroup.className = "filter-group";
+    cicloGroup.className = "filter-group hidden";
     const cicloLabel = document.createElement("div");
     cicloLabel.className = "filter-label";
     cicloLabel.textContent = "Ciclo";
@@ -295,6 +295,11 @@ async function initBuscaAr() {
 
     function renderBtusChips() {
         btusRow.innerHTML = "";
+        if (!selectedTipo) {
+            btusGroup.classList.add("hidden");
+            return;
+        }
+        btusGroup.classList.remove("hidden");
         const btusOptions = getBtusOptions();
         if (btusOptions.length === 0) {
             renderInlineNote(btusRow, "Nenhum BTU encontrado para esse tipo.");
@@ -333,6 +338,11 @@ async function initBuscaAr() {
 
     function renderCicloChips() {
         cicloRow.innerHTML = "";
+        if (!selectedTipo || !selectedBtus) {
+            cicloGroup.classList.add("hidden");
+            return;
+        }
+        cicloGroup.classList.remove("hidden");
         const ciclos = getCicloOptions();
         if (ciclos.length === 0) {
             renderInlineNote(cicloRow, "Nenhum ciclo encontrado para esse BTU.");
