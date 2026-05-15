@@ -1,1 +1,1 @@
-Adiciona ordenacao automatica do Dynamics a extensao
+Cria pasta Catalogos no repositorio
