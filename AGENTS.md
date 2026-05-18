@@ -490,3 +490,57 @@ Faça somente o que foi pedido.
 ---
 
 *Documento consolidado a partir do `.antigravity_skills.md` original (criado em 28/04/2026). Regras expandidas e centralizadas neste AGENTS.md para reconhecimento por agentes de IA modernos.*
+
+---
+
+## Contexto ampliado para agentes de IA
+
+Este repositório não é apenas um site estático. Ele é um ecossistema de ferramentas internas chamado Hub Dufrio, usado para apoio operacional, comercial e técnico.
+
+Antes de alterar qualquer arquivo, a IA deve entender que o projeto possui várias ferramentas conectadas entre si e que pequenas mudanças podem quebrar fluxos existentes.
+
+Principais áreas do projeto:
+
+1. Hub principal
+- Arquivo principal: index.html
+- É a porta de entrada do projeto.
+- Controla cards, navegação, menu oculto, atualizações e identidade visual.
+- O padrão visual deve ser preservado: fundo escuro, auroras, glassmorphism, cards bento, fonte Outfit e responsividade.
+
+2. Ferramentas de ar-condicionado
+- Arquivos importantes: scraper-ar.html, comparador-ar.html, precificacao-ar.html e precos-ao-vivo.html.
+- Preservar carregamento de planilhas, filtros, chips, lógica de BTUs, ciclos, links, cards e abertura de páginas.
+- Não alterar fluxos de busca ou comparação sem entender a lógica completa.
+
+3. Extensão Chrome/Edge
+- Pasta: extensao/
+- Arquivos críticos: popup.js, content.js, background.js, bridge.js e manifest.json.
+- A extensão injeta painel lateral, captura produtos, copia listas, conversa com o Hub, usa chrome.storage.local e alimenta o Preços ao Vivo.
+- Não quebrar createPanel, currentProductsList, comparador_data, postMessage, chrome.tabs.create ou permissões do manifest.
+
+4. Laboratório de scrapers
+- Arquivos importantes: scraper-store-lab.js e scraper-*.html.
+- Scrapers são frágeis e dependem de seletores, proxies, planilha e estrutura das lojas.
+- Não refatorar scrapers sem necessidade real.
+- Não remover fallbacks ou proxies sem validar.
+
+5. Ferramentas técnicas
+- Arquivos importantes: plano-corte.html, simulador-gabinete.html, CheckList.html e cotacoes.html.
+- Preservar cálculos, geração de PDF, layout mobile e tratamento de erros.
+- Em ferramentas de cálculo, evitar loops infinitos e sempre validar entradas antes de processar.
+
+Regras de comportamento para a IA:
+- Ler os arquivos relacionados antes de alterar.
+- Fazer mudanças mínimas e seguras.
+- Não reescrever arquivos inteiros sem necessidade.
+- Não remover ferramentas existentes.
+- Não inventar arquivos, páginas ou fluxos sem pedido.
+- Não alterar visual principal sem manter o padrão do Hub.
+- Não afirmar que algo foi concluído sem commit, PR, merge ou validação real.
+- Sempre explicar arquivos alterados, riscos e testes feitos.
+
+Atualizações obrigatórias:
+Quando a alteração for relevante para o usuário, atualizar também:
+- updatesData dentro de index.html
+- ultimo_log.js
+- mensagem_atualizacao.txt
