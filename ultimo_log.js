@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Remove pasta Catalogos do repositorio', dateIso: '2026-05-15T10:34:05-03:00' };
+const LATEST_LOG = { message: 'Atualiza AGENTS com contexto ampliado do projeto', dateIso: '2026-05-18T10:12:18-03:00' };

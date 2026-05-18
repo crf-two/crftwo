@@ -1,1 +1,1 @@
-Remove pasta Catalogos do repositorio
+Atualiza AGENTS com contexto ampliado do projeto
