@@ -1,1 +1,1 @@
-Atualiza AGENTS com contexto ampliado do projeto
+Identifica PC e celular do Thiago no Telegram Analytics
