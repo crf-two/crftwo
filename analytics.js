@@ -50,43 +50,6 @@
 
   // Gera ou recupera o ID de visitante único persistente
   function getVisitorId() {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const meParam = urlParams.get("me");
-      const muteParam = urlParams.get("mute");
-      
-      // Configura se deve silenciar as notificações do admin
-      if (muteParam === "true") {
-        localStorage.setItem("dufrio_mute_admin", "true");
-      } else if (muteParam === "false") {
-        localStorage.removeItem("dufrio_mute_admin");
-      }
-      
-      if (meParam) {
-        let customId = "";
-        const paramLower = meParam.toLowerCase();
-        if (paramLower === "pc") {
-          customId = "👑 Thiago (PC)";
-        } else if (paramLower === "cel" || paramLower === "celular") {
-          customId = "👑 Thiago (Celular)";
-        } else {
-          customId = `👑 Thiago (${meParam})`;
-        }
-        
-        if (customId) {
-          localStorage.setItem("dufrio_visitor_id", customId);
-          localStorage.setItem("dufrio_is_admin", "true");
-          
-          // Limpa o parâmetro da URL de forma limpa sem recarregar a página
-          const cleanUrl = window.location.pathname + window.location.hash;
-          window.history.replaceState({}, document.title, cleanUrl);
-          return customId;
-        }
-      }
-    } catch (e) {
-      console.warn("Erro ao processar parâmetros do Thiago:", e);
-    }
-
     let id = localStorage.getItem("dufrio_visitor_id");
     if (!id) {
       id = "Visitante #" + Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -175,11 +138,6 @@
 
   // Monta a mensagem e envia para o Telegram
   async function sendTelegramNotification(type) {
-    // Evita enviar notificações das visitas do Thiago se estiver configurado para silenciar
-    if (localStorage.getItem("dufrio_mute_admin") === "true" && localStorage.getItem("dufrio_is_admin") === "true") {
-      return;
-    }
-
     const duration = getDurationString();
     let statusText = "";
     
