@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Identifica PC e celular do Thiago no Telegram Analytics', dateIso: '2026-06-02T21:30:05-03:00' };
+const LATEST_LOG = { message: 'Atualiza AGENTS com contexto ampliado do projeto', dateIso: '2026-05-18T10:12:18-03:00' };
