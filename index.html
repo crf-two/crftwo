@@ -905,7 +905,561 @@
       }
     }
 
-    /* Responsividade */
+    /* === WIDGET COTADOR DUFRIO === */
+    .dufrio-cotador-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(18, 18, 28, 0.75);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      position: relative;
+    }
+    .cotador-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    .cotador-logo {
+      height: 24px;
+      object-fit: contain;
+      filter: invert(1) brightness(1.2);
+      mix-blend-mode: screen;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .cotador-title {
+      font-size: 12px;
+      font-weight: 900;
+      color: #4facfe;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+    .cotador-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cotador-step {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      animation: slideUpWidget 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .cotador-step.active {
+      display: flex;
+    }
+    @keyframes slideUpWidget {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cotador-label {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
+    .cotador-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .cotador-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #b7b7c8;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--font-outfit);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cotador-btn:hover {
+      background: rgba(79, 172, 254, 0.08);
+      border-color: rgba(79, 172, 254, 0.3);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .cotador-btn.selected {
+      background: rgba(79, 172, 254, 0.16);
+      border-color: #4facfe;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(79, 172, 254, 0.25);
+    }
+    .cotador-search-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: #4facfe;
+      color: #fff;
+      border: none;
+      font-family: var(--font-outfit);
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(79, 172, 254, 0.3);
+      animation: pulse-glow 2s infinite alternate;
+    }
+    .cotador-search-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 0 22px rgba(79, 172, 254, 0.5);
+    }
+    @keyframes pulse-glow {
+      from { box-shadow: 0 0 8px rgba(79, 172, 254, 0.25); }
+      to { box-shadow: 0 0 18px rgba(79, 172, 254, 0.45); }
+    }
+
+    /* === MODAL OVERLAY DUFRIO === */
+    .dufrio-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: rgba(2, 6, 23, 0.74);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .dufrio-modal-overlay.is-open {
+      display: flex;
+    }
+    .dufrio-modal-panel {
+      width: min(1200px, 100%);
+      max-height: min(85vh, 880px);
+      overflow: auto;
+      padding: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(79, 172, 254, 0.16), transparent 32%),
+        rgba(15, 15, 25, 0.97);
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .dufrio-modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 18px;
+    }
+    .dufrio-modal-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: left;
+    }
+    .dufrio-modal-kicker {
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .dufrio-modal-title {
+      color: var(--text-main);
+      font-size: 26px;
+      font-weight: 900;
+      line-height: 1.1;
+      text-transform: uppercase;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .dufrio-modal-title span {
+      background: rgba(79, 172, 254, 0.15);
+      border: 1px solid rgba(79, 172, 254, 0.4);
+      color: #4facfe;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .dufrio-modal-close {
+      flex: 0 0 auto;
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dufrio-modal-close:hover {
+      border-color: rgba(239, 68, 68, 0.65);
+      color: #fff;
+      background: rgba(239, 68, 68, 0.18);
+    }
+    .dufrio-modal-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 60px 0;
+    }
+    .dufrio-modal-loader .spinner {
+      width: 38px;
+      height: 38px;
+      border: 3px solid rgba(79, 172, 254, 0.15);
+      border-top-color: #4facfe;
+      border-radius: 50%;
+      animation: spinModal 0.9s linear infinite;
+    }
+    @keyframes spinModal {
+      to { transform: rotate(360deg); }
+    }
+    .dufrio-modal-loader span {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #4facfe;
+    }
+    .dufrio-modal-status {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* === GRID E CARDS DE PRODUTOS === */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .product-card {
+      background: linear-gradient(180deg, rgba(18, 18, 28, 0.95), rgba(12, 12, 20, 0.98));
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s;
+      position: relative;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+      text-align: left;
+    }
+    .product-card:hover {
+      border-color: rgba(79, 172, 254, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(79, 172, 254, 0.1);
+    }
+    .store-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 3;
+      background: linear-gradient(135deg, #004a99, #007bff);
+      border: 1px solid #007bff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 900;
+      color: white;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      backdrop-filter: blur(8px);
+    }
+    .product-img-wrap {
+      width: 100%;
+      aspect-ratio: 1.08/1;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .product-img-wrap img {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      transition: transform 0.3s;
+    }
+    .product-img-wrap:hover img {
+      transform: scale(1.045);
+    }
+    .img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+    .img-overlay span {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: white;
+      text-transform: uppercase;
+      background: rgba(79, 172, 254, 0.3);
+      border: 1px solid rgba(79, 172, 254, 0.5);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+    .product-img-wrap:hover .img-overlay {
+      opacity: 1;
+    }
+    .img-overlay.copied span {
+      background: rgba(0, 230, 118, 0.3);
+      border-color: rgba(0, 230, 118, 0.5);
+      color: #00e676;
+    }
+    .product-info {
+      padding: 20px 14px 10px;
+      cursor: pointer;
+      position: relative;
+      flex: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 178px;
+    }
+    .product-info:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .copy-hint {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 8px;
+      font-weight: 900;
+      color: rgba(79, 172, 254, 0.6);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: all 0.2s ease;
+      z-index: 5;
+    }
+    .product-info:hover .copy-hint {
+      opacity: 1;
+    }
+    .product-info.copied .copy-hint {
+      opacity: 1;
+      color: #00e676;
+    }
+    .product-title {
+      font-size: 15px;
+      font-weight: 850;
+      color: #ffffff;
+      line-height: 1.32;
+      margin-bottom: 16px;
+      text-align: center;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      width: 100%;
+      min-height: 79px;
+      overflow: hidden;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    .prices-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+      text-align: center;
+      background: rgba(3, 3, 10, 0.62);
+      padding: 14px 10px;
+      border-radius: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      margin-top: auto;
+    }
+    .price-vista {
+      font-size: 21px;
+      font-weight: 900;
+      color: #00e676;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      text-align: center;
+      text-shadow: 0 0 14px rgba(0, 230, 118, 0.2);
+      letter-spacing: 0;
+    }
+    .discount-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #00e676;
+      background: rgba(0, 230, 118, 0.12);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .price-install {
+      font-size: 12px;
+      color: #b7b7c8;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.35;
+    }
+    .card-footer {
+      margin-top: auto;
+      padding: 8px 14px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.015);
+    }
+    .btn-link {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      border-radius: 9px;
+      background: rgba(79, 172, 254, 0.08);
+      border: 1px solid rgba(79, 172, 254, 0.22);
+      color: #79bdff;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: var(--font-outfit);
+    }
+    .btn-link:hover {
+      background: linear-gradient(135deg, rgba(79, 172, 254, 0.25), rgba(167, 139, 250, 0.25));
+      border-color: rgba(79, 172, 254, 0.5);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(79, 172, 254, 0.15);
+    }
+
+    /* === RESPONSIVIDADE ADICIONAL === */
+    @media (max-width: 900px) {
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .product-card {
+        width: 100%;
+      }
+      .btn-link {
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 24px !important;
+      }
+      .dufrio-cotador-card {
+        max-width: 100%;
+      }
+      .dufrio-modal-overlay {
+        padding: 12px;
+      }
+      .dufrio-modal-panel {
+        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+        border-radius: 20px;
+        max-height: calc(100dvh - 24px);
+      }
+      .dufrio-modal-title {
+        font-size: 18px;
+      }
+      .products-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 18px;
+      }
+      .product-card {
+        border-radius: 16px;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .product-img-wrap {
+        aspect-ratio: 4/3;
+      }
+      .product-info {
+        padding: 22px 20px 12px;
+        min-height: 0;
+      }
+      .product-title {
+        font-size: 18px;
+        line-height: 1.22;
+        margin-bottom: 18px;
+      }
+      .price-vista {
+        font-size: 25px;
+      }
+      .price-install {
+        font-size: 13px;
+      }
+    }
+    @media (max-width: 480px) {
+      .dufrio-modal-title {
+        font-size: 16px;
+      }
+      .dufrio-modal-title span {
+        font-size: 10px;
+        padding: 2px 8px;
+      }
+      .product-info {
+        padding: 20px 16px 12px;
+      }
+      .product-title {
+        font-size: 16px;
+      }
+      .price-vista {
+        font-size: 22px;
+      }
+      .price-install {
+        font-size: 12px;
+      }
+    }
   </style>
 	<script src="analytics.js" defer></script>
 </head>
@@ -922,8 +1476,39 @@
         <h1>Hub de Ferramentas Dufrio</h1>
         <p>Ferramentas internas para vendas, orçamentos e análise de mercado.</p>
       </div>
-      <div class="logo-container">
-        <img id="dufrioLogo" src="https://www.dufrio.com.br/media/logo/websites/1/Logo_Dufrio_3_1_.webp" alt="Dufrio" crossorigin="anonymous">
+      <div class="dufrio-cotador-card" id="dufrioCotadorCard">
+        <div class="cotador-header">
+          <img id="dufrioLogo" class="cotador-logo" src="https://www.dufrio.com.br/media/logo/websites/1/Logo_Dufrio_3_1_.webp" alt="Dufrio" crossorigin="anonymous">
+          <span class="cotador-title">Cotar na Dufrio</span>
+        </div>
+        <div class="cotador-body">
+          <!-- Passo 1: Tipo -->
+          <div class="cotador-step active" id="cotador-step-tipo">
+            <span class="cotador-label">1. Selecione o Tipo:</span>
+            <div class="cotador-buttons">
+              <button type="button" class="cotador-btn" data-tipo="Hiwall">Hi Wall</button>
+              <button type="button" class="cotador-btn" data-tipo="Piso Teto">Piso Teto</button>
+              <button type="button" class="cotador-btn" data-tipo="Cassete">Cassete</button>
+            </div>
+          </div>
+          <!-- Passo 2: BTUs -->
+          <div class="cotador-step" id="cotador-step-btu">
+            <span class="cotador-label">2. Selecione a Capacidade (BTUs):</span>
+            <div class="cotador-buttons" id="cotador-btu-options"></div>
+          </div>
+          <!-- Passo 3: Ciclo -->
+          <div class="cotador-step" id="cotador-step-ciclo">
+            <span class="cotador-label">3. Selecione o Ciclo:</span>
+            <div class="cotador-buttons" id="cotador-ciclo-options"></div>
+          </div>
+          <!-- Passo 4: Botão Cotar -->
+          <div class="cotador-step" id="cotador-step-action">
+            <button type="button" class="cotador-search-btn" id="cotadorSearchTrigger">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Pesquisar Ofertas
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -947,6 +1532,27 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Modal de Resultados de Cotação Dufrio -->
+  <div class="dufrio-modal-overlay" id="dufrioCotadorOverlay">
+    <div class="dufrio-modal-panel">
+      <div class="dufrio-modal-header">
+        <div class="dufrio-modal-title-wrap">
+          <span class="dufrio-modal-kicker">Cotação Rápida Dufrio</span>
+          <h2 class="dufrio-modal-title" id="dufrioModalTitle">Dufrio <span>Aguardando...</span></h2>
+        </div>
+        <button type="button" class="dufrio-modal-close" id="dufrioModalClose" aria-label="Fechar Resultados">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="dufrio-modal-loader" id="dufrioModalLoader" style="display: none;">
+        <div class="spinner"></div>
+        <span>Buscando ofertas na Dufrio...</span>
+      </div>
+      <div class="products-grid" id="dufrioModalResults"></div>
+      <div class="dufrio-modal-status" id="dufrioModalStatus"></div>
+    </div>
   </div>
 
   <script>
@@ -1715,7 +2321,638 @@
       } catch(e) {
         console.error('Erro ao carregar atualizações:', e);
       }
+      } catch(e) {
+        console.error('Erro ao carregar atualizações:', e);
+      }
     }
+
+    // === LÓGICA DO COTADOR RÁPIDO DUFRIO ===
+    const DUFRIO_LINKS_FALLBACK = [
+      { tipo: 'Hiwall', btu: '9000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '9000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=9.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '12000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '12000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=12.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '18000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=18.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '18000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=18.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '22000 a 24000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_capacidade%5B2%5D=23.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '22000 a 24000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_capacidade%5B2%5D=23.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '27000 a 34000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade[0]=27.000+BTUs&ec_capacidade[1]=28.000+BTUs&ec_capacidade[2]=30.000+BTUs&ec_capacidade[3]=31.000+BTUs&ec_capacidade[4]=32.000+BTUs&ec_capacidade[5]=33.000+BTUs&ec_capacidade[6]=34.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '27000 a 34000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade[0]=27.000+BTUs&ec_capacidade[1]=28.000+BTUs&ec_capacidade[2]=30.000+BTUs&ec_capacidade[3]=31.000+BTUs&ec_capacidade[4]=32.000+BTUs&ec_capacidade[5]=33.000+BTUs&ec_capacidade[6]=34.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '36000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=36.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Hiwall', btu: '36000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      
+      { tipo: 'Piso Teto', btu: '24000 a 30000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=24.000+BTUs&ec_capacidade%5B1%5D=30.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '24000 a 30000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=24.000+BTUs&ec_capacidade%5B1%5D=30.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '34000 a 36000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=34.000+BTUs&ec_capacidade%5B1%5D=36.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '34000 a 36000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=34.000+BTUs&ec_capacidade%5B1%5D=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '42000 a 48000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '42000 a 48000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '52000 a 60000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=52.000+BTUs&ec_capacidade%5B1%5D=55.000+BTUs&ec_capacidade%5B2%5D=56.000+BTUs&ec_capacidade%5B3%5D=57.000+BTUs&ec_capacidade%5B4%5D=58.000+BTUs&ec_capacidade%5B5%5D=60.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '52000 a 60000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=52.000+BTUs&ec_capacidade%5B1%5D=55.000+BTUs&ec_capacidade%5B2%5D=56.000+BTUs&ec_capacidade%5B3%5D=57.000+BTUs&ec_capacidade%5B4%5D=58.000+BTUs&ec_capacidade%5B5%5D=60.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '70000 a 80000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=70.000+BTUs&ec_capacidade%5B1%5D=80.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Piso Teto', btu: '70000 a 80000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=70.000+BTUs&ec_capacidade%5B1%5D=80.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      
+      { tipo: 'Cassete', btu: '9000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '9000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '12000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '12000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '18000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=18.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '18000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=18.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '22000 a 24000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '22000 a 24000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '28000 a 34000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=28.000+BTUs&ec_capacidade%5B1%5D=34.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '28000 a 34000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=28.000+BTUs&ec_capacidade%5B1%5D=34.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '36000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=36.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '36000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '42000 a 52000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_capacidade%5B2%5D=50.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '42000 a 52000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_capacidade%5B2%5D=50.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '55000 a 60000', ciclo: 'Só Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=55.000+BTUs&ec_capacidade%5B1%5D=56.000+BTUs&ec_capacidade%5B2%5D=60.000+BTUs&product_list_dir=asc&product_list_order=price' },
+      { tipo: 'Cassete', btu: '55000 a 60000', ciclo: 'Quente/Frio', link: 'https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=55.000+BTUs&ec_capacidade%5B1%5D=56.000+BTUs&ec_capacidade%5B2%5D=60.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price' }
+    ];
+
+    const SHEET_URL = "https://opensheet.elk.sh/1ml7XpwZfzM4ElRJb4G62b93VMqUw3jeprTtgxdigiD8/Sheet1";
+    const CACHE_KEY = "dufrio_cotador_sheet_data_v1";
+
+    let cotadorLinks = [...DUFRIO_LINKS_FALLBACK];
+    let cotadorSelection = { tipo: "", btu: "", ciclo: "", link: "" };
+
+    const norm = (s) => String(s || "").toLowerCase().replace(/[\s\-_.]/g, "");
+    const normalizeText = (s) => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const normalizeCiclo = (c) => normalizeText(c).trim().replace(/^so\s+/, "");
+    const sortBTUs = (a, b) => {
+      const getVal = (s) => parseInt(String(s).replace(/[.,]/g, "").match(/\d+/) || [0], 10);
+      return getVal(a) - getVal(b);
+    };
+    const formatBTU = (btu) => String(btu).replace(/\b(\d+)\b/g, m => m.length >= 4 ? m.replace(/\B(?=(\d{3})+(?!\d))/g, ".") : m);
+
+    function initDufrioCotador() {
+      // Carregar cache
+      const cached = localStorage.getItem(CACHE_KEY);
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          if (parsed && parsed.length) {
+            cotadorLinks = parsed;
+          }
+        } catch (_) {}
+      }
+
+      // Eventos dos botões do Passo 1 (Tipo)
+      document.querySelectorAll('#cotador-step-tipo .cotador-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#cotador-step-tipo .cotador-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectCotadorTipo(btn.dataset.tipo);
+        });
+      });
+
+      // Evento do botão de fechar do modal
+      document.getElementById('dufrioModalClose').addEventListener('click', closeCotadorModal);
+
+      // Evento do clique de busca
+      document.getElementById('cotadorSearchTrigger').addEventListener('click', triggerDufrioSearch);
+
+      // Sincronizar planilha em background
+      syncLinksFromSheet();
+    }
+
+    async function syncLinksFromSheet() {
+      try {
+        const res = await fetch(SHEET_URL);
+        if (!res.ok) return;
+        const fresh = await res.json();
+        if (fresh && Array.isArray(fresh)) {
+          const mapped = fresh
+            .filter(i => i && i.Site && norm(i.Site).includes("dufrio"))
+            .map(i => ({
+              tipo: i.Tipo,
+              btu: i.BTUs,
+              ciclo: i.Ciclo,
+              link: i.Link
+            }))
+            .filter(i => i.tipo && i.btu && i.ciclo && i.link);
+
+          if (mapped.length > 0) {
+            cotadorLinks = mapped;
+            localStorage.setItem(CACHE_KEY, JSON.stringify(mapped));
+            // Se o usuário já selecionou tipo, re-renderiza opções
+            if (cotadorSelection.tipo) {
+              const currentTipo = cotadorSelection.tipo;
+              const currentBtu = cotadorSelection.btu;
+              selectCotadorTipo(currentTipo);
+              if (currentBtu) {
+                selectCotadorBTU(currentBtu);
+              }
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Falha ao sincronizar links da planilha:", e);
+      }
+    }
+
+    function selectCotadorTipo(tipo) {
+      cotadorSelection.tipo = tipo;
+      cotadorSelection.btu = "";
+      cotadorSelection.ciclo = "";
+      cotadorSelection.link = "";
+
+      // Ocultar passos subsequentes
+      document.getElementById('cotador-step-btu').classList.remove('active');
+      document.getElementById('cotador-step-ciclo').classList.remove('active');
+      document.getElementById('cotador-step-action').classList.remove('active');
+
+      // Buscar BTUs válidos
+      const rows = cotadorLinks.filter(i => norm(i.tipo) === norm(tipo));
+      const btus = [...new Set(rows.map(i => i.btu))].sort(sortBTUs);
+
+      const btuContainer = document.getElementById('cotador-btu-options');
+      btuContainer.innerHTML = "";
+
+      if (!btus.length) return;
+
+      btus.forEach(btu => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cotador-btn';
+        btn.textContent = formatBTU(btu);
+        btn.addEventListener('click', () => {
+          btuContainer.querySelectorAll('.cotador-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectCotadorBTU(btu);
+        });
+        btuContainer.appendChild(btn);
+      });
+
+      document.getElementById('cotador-step-btu').classList.add('active');
+    }
+
+    function selectCotadorBTU(btu) {
+      cotadorSelection.btu = btu;
+      cotadorSelection.ciclo = "";
+      cotadorSelection.link = "";
+
+      document.getElementById('cotador-step-ciclo').classList.remove('active');
+      document.getElementById('cotador-step-action').classList.remove('active');
+
+      // Buscar ciclos válidos
+      const rows = cotadorLinks.filter(i => norm(i.tipo) === norm(cotadorSelection.tipo) && norm(i.btu) === norm(btu));
+      const ciclos = [...new Set(rows.map(i => i.ciclo))];
+
+      const cicloContainer = document.getElementById('cotador-ciclo-options');
+      cicloContainer.innerHTML = "";
+
+      if (!ciclos.length) return;
+
+      ciclos.forEach(ciclo => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cotador-btn';
+        // Formatar para exibição
+        const displayCiclo = normalizeCiclo(ciclo) === "frio" ? "Só Frio" : ciclo;
+        btn.textContent = displayCiclo;
+        btn.addEventListener('click', () => {
+          cicloContainer.querySelectorAll('.cotador-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectCotadorCiclo(ciclo);
+        });
+        cicloContainer.appendChild(btn);
+      });
+
+      document.getElementById('cotador-step-ciclo').classList.add('active');
+    }
+
+    function selectCotadorCiclo(ciclo) {
+      cotadorSelection.ciclo = ciclo;
+      cotadorSelection.link = "";
+
+      document.getElementById('cotador-step-action').classList.remove('active');
+
+      // Buscar link final
+      const targetCicloNorm = normalizeCiclo(ciclo);
+      const row = cotadorLinks.find(i =>
+        norm(i.tipo) === norm(cotadorSelection.tipo) &&
+        norm(i.btu) === norm(cotadorSelection.btu) &&
+        normalizeCiclo(i.ciclo) === targetCicloNorm
+      );
+
+      if (row && row.link) {
+        cotadorSelection.link = row.link;
+        document.getElementById('cotador-step-action').classList.add('active');
+      } else {
+        alert("Nenhum link encontrado para esta combinação específica.");
+      }
+    }
+
+    function closeCotadorModal() {
+      const modal = document.getElementById('dufrioCotadorOverlay');
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function triggerDufrioSearch() {
+      if (!cotadorSelection.link) return;
+
+      const modal = document.getElementById('dufrioCotadorOverlay');
+      const resultsGrid = document.getElementById('dufrioModalResults');
+      const loader = document.getElementById('dufrioModalLoader');
+      const statusDiv = document.getElementById('dufrioModalStatus');
+      const titleSpan = document.querySelector('#dufrioModalTitle span');
+
+      // Configurar título do modal
+      const displayTipo = cotadorSelection.tipo === "Hiwall" ? "Hi Wall" : cotadorSelection.tipo;
+      const displayCiclo = normalizeCiclo(cotadorSelection.ciclo) === "frio" ? "Só Frio" : cotadorSelection.ciclo;
+      document.getElementById('dufrioModalTitle').innerHTML = `Dufrio <span>${displayTipo} · ${formatBTU(cotadorSelection.btu)} · ${displayCiclo}</span>`;
+
+      // Abrir modal e iniciar busca
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      resultsGrid.innerHTML = "";
+      statusDiv.innerText = "";
+      loader.style.display = "flex";
+
+      scrapeDufrioProducts(cotadorSelection.link)
+        .then(products => {
+          loader.style.display = "none";
+          if (!products || !products.length) {
+            statusDiv.innerText = "Nenhum produto em estoque encontrado no site da Dufrio para esta especificação.";
+          } else {
+            // Remover duplicados
+            const unique = [];
+            const titles = new Set();
+            products.forEach(p => {
+              if (!titles.has(p.title)) {
+                titles.add(p.title);
+                unique.push(p);
+              }
+            });
+
+            unique.forEach(p => {
+              const card = createProductCard(p);
+              resultsGrid.appendChild(card);
+            });
+          }
+        })
+        .catch(err => {
+          loader.style.display = "none";
+          statusDiv.innerText = "Erro crítico ao carregar dados do site da Dufrio. Tente novamente mais tarde.";
+          console.error(err);
+        });
+    }
+
+    // === CORE SCRAPER DUFRIO ===
+    async function scrapeDufrioProducts(url) {
+      const busterUrl = url + (url.includes("?") ? "&" : "?") + "_=" + Date.now();
+      const proxies = [
+        "https://frigelar-proxy.crftwo.workers.dev/?url=" + encodeURIComponent(busterUrl),
+        "https://corsproxy.io/?" + encodeURIComponent(busterUrl)
+      ];
+
+      let html = "";
+      let lastError = null;
+
+      for (const proxy of proxies) {
+        try {
+          const res = await fetch(proxy, { cache: "no-store" });
+          if (res.ok) {
+            html = await res.text();
+            if (html && html.includes("product-item")) break;
+          }
+        } catch (e) {
+          lastError = e;
+        }
+      }
+
+      if (!html) {
+        throw lastError || new Error("Falha ao obter HTML do site Dufrio.");
+      }
+
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const cards = Array.from(doc.querySelectorAll(".product-item"));
+
+      return cards.map(card => {
+        const titleEl = card.querySelector("a.product-item-link");
+        if (!titleEl) return null;
+        const title = titleEl.innerText.trim();
+
+        const imgEl = card.querySelector("img.product-image-photo, img.product-image");
+        let image = "";
+        if (imgEl) {
+          image = imgEl.src || imgEl.getAttribute("data-src") || "";
+          if (image.includes("workers.dev")) {
+            try {
+              const u = new URL(image);
+              image = u.searchParams.get("url") || image;
+            } catch (_) {}
+          }
+          if (image && !image.startsWith("http")) {
+            image = "https://www.dufrio.com.br" + (image.startsWith("/") ? "" : "/") + image;
+          }
+        }
+
+        let spot = "";
+        const spotPriceEl = card.querySelector(".spot-price");
+        if (spotPriceEl) {
+          spot = spotPriceEl.innerText.replace(/\s+/g, " ").trim();
+        } else {
+          const cashDownEl = card.querySelector("#cash_down");
+          if (cashDownEl) {
+            spot = cashDownEl.innerText.replace(/\s+/g, " ").trim();
+          } else {
+            spot = "Sob consulta";
+          }
+        }
+
+        let install = "";
+        card.querySelectorAll("p").forEach(p => {
+          const pText = p.innerText.toLowerCase();
+          if (pText.includes("ou r$") && (pText.includes("em") || pText.includes("x"))) {
+            install = p.innerText.replace(/\s+/g, " ").trim();
+          }
+        });
+        if (!install) install = "Consulte parcelamento";
+
+        let link = titleEl.getAttribute("href") || "";
+        if (link && !link.startsWith("http")) {
+          link = "https://www.dufrio.com.br" + (link.startsWith("/") ? "" : "/") + link;
+        }
+
+        return { title, image, spot, install, link, storeName: "Dufrio" };
+      }).filter(Boolean);
+    }
+
+    // === CÓPIA DE TEXTOS E IMAGENS (UX SCRAPER OFICIAL) ===
+    function boldBrand(title) {
+      const marcas = ["Gree", "Daikin", "Fujitsu", "Samsung", "LG", "Elgin", "Midea", "Carrier", "Springer", "Philco", "Agratto", "Komeco", "TCL"];
+      for (const m of marcas) {
+        const rx = new RegExp("\\b(" + m + ")\\b", "i");
+        if (rx.test(title)) return title.replace(rx, "*$1*");
+      }
+      return title;
+    }
+
+    function getCycleEmoji(title) {
+      const t = title.toLowerCase();
+      if (t.includes("quente/frio") || t.includes("quente e frio") || t.includes("quente frio") || t.includes("q/f")) return "🔥❄️";
+      return "❄️";
+    }
+
+    function formatCopyText(title, spot, install) {
+      return getCycleEmoji(title) + " " + boldBrand(title) + "\n💵 " + spot + "\n💳 " + install;
+    }
+
+    function normalizeCopyImageUrl(url) {
+      let cleanUrl = String(url || "").trim();
+      if (!cleanUrl) throw new Error("Imagem ausente");
+      if (cleanUrl.includes("workers.dev") && cleanUrl.includes("url=")) {
+        try {
+          cleanUrl = new URL(cleanUrl).searchParams.get("url") || cleanUrl;
+        } catch (_) {}
+      }
+      if (cleanUrl.startsWith("//")) cleanUrl = "https:" + cleanUrl;
+      return cleanUrl;
+    }
+
+    function imageProxyUrls(url) {
+      const cleanUrl = normalizeCopyImageUrl(url);
+      const proxied = [
+        "https://wsrv.nl/?url=" + encodeURIComponent(cleanUrl),
+        "https://images.weserv.nl/?url=" + encodeURIComponent(cleanUrl),
+        "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(cleanUrl),
+        cleanUrl
+      ];
+      return [...new Set(proxied)];
+    }
+
+    function detectImageMime(buffer, contentType, sourceUrl) {
+      const bytes = new Uint8Array(buffer.slice(0, 12));
+      if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
+      if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47) return "image/png";
+      if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) return "image/gif";
+      if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[8] === 0x57 && bytes[9] === 0x45) return "image/webp";
+
+      const headerType = String(contentType || "").split(";")[0].trim().toLowerCase();
+      if (headerType.startsWith("image/")) return headerType;
+
+      const lowerUrl = String(sourceUrl || "").toLowerCase();
+      if (lowerUrl.includes(".png")) return "image/png";
+      if (lowerUrl.includes(".webp")) return "image/webp";
+      return "image/jpeg";
+    }
+
+    async function decodeImageBlob(blob) {
+      if (typeof createImageBitmap === "function") {
+        try {
+          return await createImageBitmap(blob);
+        } catch (_) {}
+      }
+      return await new Promise((resolve, reject) => {
+        const objectUrl = URL.createObjectURL(blob);
+        const image = new Image();
+        image.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(image);
+        };
+        image.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error("Falha ao decodificar imagem"));
+        };
+        image.src = objectUrl;
+      });
+    }
+
+    async function convertImageToPng(blob) {
+      const decoded = await decodeImageBlob(blob);
+      const width = decoded.width || decoded.naturalWidth;
+      const height = decoded.height || decoded.naturalHeight;
+      if (!width || !height) throw new Error("Imagem sem dimensões");
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(decoded, 0, 0);
+      if (typeof decoded.close === "function") decoded.close();
+
+      return await new Promise((resolve, reject) => {
+        canvas.toBlob(blobPng => {
+          if (blobPng) resolve(blobPng);
+          else reject(new Error("Falha ao gerar PNG"));
+        }, "image/png");
+      });
+    }
+
+    async function getCopyableImageBlob(imageUrl, storeName) {
+      let lastError = null;
+      for (const candidateUrl of imageProxyUrls(imageUrl)) {
+        try {
+          const response = await fetch(candidateUrl, { cache: "no-store" });
+          if (!response.ok) throw new Error("HTTP " + response.status);
+
+          const buffer = await response.arrayBuffer();
+          if (!buffer.byteLength) throw new Error("Imagem vazia");
+
+          const mimeType = detectImageMime(buffer, response.headers.get("content-type"), candidateUrl);
+          const imageBlob = new Blob([buffer], { type: mimeType });
+          return await convertImageToPng(imageBlob);
+        } catch (error) {
+          lastError = error;
+        }
+      }
+      throw lastError || new Error("Não foi possível processar a imagem.");
+    }
+
+    function createProductCard(p) {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      const badge = document.createElement("div");
+      badge.className = "store-badge";
+      badge.textContent = p.storeName;
+
+      const imgWrap = document.createElement("div");
+      imgWrap.className = "product-img-wrap";
+      const img = document.createElement("img");
+      img.src = p.image;
+      img.alt = p.title;
+      img.onerror = () => img.src = "https://placehold.co/260x260/111/333?text=" + p.storeName;
+
+      const overlay = document.createElement("div");
+      overlay.className = "img-overlay";
+      const overlaySpan = document.createElement("span");
+
+      const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || ('ontouchstart' in window);
+      overlaySpan.textContent = isMobileDevice ? "📤 Compartilhar" : "📸 Copiar Foto";
+
+      overlay.appendChild(overlaySpan);
+      imgWrap.appendChild(img);
+      imgWrap.appendChild(overlay);
+
+      imgWrap.onclick = async () => {
+        if (isMobileDevice) {
+          overlaySpan.textContent = "⌛ Aguarde...";
+          try {
+            const blob = await getCopyableImageBlob(p.image, p.storeName);
+            const fileName = (p.title.substring(0, 40).replace(/[^a-zA-Z0-9]/g, '_') || 'produto') + '.png';
+            const file = new File([blob], fileName, { type: "image/png" });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              await navigator.share({ files: [file], title: p.title });
+            } else if (navigator.share) {
+              await navigator.share({ title: p.title, url: p.link });
+            } else {
+              window.open(p.image, '_blank');
+            }
+            overlay.classList.add("copied");
+            overlaySpan.textContent = "✅ Compartilhado!";
+            setTimeout(() => {
+              overlay.classList.remove("copied");
+              overlaySpan.textContent = "📤 Compartilhar";
+            }, 1800);
+          } catch(e) {
+            if (e.name !== 'AbortError') {
+              window.open(p.image, '_blank');
+            }
+            overlaySpan.textContent = "📤 Compartilhar";
+          }
+        } else {
+          overlaySpan.textContent = "⌛...";
+          try {
+            const blob = await getCopyableImageBlob(p.image, p.storeName);
+            await navigator.clipboard.write([
+              new ClipboardItem({ "image/png": blob })
+            ]);
+            overlay.classList.add("copied");
+            overlaySpan.textContent = "✅ Copiado!";
+            setTimeout(() => {
+              overlay.classList.remove("copied");
+              overlaySpan.textContent = "📸 Copiar Foto";
+            }, 1800);
+          } catch(e) {
+            console.error("Erro ao copiar imagem:", e);
+            overlay.classList.add("copied");
+            overlaySpan.textContent = "⚠️ Erro ao Copiar";
+            setTimeout(() => {
+              overlay.classList.remove("copied");
+              overlaySpan.textContent = "📸 Copiar Foto";
+            }, 1800);
+          }
+        }
+      };
+
+      const info = document.createElement("div");
+      info.className = "product-info";
+      const hint = document.createElement("div");
+      hint.className = "copy-hint";
+      hint.textContent = "COPIAR";
+
+      const titleDiv = document.createElement("div");
+      titleDiv.className = "product-title";
+      titleDiv.innerHTML = "<span>" + p.title + "</span>";
+
+      const pricesWrap = document.createElement("div");
+      pricesWrap.className = "prices-wrap";
+
+      const priceVista = document.createElement("div");
+      priceVista.className = "price-vista";
+
+      const spotMatch = p.spot.match(/^(R\$\s*[\d.,]+)(.*)$/);
+      const mainPrice = spotMatch ? spotMatch[1].trim() : p.spot;
+      const discountBit = spotMatch && spotMatch[2] ? spotMatch[2].trim() : "";
+      priceVista.innerHTML = `<span>${mainPrice}</span>`;
+      if (discountBit) {
+        const badgeSpan = document.createElement("span");
+        badgeSpan.className = "discount-badge";
+        badgeSpan.textContent = discountBit;
+        priceVista.appendChild(badgeSpan);
+      }
+
+      const priceInstall = document.createElement("div");
+      priceInstall.className = "price-install";
+      priceInstall.textContent = p.install;
+
+      pricesWrap.appendChild(priceVista);
+      pricesWrap.appendChild(priceInstall);
+
+      info.appendChild(hint);
+      info.appendChild(titleDiv);
+      info.appendChild(pricesWrap);
+
+      info.onclick = () => {
+        const txt = formatCopyText(p.title, p.spot, p.install);
+        navigator.clipboard.writeText(txt);
+        hint.textContent = "✅ COPIADO!";
+        info.classList.add("copied");
+        setTimeout(() => {
+          hint.textContent = "COPIAR";
+          info.classList.remove("copied");
+        }, 1800);
+      };
+
+      const footer = document.createElement("div");
+      footer.className = "card-footer";
+      const btnLink = document.createElement("button");
+      btnLink.type = "button";
+      btnLink.className = "btn-link";
+      btnLink.textContent = "🔗 Abrir na Dufrio";
+      btnLink.onclick = () => window.open(p.link, "_blank");
+      footer.appendChild(btnLink);
+
+      card.appendChild(badge);
+      card.appendChild(imgWrap);
+      card.appendChild(info);
+      card.appendChild(footer);
+
+      return card;
+    }
+
+    // === INICIALIZAÇÃO NO CARREGAMENTO ===
+    document.addEventListener('DOMContentLoaded', () => {
+      initDufrioCotador();
+    });
 
     // loadLastUpdate é disparado pelo onload/onerror do logScript acima.
     // Mantém um fallback caso o DOM termine antes do script (ex: cache).
