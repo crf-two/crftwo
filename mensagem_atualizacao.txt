@@ -1,1 +1,1 @@
-Corrige ReferenceError no Scraper Dufrio definindo IMAGES
+Adiciona Busca Rápida Dufrio integrada por modal no Hub principal

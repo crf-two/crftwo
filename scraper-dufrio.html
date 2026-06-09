@@ -804,6 +804,12 @@
         opacity: 0;
       }
     }
+    body.in-iframe .btn-back {
+      display: none !important;
+    }
+    body.in-iframe .container {
+      padding-top: 20px !important;
+    }
   </style>
   <script src="analytics.js" defer></script>
 </head>
@@ -865,6 +871,11 @@
   
   <script src="ultimo_log.js" onerror="window.LATEST_LOG = null;"></script>
   <script>
+    // Ajustes caso a ferramenta seja carregada em Iframe (Busca Rápida no Hub)
+    if (window.self !== window.top) {
+      document.body.classList.add('in-iframe');
+    }
+
     const DUFRIO_DATA = [
       {
         "Tipo": "Hiwall",
