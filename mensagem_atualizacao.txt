@@ -1,1 +1,1 @@
-Adiciona painel flutuante dragável com cópia rápida da lista no Scraper Dufrio
+Ajuste visual do painel de lista e links no Scraper Dufrio

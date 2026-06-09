@@ -912,6 +912,56 @@
       80% { opacity: 1; }
       100% { opacity: 0; }
     }
+    .floating-list-trigger {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(18, 18, 28, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 230, 118, 0.4);
+      color: #00e676;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 230, 118, 0.2);
+      z-index: 9998;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease, transform 0.2s ease;
+    }
+    .floating-list-trigger:hover {
+      background: rgba(0, 230, 118, 0.15);
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 24px rgba(0, 230, 118, 0.3);
+    }
+    .floating-list-trigger:active {
+      transform: translateY(0) scale(0.98);
+    }
+    .floating-minimize-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: all 0.2s;
+    }
+    .floating-minimize-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
     @media (max-width: 768px) {
       .floating-list-panel {
         position: fixed;
@@ -924,6 +974,10 @@
       }
       .floating-list-header {
         cursor: default;
+      }
+      .floating-list-trigger {
+        bottom: 20px;
+        right: 20px;
       }
     }
   </style>
@@ -968,7 +1022,7 @@
       <!-- Barra de Ações Rápidas (Link consultado) -->
       <div id="quick-action-bar" style="margin-bottom: 24px;">
         <div style="display: flex; flex-direction: column;">
-          <div class="action-link-label">🔗 Link consultado na Dufrio:</div>
+          <div class="action-link-label">🔗 link:</div>
           <a id="consulted-link" class="action-link-url" href="#" target="_blank"></a>
         </div>
       </div>
@@ -1839,6 +1893,8 @@
       document.getElementById("loading-results").style.display = "none";
       document.getElementById("quick-action-bar").style.display = "none";
       document.getElementById("floating-list-panel").style.display = "none";
+      const trigger = document.getElementById("floating-list-trigger");
+      if (trigger) trigger.style.display = "none";
       renderTipos();
       document.getElementById("step-tipo").scrollIntoView({behavior: 'smooth', block: 'start'});
     }
@@ -2100,11 +2156,27 @@
       return emoji + parts.join(' · ');
     }
 
+    function expandFloatingPanel() {
+      const panel = document.getElementById("floating-list-panel");
+      const trigger = document.getElementById("floating-list-trigger");
+      if (panel) panel.style.display = "flex";
+      if (trigger) trigger.style.display = "none";
+    }
+
+    function minimizeFloatingPanel() {
+      const panel = document.getElementById("floating-list-panel");
+      const trigger = document.getElementById("floating-list-trigger");
+      if (panel) panel.style.display = "none";
+      if (trigger) trigger.style.display = "flex";
+    }
+
     function updateRenderedListPreview(products) {
       const panel = document.getElementById("floating-list-panel");
+      const trigger = document.getElementById("floating-list-trigger");
       const textarea = document.getElementById("rendered-list-preview");
       if (!products || products.length === 0) {
         if (panel) panel.style.display = "none";
+        if (trigger) trigger.style.display = "none";
         if (textarea) textarea.value = "";
         return;
       }
@@ -2115,7 +2187,15 @@
       const textToCopy = `${titleText}\n\n${listText}`;
       
       if (textarea) textarea.value = textToCopy;
-      if (panel) panel.style.display = "flex";
+      
+      if (panel) {
+        if (panel.style.display === "flex") {
+          if (trigger) trigger.style.display = "none";
+        } else {
+          panel.style.display = "none";
+          if (trigger) trigger.style.display = "flex";
+        }
+      }
     }
 
     function copyRenderedList() {
@@ -2153,7 +2233,7 @@
       let startX, startY, initialLeft, initialTop;
 
       header.addEventListener("mousedown", (e) => {
-        if (e.target.classList.contains("floating-copy-btn")) return;
+        if (e.target.classList.contains("floating-copy-btn") || e.target.classList.contains("floating-minimize-btn")) return;
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
@@ -2198,7 +2278,7 @@
 
       // Touch drag
       header.addEventListener("touchstart", (e) => {
-        if (e.target.classList.contains("floating-copy-btn")) return;
+        if (e.target.classList.contains("floating-copy-btn") || e.target.classList.contains("floating-minimize-btn")) return;
         const touch = e.touches[0];
         isDragging = true;
         startX = touch.clientX;
@@ -2251,13 +2331,21 @@
   <!-- Painel Flutuante Dragável da Lista WhatsApp -->
   <div id="floating-list-panel" class="floating-list-panel">
     <div id="floating-list-header" class="floating-list-header">
-      <span>📋 LISTA WHATSAPP (ARRASTE)</span>
-      <button onclick="copyRenderedList()" class="floating-copy-btn">Copiar</button>
+      <span>📋 LISTA WHATSAPP</span>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button onclick="copyRenderedList()" class="floating-copy-btn">Copiar</button>
+        <button onclick="minimizeFloatingPanel()" class="floating-minimize-btn" title="Minimizar">×</button>
+      </div>
     </div>
     <div class="floating-list-body">
       <textarea id="rendered-list-preview" class="floating-list-textarea" readonly placeholder="Gerando lista..." onclick="copyRenderedList()"></textarea>
       <div id="floating-copy-toast" class="floating-copy-toast">Copiado!</div>
     </div>
   </div>
+
+  <!-- Botão Discreto / Trigger para abrir o painel flutuante -->
+  <button id="floating-list-trigger" class="floating-list-trigger" onclick="expandFloatingPanel()">
+    📋 Lista WhatsApp
+  </button>
 </body>
 </html>
