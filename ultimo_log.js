@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Adiciona Busca Rápida Dufrio integrada por modal no Hub principal', dateIso: '2026-06-09T19:21:00-03:00' };
+const LATEST_LOG = { message: 'Adiciona exibição de link consultado e cópia de lista formatada para WhatsApp no Scraper Dufrio', dateIso: '2026-06-09T19:33:00-03:00' };

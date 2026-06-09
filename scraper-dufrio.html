@@ -810,6 +810,15 @@
     body.in-iframe .container {
       padding-top: 20px !important;
     }
+    /* ACTIONS BAR */
+    #quick-action-bar { width: 100%; background: var(--card-bg); border: 1px solid var(--card-border); padding: 20px; border-radius: 12px; display: none; flex-direction: column; gap: 16px; margin-bottom: 24px; backdrop-filter: blur(12px); box-sizing: border-box; }
+    .action-link-label { font-size: 11px; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; text-align: left; }
+    .action-link-url { color: #3b82f6; text-decoration: none; font-weight: 600; font-size: 13px; word-break: break-all; transition: color 0.2s; text-align: left; display: block; }
+    .action-link-url:hover { color: #60a5fa; text-decoration: underline; }
+    .btn-copy-list { background: rgba(0, 230, 118, 0.15) !important; border-color: rgba(0, 230, 118, 0.4) !important; color: #00e676 !important; box-shadow: 0 0 12px rgba(0, 230, 118, 0.1) !important; }
+    .btn-copy-list:hover { background: rgba(0, 230, 118, 0.25) !important; border-color: rgba(0, 230, 118, 0.6) !important; box-shadow: 0 0 18px rgba(0, 230, 118, 0.18) !important; }
+    .rendered-list-textarea { background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; color: var(--text-main); font-family: monospace; font-size: 12px; width: 100%; height: 120px; resize: vertical; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+    .rendered-list-textarea:focus { border-color: rgba(0, 123, 255, 0.5); }
   </style>
   <script src="analytics.js" defer></script>
 </head>
@@ -847,6 +856,18 @@
       <div id="selection-summary" style="display:none;">
         <div class="summary-text" id="summary-text"></div>
         <button class="btn-reset" onclick="resetScraper()">🔄 Refazer Busca</button>
+      </div>
+
+      <!-- Barra de Ações Rápidas (Link consultado e Cópia de Lista) -->
+      <div id="quick-action-bar">
+        <div style="display: flex; flex-direction: column;">
+          <div class="action-link-label">🔗 Link consultado na Dufrio:</div>
+          <a id="consulted-link" class="action-link-url" href="#" target="_blank"></a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <button id="btn-copy-list" class="btn-reset btn-copy-list" onclick="copyRenderedList()">📋 Copiar Lista WhatsApp</button>
+          <textarea id="rendered-list-preview" class="rendered-list-textarea" style="display: none;" placeholder="Gerando lista para WhatsApp..."></textarea>
+        </div>
       </div>
 
       <div id="filters-section" style="display:none;">
@@ -1529,11 +1550,22 @@
         summaryTextEl.innerHTML = `<span>Dufrio</span><span>${selection.tipo}</span><span>${formatBTU(selection.btu)} BTUs</span><span>${formatCiclo(selection.ciclo)}</span>`;
         document.getElementById("selection-summary").style.display = "flex";
 
+        const consultedLinkEl = document.getElementById("consulted-link");
+        const quickActionBarEl = document.getElementById("quick-action-bar");
+        if (dufrioLink && dufrioLink.Link) {
+          consultedLinkEl.href = dufrioLink.Link;
+          consultedLinkEl.textContent = dufrioLink.Link;
+          quickActionBarEl.style.display = "flex";
+        } else {
+          quickActionBarEl.style.display = "none";
+        }
+
         if (allFetchedProducts.length > 0) {
           generateFilters();
           applyFilters();
         } else {
           document.getElementById("results-grid").innerHTML="<p style=\"grid-column:1/-1;color:var(--muted);font-size:13px;text-transform:uppercase;font-weight:800;text-align:center;padding:40px 0;\">Nenhum produto encontrado na Dufrio para esta combinação.</p>";
+          updateRenderedListPreview([]);
         }
       } catch (err) {
         console.error("Erro no scraping:", err);
@@ -1681,8 +1713,13 @@
         const c = activeFilters.ciclos.length === 0 || activeFilters.ciclos.includes(p.ciclo);
         return m && b && c;
       });
-      if (filtered.length === 0) grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--muted);font-size:13px;text-transform:uppercase;font-weight:800;text-align:center;padding:40px 0;\">Nenhum produto atende aos filtros atuais.</p>";
-      else filtered.forEach(p => grid.appendChild(createCard(p, "Dufrio")));
+      if (filtered.length === 0) {
+        grid.innerHTML = "<p style=\"grid-column:1/-1;color:var(--muted);font-size:13px;text-transform:uppercase;font-weight:800;text-align:center;padding:40px 0;\">Nenhum produto atende aos filtros atuais.</p>";
+        updateRenderedListPreview([]);
+      } else {
+        filtered.forEach(p => grid.appendChild(createCard(p, "Dufrio")));
+        updateRenderedListPreview(filtered);
+      }
     }
 
     function resetScraper() {
@@ -1696,6 +1733,7 @@
       document.getElementById("step-ciclo").classList.remove("active");
       document.getElementById("step-resultados").classList.remove("active");
       document.getElementById("loading-results").style.display = "none";
+      document.getElementById("quick-action-bar").style.display = "none";
       renderTipos();
       document.getElementById("step-tipo").scrollIntoView({behavior: 'smooth', block: 'start'});
     }
@@ -1913,6 +1951,78 @@
 
       card.appendChild(badge); card.appendChild(imgWrap); card.appendChild(info); card.appendChild(footer);
       return card;
+    }
+
+    // Funções auxiliares para cópia da lista completa (formato WhatsApp)
+    const HYPER_BRANDS = ['daikin', 'fujitsu', 'hitachi', 'trane', 'lg', 'samsung', 'gree', 'carrier', 'midea', 'hisense'];
+
+    function boldPremiumBrand(title) {
+      if (!title) return title;
+      let formattedTitle = title;
+      for (const b of HYPER_BRANDS) {
+        let regex = b === 'lg' ? new RegExp(`\\b(${b})\\b`, 'i') : new RegExp(`(${b})`, 'i');
+        if (regex.test(formattedTitle)) {
+          formattedTitle = formattedTitle.replace(regex, '*$1*');
+          break;
+        }
+      }
+      return formattedTitle;
+    }
+
+    function formatProductText(title, spot, install) {
+      let emojiCycle = "❄️";
+      const titleLower = title.toLowerCase();
+      if (titleLower.includes('quente/frio') || titleLower.includes('quente e frio') || titleLower.includes('q/f') || titleLower.includes('quente / frio') || titleLower.includes('quente frio')) {
+        emojiCycle = "🔥❄️";
+      }
+      const boldedTitle = boldPremiumBrand(title);
+      return `${emojiCycle} ${boldedTitle}\n💰 ${spot}\n💳 ${install}`;
+    }
+
+    function generateSmartTitle(products) {
+      if (!products || products.length === 0) return 'Ar condicionado - Dufrio';
+      
+      const formatInt = (n) => parseInt(String(n).replace(/[.,]/g, "").match(/\d+/) || [0], 10).toLocaleString('pt-BR');
+      
+      let emoji = "❄️ ";
+      if (selection.ciclo.toLowerCase().includes("quente")) {
+        emoji = "🔥❄️ ";
+      }
+      
+      const parts = [selection.tipo];
+      if (selection.btu) parts.push(formatInt(selection.btu) + " Btus");
+      if (selection.ciclo) parts.push(formatCiclo(selection.ciclo));
+      
+      return emoji + parts.join(' · ');
+    }
+
+    function updateRenderedListPreview(products) {
+      const textarea = document.getElementById("rendered-list-preview");
+      if (!products || products.length === 0) {
+        textarea.style.display = "none";
+        textarea.value = "";
+        return;
+      }
+      
+      const fullTitle = generateSmartTitle(products);
+      const listText = products.map(p => formatProductText(p.title, p.spot, p.install)).join('\n\n_____\n\n');
+      const titleText = fullTitle.split('\n').map(l => `*${l}*`).join('\n');
+      const textToCopy = `${titleText}\n\n${listText}`;
+      
+      textarea.value = textToCopy;
+      textarea.style.display = "block";
+    }
+
+    function copyRenderedList() {
+      const textarea = document.getElementById("rendered-list-preview");
+      if (!textarea || !textarea.value) return;
+      
+      navigator.clipboard.writeText(textarea.value).then(() => {
+        const btn = document.getElementById("btn-copy-list");
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "✔️ Lista Copiada!";
+        setTimeout(() => btn.innerHTML = originalText, 2000);
+      });
     }
 
     window.onload = loadData;
