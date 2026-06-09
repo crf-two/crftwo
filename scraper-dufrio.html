@@ -147,8 +147,7 @@
       .filter-row { gap: 6px; }
       .filter-btn { padding: 6px 12px; font-size: 9px; border-radius: 16px; }
 
-      .sync-status { bottom: 16px; right: 16px; padding: 8px 14px; font-size: 9px; }
-      .sync-dot { width: 6px; height: 6px; }
+
     }
 
     @media (max-width: 480px) {
@@ -199,8 +198,7 @@
       .filter-row { gap: 5px; }
       .filter-btn { padding: 5px 10px; font-size: 8px; border-radius: 14px; }
 
-      .sync-status { bottom: 12px; right: 12px; padding: 6px 10px; font-size: 8px; }
-      .sync-dot { width: 5px; height: 5px; }
+
 
       #loading-results { padding: 30px; }
       .spinner { width: 28px; height: 28px; border-width: 2px; }
@@ -228,13 +226,7 @@
     .filter-quality-btn.quality-inter.active { background: rgba(255,192,0,0.18); border-color: rgba(255,192,0,0.58); color: #facc15; box-shadow: 0 0 12px rgba(255,192,0,0.18); }
     .filter-quality-btn.quality-basica.active { background: rgba(255,0,0,0.16); border-color: rgba(255,0,0,0.48); color: #f87171; box-shadow: 0 0 12px rgba(255,0,0,0.14); }
 
-    /* SYNC STATUS */
-    .sync-status { position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: rgba(18,18,28,0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); padding: 10px 18px; border-radius: 30px; display: flex; align-items: center; gap: 10px; font-size: 10px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: all 0.4s ease; cursor: default; }
-    .sync-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .sync-status.loading .sync-dot { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation: pulse-dot 1s infinite alternate; }
-    .sync-status.success .sync-dot { background: #00e676; box-shadow: 0 0 10px #00e676; }
-    .sync-status.error .sync-dot { background: #ff5252; box-shadow: 0 0 10px #ff5252; }
-    @keyframes pulse-dot { from { opacity: 0.4; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
+
 
     /* Mobile polish: visual only, preserving scraper behavior and selectors. */
     html {
@@ -602,15 +594,7 @@
         letter-spacing: 1px;
       }
 
-      .sync-status {
-        right: 10px;
-        bottom: max(10px, env(safe-area-inset-bottom));
-        max-width: calc(100vw - 20px);
-        padding: 7px 11px;
-        font-size: 8px;
-        gap: 7px;
-        opacity: 0.82;
-      }
+
     }
 
     @media (max-width: 480px) {
@@ -824,10 +808,7 @@
   <script src="analytics.js" defer></script>
 </head>
 <body>
-  <div id="sync-status" class="sync-status loading">
-    <div class="sync-dot"></div>
-    <span id="sync-text">Conectando</span>
-  </div>
+
   <div style="position:fixed;inset:0;background:#050505;z-index:-2;pointer-events:none;"></div>
   <div class="aurora a1"></div>
   <div class="aurora a2"></div>
@@ -884,9 +865,276 @@
   
   <script src="ultimo_log.js" onerror="window.LATEST_LOG = null;"></script>
   <script>
-    const IMAGES = {"Hiwall":"img/hi_wall.png","Hi Wall":"img/hi_wall.png","Piso Teto":"img/piso_teto.png","Cassete":"img/cassete.png"};
-    let sheetData = [], selection = {tipo:"",btu:"",ciclo:""};
-    const CACHE_KEY = "scraper_sheet_data_v1";
+    const DUFRIO_DATA = [
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "9000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "9000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=9.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "12000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "12000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=12.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "18000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=18.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "18000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=18.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "22000 a 24000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_capacidade%5B2%5D=23.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "22000 a 24000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_capacidade%5B2%5D=23.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "27000 a 34000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade[0]=27.000+BTUs&ec_capacidade[1]=28.000+BTUs&ec_capacidade[2]=30.000+BTUs&ec_capacidade[3]=31.000+BTUs&ec_capacidade[4]=32.000+BTUs&ec_capacidade[5]=33.000+BTUs&ec_capacidade[6]=34.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "27000 a 34000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade[0]=27.000+BTUs&ec_capacidade[1]=28.000+BTUs&ec_capacidade[2]=30.000+BTUs&ec_capacidade[3]=31.000+BTUs&ec_capacidade[4]=32.000+BTUs&ec_capacidade[5]=33.000+BTUs&ec_capacidade[6]=34.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "36000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=36.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Hiwall",
+        "BTUs": "36000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-inverter?ec_capacidade=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "24000 a 30000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=24.000+BTUs&ec_capacidade%5B1%5D=30.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "24000 a 30000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=24.000+BTUs&ec_capacidade%5B1%5D=30.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "34000 a 36000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=34.000+BTUs&ec_capacidade%5B1%5D=36.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "34000 a 36000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=34.000+BTUs&ec_capacidade%5B1%5D=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "42000 a 48000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "42000 a 48000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "52000 a 60000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=52.000+BTUs&ec_capacidade%5B1%5D=55.000+BTUs&ec_capacidade%5B2%5D=56.000+BTUs&ec_capacidade%5B3%5D=57.000+BTUs&ec_capacidade%5B4%5D=58.000+BTUs&ec_capacidade%5B5%5D=60.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "52000 a 60000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=52.000+BTUs&ec_capacidade%5B1%5D=55.000+BTUs&ec_capacidade%5B2%5D=56.000+BTUs&ec_capacidade%5B3%5D=57.000+BTUs&ec_capacidade%5B4%5D=58.000+BTUs&ec_capacidade%5B5%5D=60.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "70000 a 80000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=70.000+BTUs&ec_capacidade%5B1%5D=80.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Piso Teto",
+        "BTUs": "70000 a 80000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-piso-teto?ec_capacidade%5B0%5D=70.000+BTUs&ec_capacidade%5B1%5D=80.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "9000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "9000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=9.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "12000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "12000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=12.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "18000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=18.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "18000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=18.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "22000 a 24000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "22000 a 24000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=22.000+BTUs&ec_capacidade%5B1%5D=24.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "28000 a 34000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=28.000+BTUs&ec_capacidade%5B1%5D=34.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "28000 a 34000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=28.000+BTUs&ec_capacidade%5B1%5D=34.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "36000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=36.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "36000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade=36.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "42000 a 52000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_capacidade%5B2%5D=50.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "42000 a 52000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=46.000+BTUs&ec_capacidade%5B1%5D=48.000+BTUs&ec_capacidade%5B2%5D=50.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "55000 a 60000",
+        "Ciclo": "Só Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=55.000+BTUs&ec_capacidade%5B1%5D=56.000+BTUs&ec_capacidade%5B2%5D=60.000+BTUs&product_list_dir=asc&product_list_order=price"
+      },
+      {
+        "Tipo": "Cassete",
+        "BTUs": "55000 a 60000",
+        "Ciclo": "Quente/Frio",
+        "Site": "Dufrio",
+        "Link": "https://www.dufrio.com.br/ar-condicionado/ar-condicionado-split-cassete?ec_capacidade%5B0%5D=55.000+BTUs&ec_capacidade%5B1%5D=56.000+BTUs&ec_capacidade%5B2%5D=60.000+BTUs&ec_ciclo=Quente%2FFrio&product_list_dir=asc&product_list_order=price"
+      }
+    ];
+
+    let selection = {tipo:"",btu:"",ciclo:""};
 
     let allFetchedProducts = [];
     let activeFilters = { marcas: [], btus: [], ciclos: [] };
@@ -905,49 +1153,9 @@
       "Cassete": ["9000", "12000", "18000", "22000 a 24000", "28000 a 34000", "36000", "42000 a 52000", "55000 a 60000"]
     };
     const CICLOS_PADRAO = ["Só Frio", "Quente/Frio"];
-    let sheetLoadPromise = null;
 
-    async function loadData() {
-      // 1. Renderiza o caminho completo imediatamente para o usuário não esperar a planilha.
+    function loadData() {
       refreshChoiceOptions();
-      
-      const syncStatus = document.getElementById("sync-status");
-      const syncText = document.getElementById("sync-text");
-
-      // 2. Carrega a planilha em segundo plano
-      sheetLoadPromise = (async () => {
-        const cached = localStorage.getItem(CACHE_KEY);
-        if (cached) {
-          try { sheetData = JSON.parse(cached); } catch(e) {}
-        }
-
-        try {
-          const r = await fetch("https://opensheet.elk.sh/1ml7XpwZfzM4ElRJb4G62b93VMqUw3jeprTtgxdigiD8/Sheet1");
-          const freshData = await r.json();
-          if (JSON.stringify(sheetData) !== JSON.stringify(freshData)) {
-            sheetData = freshData;
-            localStorage.setItem(CACHE_KEY, JSON.stringify(sheetData));
-          }
-          
-          syncStatus.className = "sync-status success";
-          syncText.innerText = "Conectado";
-          
-          setTimeout(() => {
-            syncStatus.style.opacity = "0.5";
-            syncStatus.style.transform = "scale(0.95)";
-          }, 3000);
-          
-          syncStatus.onmouseenter = () => { syncStatus.style.opacity = "1"; syncStatus.style.transform = "scale(1)"; };
-          syncStatus.onmouseleave = () => { syncStatus.style.opacity = "0.5"; syncStatus.style.transform = "scale(0.95)"; };
-          reconcileSelectionsWithOptions();
-          refreshChoiceOptions();
-          
-        } catch(e) {
-          console.error("Erro ao carregar planilha", e);
-          syncStatus.className = "sync-status error";
-          syncText.innerText = "Falha ao Conectar";
-        }
-      })();
     }
 
     function uniqueValues(items) {
@@ -974,20 +1182,19 @@
     }
 
     function getTipoOptions() {
-      const tipos = sheetData && sheetData.length > 0 ? uniqueValues(sheetData.map(i => i.Tipo)) : TIPOS_PADRAO;
+      const tipos = uniqueValues(DUFRIO_DATA.map(i => i.Tipo));
       return TIPOS_PADRAO.filter(t => tipos.includes(t)).concat(tipos.filter(t => !TIPOS_PADRAO.includes(t)).sort());
     }
 
     function getBTUOptions(tipo = selection.tipo) {
-      if (!sheetData || sheetData.length === 0) return getFallbackBTUs(tipo);
-      const source = tipo ? sheetData.filter(i => i.Tipo === tipo) : sheetData;
+      const source = tipo ? DUFRIO_DATA.filter(i => i.Tipo === tipo) : DUFRIO_DATA;
       const btus = uniqueValues(source.map(i => i.BTUs)).sort(sortBTUs);
       return btus.length ? btus : getFallbackBTUs(tipo);
     }
 
     function getCicloOptions(tipo = selection.tipo, btu = selection.btu) {
-      if (!sheetData || sheetData.length === 0 || !tipo || !btu) return CICLOS_PADRAO;
-      const ciclos = uniqueValues(sheetData
+      if (!tipo || !btu) return CICLOS_PADRAO;
+      const ciclos = uniqueValues(DUFRIO_DATA
         .filter(i => i.Tipo === tipo && i.BTUs === btu)
         .map(i => i.Ciclo)
       );
@@ -1258,17 +1465,12 @@
         allFetchedProducts = [];
         activeFilters = { marcas: [], btus: [], ciclos: [] };
 
-        if (sheetLoadPromise) {
-          document.getElementById("loading-msg").innerText = "SINCRONIZANDO PLANILHA...";
-          await sheetLoadPromise;
-        }
-
         const normalizeCiclo = (c) => {
           return String(c || "").toLowerCase().trim().replace(/^só\s+/, "");
         };
         const cicloNormalizado = normalizeCiclo(selection.ciclo);
 
-        const links = sheetData.filter(i => {
+        const links = DUFRIO_DATA.filter(i => {
           const cicloSheet = normalizeCiclo(i.Ciclo);
           return i.Tipo === selection.tipo &&
                  i.BTUs === selection.btu &&

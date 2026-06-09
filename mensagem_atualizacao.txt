@@ -1,1 +1,1 @@
-Atualiza o Scraper Dufrio com recursos avançados do Scraper Oficial
+Embutidos os links da planilha direto no código do Scraper Dufrio para carregamento instantâneo

@@ -1,1 +1,1 @@
-const LATEST_LOG = { message: 'Atualiza o Scraper Dufrio com recursos avançados do Scraper Oficial', dateIso: '2026-06-09T18:55:00-03:00' };
+const LATEST_LOG = { message: 'Embutidos os links da planilha direto no código do Scraper Dufrio para carregamento instantâneo', dateIso: '2026-06-09T19:10:00-03:00' };
