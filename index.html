@@ -1147,7 +1147,7 @@
       { nome: "Extrator de Códigos", desc: "Cole uma lista e extraia automaticamente os códigos com quantidade em estoque.", arquivo: "itens-quantidade.html", icone: svgFiltro, color: "#d946ef", slug: "extracao", category: "hidden" },
       { nome: "Preços ao Vivo", badge: "Em Produção", desc: "Painel interno para visualizar ofertas capturadas pela extensão.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`, color: "#00e676", slug: "precos-vivo", category: "hidden" },
       { nome: "Cotação Express — Infraestrutura", desc: "Gere orçamentos rápidos de infraestrutura para instalação de ar-condicionado.", arquivo: "cotacoes.html", icone: svgCotar, color: "#8b5cf6", slug: "cotacao", category: "hidden" },
-      { nome: "Baixar Extensão", desc: "Baixe a extensão do Hub para instalar no Chrome ou Edge.", arquivo: "hub-dufrio-extensao.zip", downloadName: "hub-dufrio-extensao.zip", icone: svgDownload, color: "#94a3b8", isDownload: true, slug: "download", category: "hidden" }
+      { nome: "Baixar Extensão", desc: "Baixe a extensão do Hub para instalar no Chrome ou Edge.", arquivo: "baixar-extensao.html", icone: svgDownload, color: "#94a3b8", slug: "download", category: "hidden" }
     ];
 
     function openToolItem(f) {
@@ -1384,6 +1384,12 @@
     // Dados de atualizações embutidos (Fallback)
     const updatesData = {
       "updates": [
+        {
+          "date": "18/06/2026",
+          "time": "11:30",
+          "title": "Integração de download dinâmico da extensão",
+          "description": "Adicionado empacotamento dinâmico da extensão via JSZip no navegador e criada a página baixar-extensao.html, removendo o arquivo zip estático do repositório."
+        },
         {
           "date": "18/06/2026",
           "time": "11:07",
