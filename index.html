@@ -343,9 +343,20 @@
 
     .bento-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
       margin-bottom: 18px;
+      grid-auto-flow: dense;
+    }
+
+    #gridCamara {
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      grid-template-rows: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    #gridAr {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: stretch;
     }
 
     .bento-card {
@@ -389,9 +400,33 @@
       outline-offset: 3px;
     }
 
-    [data-id="gabinete"] { grid-column: span 2; min-height: 260px; }
-    [data-id="gabinete"] .card-title { font-size: 30px; letter-spacing: -1px; }
-    [data-id="gabinete"] .card-desc { max-width: 520px; font-size: 15px; }
+    #gridCamara [data-id="gabinete"] {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      min-height: 344px;
+    }
+
+    #gridCamara [data-id="corte"] {
+      grid-column: 2;
+      grid-row: 1;
+      min-height: 0;
+    }
+
+    #gridCamara [data-id="checklist"] {
+      grid-column: 2;
+      grid-row: 2;
+      min-height: 0;
+    }
+
+    #gridCamara [data-id="gabinete"] .card-title { font-size: 30px; letter-spacing: -1px; }
+    #gridCamara [data-id="gabinete"] .card-desc { max-width: 520px; font-size: 15px; }
+
+    #gridAr [data-id="scraper"],
+    #gridAr [data-id="comparador"],
+    #gridAr [data-id="precificacao"],
+    #gridAr [data-id="scraper-labs"] {
+      grid-column: span 2;
+    }
 
     .card-top {
       display: flex;
@@ -740,8 +775,29 @@
     @media (max-width: 960px) {
       .hero,
       .meta-footer { grid-template-columns: 1fr; }
-      [data-id="gabinete"] { grid-column: span 1; }
-      .bento-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+      .bento-grid,
+      #gridCamara,
+      #gridAr {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+      }
+
+      #gridCamara [data-id="gabinete"],
+      #gridAr [data-id="scraper"] {
+        grid-column: span 2;
+        grid-row: auto;
+        min-height: 240px;
+      }
+
+      #gridCamara [data-id="corte"],
+      #gridCamara [data-id="checklist"],
+      #gridAr [data-id="comparador"],
+      #gridAr [data-id="precificacao"],
+      #gridAr [data-id="scraper-labs"] {
+        grid-column: span 1;
+        grid-row: auto;
+      }
     }
 
     @media (max-width: 720px) {
@@ -764,10 +820,20 @@
       .hero-main::after { display: none; }
       h1 { letter-spacing: -2.2px; }
       .hero-subtitle { font-size: 15px; }
-      .bento-grid { grid-template-columns: 1fr; }
+
+      .bento-grid,
+      #gridCamara,
+      #gridAr { grid-template-columns: 1fr; }
+
+      #gridCamara [data-id],
+      #gridAr [data-id] {
+        grid-column: 1;
+        grid-row: auto;
+        min-height: auto;
+      }
+
       .bento-card { min-height: auto; padding: 19px; border-radius: 19px; }
-      [data-id="gabinete"] { min-height: auto; }
-      [data-id="gabinete"] .card-title { font-size: 22px; }
+      #gridCamara [data-id="gabinete"] .card-title { font-size: 22px; }
       .section-head { align-items: flex-start; flex-direction: column; gap: 6px; }
       .section-note { text-align: left; }
       .labs-overlay, .quick-search-modal { padding: 10px; align-items: stretch; }
@@ -877,9 +943,9 @@
       </div>
       <div class="footer-card">
         <div class="update-label">Última atualização</div>
-        <div id="update-title">Acesso rápido no Hub</div>
-        <div id="update-desc">O resumo lateral da página inicial foi substituído por atalhos diretos para as ferramentas mais usadas.</div>
-        <div id="update-datetime">18/06/2026 às 15:22</div>
+        <div id="update-title">Grid dos cards reorganizado</div>
+        <div id="update-desc">Os cards da página inicial foram reposicionados para destacar as ferramentas mais usadas e eliminar espaços vazios no layout.</div>
+        <div id="update-datetime">18/06/2026 às 15:31</div>
       </div>
     </footer>
   </div>
