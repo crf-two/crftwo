@@ -4,1017 +4,211 @@
   <meta charset="UTF-8">
   <title>Hub de Ferramentas</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg-base: #0b0d10;
-      --bg-card: #121820;
-      --bg-card-hover: #151d27;
-      --line: rgba(148, 163, 184, 0.16);
-      --line-strong: rgba(148, 163, 184, 0.28);
-      --text-main: #f5f7fa;
-      --text-muted: #8b96a5;
-      --text-soft: #c6ced8;
+      --bg: #0b0d10;
+      --card: #121820;
+      --card-hover: #151d27;
+      --line: rgba(148,163,184,.16);
+      --line-strong: rgba(148,163,184,.30);
+      --text: #f5f7fa;
+      --soft: #c6ced8;
+      --muted: #8b96a5;
       --blue: #38bdf8;
       --green: #22c55e;
-      --font-outfit: 'Outfit', sans-serif;
     }
-
     html { scroll-behavior: smooth; }
-
     body {
       min-height: 100vh;
-      font-family: var(--font-outfit);
-      color: var(--text-main);
-      background:
-        linear-gradient(180deg, rgba(56, 189, 248, 0.04), transparent 320px),
-        radial-gradient(circle at top right, rgba(56, 189, 248, 0.08), transparent 360px),
-        var(--bg-base);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top right, rgba(56,189,248,.08), transparent 360px), var(--bg);
       overflow-x: hidden;
-      font-feature-settings: "cv01", "cv02";
     }
-
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       z-index: -1;
-      pointer-events: none;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
       background-size: 44px 44px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent 75%);
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,.7), transparent 75%);
+      pointer-events: none;
     }
-
     a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; }
-
-    .dashboard-container {
-      width: min(1180px, calc(100% - 40px));
-      margin: 0 auto;
-      padding: 34px 0 52px;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .signature {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--text-main);
-      font-size: 14px;
-      font-weight: 900;
-      letter-spacing: 2.8px;
-      text-transform: uppercase;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-    }
-
-    .signature-mark {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: var(--blue);
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .quick-search-btn,
-    .ghost-btn {
+    button, input { font-family: inherit; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 34px 0 52px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    .signature { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 900; letter-spacing: 2.8px; text-transform: uppercase; cursor: pointer; user-select: none; }
+    .signature-mark { width: 9px; height: 9px; border-radius: 999px; background: var(--blue); box-shadow: 0 0 18px rgba(56,189,248,.35); }
+    .quick-search-btn {
       min-height: 38px;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
       padding: 9px 14px;
-      border-radius: 999px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.035);
-      color: var(--text-soft);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: var(--soft);
       cursor: pointer;
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.4px;
-      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease, color 0.18s ease;
+      transition: .18s ease;
     }
+    .quick-search-btn:hover { color: var(--text); border-color: var(--line-strong); background: rgba(255,255,255,.06); transform: translateY(-1px); }
+    .quick-search-btn svg, .search-box svg { width: 15px; height: 15px; stroke: currentColor; }
 
-    .quick-search-btn:hover,
-    .ghost-btn:hover {
-      color: var(--text-main);
-      border-color: var(--line-strong);
-      background: rgba(255,255,255,0.06);
-      transform: translateY(-1px);
-    }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); gap: 16px; margin-bottom: 28px; }
+    .panel { border: 1px solid var(--line); border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.024)); box-shadow: 0 18px 54px rgba(0,0,0,.20); }
+    .hero-main { padding: 24px; }
+    .hero-side { padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; }
+    .kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: 1.6px; text-transform: uppercase; }
+    .kicker::before { content: ''; width: 20px; height: 1px; background: var(--blue); opacity: .75; }
+    h1 { margin-bottom: 8px; font-size: clamp(34px, 4.2vw, 52px); line-height: .96; font-weight: 900; letter-spacing: -2.4px; }
+    .subtitle { color: var(--soft); font-size: 14px; line-height: 1.45; font-weight: 600; }
+    .search-box { position: relative; margin-top: 18px; }
+    .search-box svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(198,206,216,.65); pointer-events: none; }
+    .search-box input { width: 100%; height: 46px; padding: 0 14px 0 42px; border: 1px solid var(--line); border-radius: 15px; outline: none; background: rgba(255,255,255,.04); color: var(--text); font-size: 13px; font-weight: 700; }
+    .search-box input:focus { border-color: rgba(56,189,248,.45); background: rgba(255,255,255,.06); }
+    .action-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+    .action-tile, .quick-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); background: rgba(255,255,255,.035); transition: .18s ease; }
+    .action-tile { min-height: 64px; padding: 12px; border-radius: 16px; }
+    .quick-link { padding: 11px 12px; border-radius: 14px; }
+    .action-tile:hover, .quick-link:hover { transform: translateY(-1px); border-color: var(--line-strong); background: rgba(255,255,255,.055); }
+    .action-tile strong, .quick-link strong { display: block; color: var(--text); font-size: 12px; font-weight: 900; margin-bottom: 2px; }
+    .action-tile span, .quick-link span { color: var(--muted); font-size: 10.5px; font-weight: 700; line-height: 1.25; }
+    .arrow { color: var(--blue); font-size: 16px; font-weight: 900; }
+    .side-title { margin-bottom: 7px; font-size: 20px; font-weight: 900; letter-spacing: -.6px; line-height: 1.08; }
+    .side-desc, .side-note { color: var(--muted); font-size: 12px; line-height: 1.4; font-weight: 650; }
+    .side-note { padding-top: 13px; border-top: 1px solid var(--line); font-size: 11px; }
+    .quick-stack { display: grid; gap: 8px; margin-top: 14px; }
 
-    .quick-search-btn svg,
-    .ghost-btn svg {
-      width: 15px;
-      height: 15px;
-      stroke: currentColor;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
-      gap: 16px;
-      align-items: stretch;
-      margin-bottom: 28px;
-    }
-
-    .hero-main,
-    .hero-side {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.052), rgba(255,255,255,0.024));
-      border-radius: 24px;
-      box-shadow: 0 18px 54px rgba(0,0,0,0.20);
-    }
-
-    .hero-main {
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-main::after { display: none; }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      color: var(--blue);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: '';
-      width: 20px;
-      height: 1px;
-      background: var(--blue);
-      opacity: 0.75;
-    }
-
-    h1 {
-      max-width: 680px;
-      margin-bottom: 8px;
-      color: var(--text-main);
-      font-size: clamp(34px, 4.2vw, 52px);
-      line-height: 0.96;
-      font-weight: 900;
-      letter-spacing: -2.4px;
-    }
-
-    .hero-subtitle {
-      max-width: 620px;
-      color: var(--text-soft);
-      font-size: 14px;
-      line-height: 1.45;
-      font-weight: 550;
-    }
-
-    .tool-search {
-      position: relative;
-      margin-top: 18px;
-    }
-
-    .tool-search svg {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      width: 17px;
-      height: 17px;
-      transform: translateY(-50%);
-      stroke: rgba(198, 206, 216, 0.65);
-      pointer-events: none;
-    }
-
-    .tool-search input {
-      width: 100%;
-      height: 46px;
-      padding: 0 14px 0 42px;
-      border-radius: 15px;
-      border: 1px solid var(--line);
-      outline: none;
-      background: rgba(255,255,255,0.04);
-      color: var(--text-main);
-      font: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      transition: border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .tool-search input::placeholder { color: rgba(139,150,165,0.72); }
-
-    .tool-search input:focus {
-      border-color: rgba(56, 189, 248, 0.45);
-      background: rgba(255,255,255,0.06);
-    }
-
-    .action-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .action-tile {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      min-height: 64px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.035);
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .action-tile:hover {
-      transform: translateY(-1px);
-      border-color: rgba(56, 189, 248, 0.34);
-      background: rgba(255,255,255,0.055);
-    }
-
-    .action-tile strong {
-      display: block;
-      color: var(--text-main);
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 3px;
-    }
-
-    .action-tile span {
-      color: var(--text-muted);
-      font-size: 10.5px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .action-tile .quick-arrow { color: var(--blue); }
-
-    .hero-pills { display: none; }
-
-    .hero-side {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 16px;
-    }
-
-    .side-kicker {
-      color: var(--blue);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .side-title {
-      color: var(--text-main);
-      font-size: 20px;
-      font-weight: 900;
-      letter-spacing: -0.6px;
-      line-height: 1.08;
-      margin-bottom: 7px;
-    }
-
-    .side-desc {
-      color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.4;
-      font-weight: 600;
-    }
-
-    .quick-stack {
-      display: grid;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .quick-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 11px 12px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.035);
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .quick-link:hover {
-      transform: translateY(-1px);
-      border-color: var(--line-strong);
-      background: rgba(255,255,255,0.055);
-    }
-
-    .quick-link strong {
-      display: block;
-      color: var(--text-main);
-      font-size: 12px;
-      font-weight: 900;
-      margin-bottom: 2px;
-    }
-
-    .quick-link span {
-      color: var(--text-muted);
-      font-size: 10.5px;
-      font-weight: 700;
-    }
-
-    .quick-arrow {
-      color: var(--blue);
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .side-note {
-      padding-top: 13px;
-      border-top: 1px solid var(--line);
-      color: var(--text-muted);
-      font-size: 11px;
-      font-weight: 650;
-      line-height: 1.4;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 18px;
-      margin: 34px 0 16px;
-    }
-
-    .section-title {
-      color: var(--text-main);
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: -0.3px;
-    }
-
-    .section-note {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      text-align: right;
-    }
-
-    .bento-grid {
-      display: grid;
-      gap: 14px;
-      margin-bottom: 18px;
-      grid-auto-flow: dense;
-    }
-
-    #gridCamara {
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-      grid-template-rows: repeat(2, minmax(0, 1fr));
-      align-items: stretch;
-    }
-
-    #gridAr {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      align-items: stretch;
-    }
-
-    .bento-card {
-      min-height: 190px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 22px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: var(--bg-card);
-      color: var(--text-main);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-    }
-
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin: 34px 0 16px; }
+    .section-title { font-size: 18px; font-weight: 900; letter-spacing: -.3px; }
+    .section-note { color: var(--muted); font-size: 12px; font-weight: 700; text-align: right; }
+    .bento-grid { display: grid; gap: 14px; margin-bottom: 18px; grid-auto-flow: dense; }
+    #gridCamara { grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+    #gridAr { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .bento-card { min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; gap: 22px; padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: var(--card); cursor: pointer; position: relative; overflow: hidden; transition: .18s ease; }
     .bento-card.is-hidden { display: none; }
-
-    .bento-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-top: 2px solid var(--card-color);
-      opacity: 0.75;
-      pointer-events: none;
-    }
-
-    .bento-card:hover {
-      transform: translateY(-2px);
-      border-color: color-mix(in srgb, var(--card-color) 45%, var(--line));
-      background: var(--bg-card-hover);
-      box-shadow: 0 18px 42px rgba(0,0,0,0.22);
-    }
-
-    .bento-card:focus-visible,
-    .lab-card:focus-visible,
-    .quick-link:focus-visible,
-    .action-tile:focus-visible,
-    button:focus-visible {
-      outline: 2px solid var(--blue);
-      outline-offset: 3px;
-    }
-
-    #gridCamara [data-id="gabinete"] {
-      grid-column: 1;
-      grid-row: 1 / span 2;
-      min-height: 344px;
-    }
-
-    #gridCamara [data-id="corte"] {
-      grid-column: 2;
-      grid-row: 1;
-      min-height: 0;
-    }
-
-    #gridCamara [data-id="checklist"] {
-      grid-column: 2;
-      grid-row: 2;
-      min-height: 0;
-    }
-
+    .bento-card::before { content: ''; position: absolute; inset: 0; border-top: 2px solid var(--card-color); opacity: .75; pointer-events: none; }
+    .bento-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--card-color) 45%, var(--line)); background: var(--card-hover); box-shadow: 0 18px 42px rgba(0,0,0,.22); }
+    #gridCamara [data-id="gabinete"] { grid-column: 1; grid-row: 1 / span 2; min-height: 344px; }
+    #gridCamara [data-id="corte"] { grid-column: 2; grid-row: 1; min-height: 0; }
+    #gridCamara [data-id="checklist"] { grid-column: 2; grid-row: 2; min-height: 0; }
     #gridCamara [data-id="gabinete"] .card-title { font-size: 30px; letter-spacing: -1px; }
     #gridCamara [data-id="gabinete"] .card-desc { max-width: 520px; font-size: 15px; }
-
-    #gridAr [data-id="scraper"],
-    #gridAr [data-id="comparador"],
-    #gridAr [data-id="precificacao"],
-    #gridAr [data-id="scraper-labs"] {
-      grid-column: span 2;
-    }
-
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .icon-box {
-      width: 46px;
-      height: 46px;
-      display: grid;
-      place-items: center;
-      border-radius: 15px;
-      color: var(--card-color);
-      background: color-mix(in srgb, var(--card-color) 11%, transparent);
-      border: 1px solid color-mix(in srgb, var(--card-color) 30%, transparent);
-      flex: 0 0 auto;
-    }
-
-    .icon-box svg {
-      width: 22px;
-      height: 22px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 26px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: var(--text-soft);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .card-category {
-      margin-bottom: 10px;
-      color: var(--card-color);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 1.1px;
-      text-transform: uppercase;
-    }
-
-    .card-title {
-      color: var(--text-main);
-      font-size: 20px;
-      font-weight: 850;
-      letter-spacing: -0.45px;
-      line-height: 1.12;
-      margin-bottom: 10px;
-    }
-
-    .card-desc {
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.45;
-    }
-
-    .card-action {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 18px;
-      color: var(--text-soft);
-      font-size: 12px;
-      font-weight: 850;
-    }
-
+    #gridAr [data-id] { grid-column: span 2; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .icon-box { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 15px; color: var(--card-color); background: color-mix(in srgb, var(--card-color) 11%, transparent); border: 1px solid color-mix(in srgb, var(--card-color) 30%, transparent); }
+    .icon-box svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .badge, .lab-card-badge { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.05); font-weight: 900; text-transform: uppercase; white-space: nowrap; }
+    .badge { min-height: 26px; padding: 6px 10px; color: var(--soft); font-size: 10px; letter-spacing: .8px; }
+    .card-category { margin-bottom: 10px; color: var(--card-color); font-size: 11px; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; }
+    .card-title { margin-bottom: 10px; font-size: 20px; font-weight: 850; letter-spacing: -.45px; line-height: 1.12; }
+    .card-desc { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
+    .card-action { display: inline-flex; gap: 7px; margin-top: 18px; color: var(--soft); font-size: 12px; font-weight: 850; }
     .card-action::after { content: '→'; color: var(--card-color); }
 
-    .labs-overlay,
-    .quick-search-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(3, 6, 10, 0.76);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
+    .overlay { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(3,6,10,.76); backdrop-filter: blur(14px); }
+    .overlay.is-open, .quick-search-modal.active { display: flex; }
+    .panel-modal { width: min(980px, 100%); max-height: min(86vh, 780px); overflow: auto; border: 1px solid var(--line-strong); border-radius: 26px; background: #0f141b; box-shadow: 0 32px 110px rgba(0,0,0,.55); padding: 28px; }
+    .modal-head { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .modal-title { font-size: 28px; font-weight: 900; letter-spacing: -.8px; }
+    .modal-desc { max-width: 620px; margin-top: 10px; color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.5; }
+    .close-btn { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.05); color: var(--text); cursor: pointer; font-size: 22px; }
+    .labs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+    .lab-card { min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.035); transition: .18s ease; }
+    .lab-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--lab-color) 45%, var(--line)); background: rgba(255,255,255,.055); }
+    .lab-card .icon-box { width: 40px; height: 40px; color: var(--lab-color); background: color-mix(in srgb, var(--lab-color) 12%, transparent); border-color: color-mix(in srgb, var(--lab-color) 30%, transparent); }
+    .lab-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .lab-card-title { margin-bottom: 7px; font-size: 14px; font-weight: 900; line-height: 1.22; }
+    .lab-card-desc { color: var(--muted); font-size: 12px; font-weight: 600; line-height: 1.45; }
+    .lab-card-meta { color: var(--lab-color); font-size: 10px; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; }
+    .lab-card-badge { min-height: 24px; padding: 5px 9px; color: var(--lab-color); font-size: 9px; letter-spacing: .8px; }
 
-    .labs-overlay.is-open,
-    .quick-search-modal.active { display: flex; }
+    .quick-search-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(3,6,10,.76); backdrop-filter: blur(14px); }
+    .quick-search-content { position: relative; width: min(1180px, 100%); height: min(86vh, 760px); overflow: hidden; border: 1px solid var(--line-strong); border-radius: 26px; background: #0f141b; box-shadow: 0 32px 110px rgba(0,0,0,.55); }
+    .quick-search-close { position: absolute; top: 14px; right: 14px; z-index: 2; width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 50%; background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; font-size: 24px; }
+    .quick-search-content iframe { width: 100%; height: 100%; border: 0; background: #0b0d10; }
 
-    .labs-panel,
-    .quick-search-modal-content {
-      width: min(980px, 100%);
-      max-height: min(86vh, 780px);
-      overflow: auto;
-      border: 1px solid var(--line-strong);
-      border-radius: 26px;
-      background: #0f141b;
-      box-shadow: 0 32px 110px rgba(0,0,0,0.55);
-    }
-
-    .labs-panel { padding: 28px; }
-
-    .labs-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .labs-kicker {
-      color: var(--blue);
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .labs-title {
-      color: var(--text-main);
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -0.8px;
-      line-height: 1.05;
-    }
-
-    .labs-desc {
-      max-width: 620px;
-      margin-top: 10px;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.5;
-    }
-
-    .labs-close,
-    .quick-search-modal-close {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.05);
-      color: var(--text-main);
-      cursor: pointer;
-      transition: border-color 0.18s ease, background 0.18s ease;
-      flex: 0 0 auto;
-    }
-
-    .labs-close:hover,
-    .quick-search-modal-close:hover {
-      border-color: var(--line-strong);
-      background: rgba(255,255,255,0.08);
-    }
-
-    .labs-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
-    }
-
-    .lab-card {
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 18px;
-      text-decoration: none;
-      color: var(--text-main);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.035);
-      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-    }
-
-    .lab-card:hover {
-      transform: translateY(-2px);
-      border-color: color-mix(in srgb, var(--lab-color) 45%, var(--line));
-      background: rgba(255,255,255,0.055);
-    }
-
-    .lab-card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .lab-card .icon-box {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      color: var(--lab-color);
-      background: color-mix(in srgb, var(--lab-color) 12%, transparent);
-      border-color: color-mix(in srgb, var(--lab-color) 30%, transparent);
-    }
-
-    .lab-card-title {
-      color: var(--text-main);
-      font-size: 14px;
-      font-weight: 900;
-      line-height: 1.22;
-      letter-spacing: -0.2px;
-      margin-bottom: 7px;
-    }
-
-    .lab-card-desc {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 1.45;
-    }
-
-    .lab-card-meta {
-      color: var(--lab-color);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1.1px;
-      text-transform: uppercase;
-    }
-
-    .lab-card-badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.055);
-      color: var(--lab-color);
-      font-size: 9px;
-      font-weight: 900;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .quick-search-modal-content {
-      position: relative;
-      width: min(1180px, 100%);
-      height: min(86vh, 760px);
-      overflow: hidden;
-    }
-
-    .quick-search-modal-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      z-index: 2;
-      border-radius: 50%;
-      font-size: 22px;
-    }
-
-    .quick-search-modal iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #0b0d10;
-    }
-
-    .meta-footer {
-      margin-top: 44px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(148, 163, 184, 0.10);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      color: rgba(139, 150, 165, 0.78);
-    }
-
-    .footer-card {
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      padding: 0;
-      min-width: 0;
-    }
-
-    .footer-card:last-child {
-      text-align: right;
-    }
-
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: rgba(198, 206, 216, 0.72);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(34, 197, 94, 0.75);
-      box-shadow: none;
-    }
-
-    .footer-small {
-      margin-top: 4px;
-      color: rgba(139, 150, 165, 0.62);
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 1.35;
-    }
-
-    .update-label {
-      display: none;
-    }
-
-    .update-hover {
-      position: relative;
-      display: inline-flex;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    #update-title {
-      position: absolute;
-      right: 0;
-      bottom: calc(100% + 6px);
-      z-index: 5;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateY(3px);
-      padding: 6px 8px;
-      border-radius: 8px;
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      background: rgba(15, 20, 27, 0.92);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.22);
-      color: rgba(198, 206, 216, 0.78);
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 1;
-      text-align: left;
-      white-space: nowrap;
-      transition: opacity 0.14s ease, visibility 0.14s ease, transform 0.14s ease;
-    }
-
-    .update-hover:hover #update-title,
-    .update-hover:focus-within #update-title {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    #update-desc {
-      display: none;
-    }
-
-    #update-datetime {
-      margin-top: 4px;
-      color: rgba(139, 150, 165, 0.58);
-      font-size: 10px;
-      font-weight: 700;
-      text-align: right;
-      cursor: help;
-    }
+    .meta-footer { margin-top: 44px; padding-top: 14px; border-top: 1px solid rgba(148,163,184,.10); display: flex; align-items: center; justify-content: space-between; gap: 18px; color: rgba(139,150,165,.78); }
+    .status-line { display: flex; align-items: center; gap: 7px; color: rgba(198,206,216,.72); font-size: 12px; font-weight: 800; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(34,197,94,.75); }
+    .footer-small { margin-top: 4px; color: rgba(139,150,165,.62); font-size: 11px; font-weight: 600; line-height: 1.35; }
+    .update-hover { position: relative; display: inline-flex; flex-direction: column; align-items: flex-end; }
+    #update-title { position: absolute; right: 0; bottom: calc(100% + 6px); opacity: 0; visibility: hidden; transform: translateY(3px); padding: 6px 8px; border: 1px solid rgba(148,163,184,.14); border-radius: 8px; background: rgba(15,20,27,.92); color: rgba(198,206,216,.78); font-size: 10px; font-weight: 700; white-space: nowrap; transition: .14s ease; }
+    .update-hover:hover #update-title, .update-hover:focus-within #update-title { opacity: 1; visibility: visible; transform: translateY(0); }
+    #update-datetime { margin-top: 4px; color: rgba(139,150,165,.58); font-size: 10px; font-weight: 700; cursor: help; }
 
     @media (max-width: 960px) {
-      .hero,
-      .meta-footer { grid-template-columns: 1fr; }
-
+      .hero { grid-template-columns: 1fr; }
       .action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-      .bento-grid,
-      #gridCamara,
-      #gridAr {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: auto;
-      }
-
-      #gridCamara [data-id="gabinete"],
-      #gridAr [data-id="scraper"] {
-        grid-column: span 2;
-        grid-row: auto;
-        min-height: 240px;
-      }
-
-      #gridCamara [data-id="corte"],
-      #gridCamara [data-id="checklist"],
-      #gridAr [data-id="comparador"],
-      #gridAr [data-id="precificacao"],
-      #gridAr [data-id="scraper-labs"] {
-        grid-column: span 1;
-        grid-row: auto;
-      }
+      #gridCamara, #gridAr { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; }
+      #gridCamara [data-id="gabinete"], #gridAr [data-id="scraper"] { grid-column: span 2; grid-row: auto; min-height: 240px; }
+      #gridCamara [data-id="corte"], #gridCamara [data-id="checklist"], #gridAr [data-id] { grid-column: span 1; grid-row: auto; }
     }
-
     @media (max-width: 720px) {
-      .dashboard-container {
-        width: min(100% - 28px, 1180px);
-        padding: 24px 0 36px;
-      }
-
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-        margin-bottom: 18px;
-      }
-
-      .top-actions { justify-content: flex-start; width: 100%; }
-      .quick-search-btn, .ghost-btn { flex: 1 1 auto; }
-      .hero-main,
-      .hero-side { border-radius: 20px; }
-      .hero-main { padding: 20px; }
-      h1 { letter-spacing: -1.6px; }
-      .hero-subtitle { font-size: 13px; }
-      .action-grid { grid-template-columns: 1fr; }
-
-      .bento-grid,
-      #gridCamara,
-      #gridAr { grid-template-columns: 1fr; }
-
-      #gridCamara [data-id],
-      #gridAr [data-id] {
-        grid-column: 1;
-        grid-row: auto;
-        min-height: auto;
-      }
-
+      .container { width: min(100% - 28px, 1180px); padding: 24px 0 36px; }
+      .topbar, .meta-footer { align-items: flex-start; flex-direction: column; }
+      .action-grid, #gridCamara, #gridAr { grid-template-columns: 1fr; }
+      #gridCamara [data-id], #gridAr [data-id] { grid-column: 1; grid-row: auto; min-height: auto; }
       .bento-card { min-height: auto; padding: 19px; border-radius: 19px; }
       #gridCamara [data-id="gabinete"] .card-title { font-size: 22px; }
       .section-head { align-items: flex-start; flex-direction: column; gap: 6px; }
       .section-note { text-align: left; }
-      .labs-overlay, .quick-search-modal { padding: 10px; align-items: stretch; }
-      .labs-panel { padding: 20px 16px; border-radius: 20px; max-height: calc(100dvh - 20px); }
-      .labs-head { position: sticky; top: -20px; z-index: 1; margin: -20px -16px 18px; padding: 16px; background: rgba(15,20,27,0.94); border-bottom: 1px solid var(--line); }
-      .labs-title { font-size: 22px; }
-      .labs-grid { grid-template-columns: 1fr; }
-      .quick-search-modal-content { height: calc(100dvh - 20px); border-radius: 20px; }
-
-      .meta-footer {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .footer-card:last-child {
-        text-align: left;
-      }
-
-      .update-hover {
-        align-items: flex-start;
-      }
-
-      #update-title {
-        left: 0;
-        right: auto;
-      }
-
-      #update-datetime {
-        text-align: left;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .signature { font-size: 12px; letter-spacing: 2px; }
-      .quick-search-btn span { display: none; }
-      .quick-search-btn { flex: 0 0 auto; width: 42px; padding: 0; }
-      .ghost-btn { font-size: 11px; }
-      .hero-main { padding: 18px; }
-      .hero-side { padding: 18px; }
-      .card-title { font-size: 18px; }
-      .card-desc { font-size: 12px; }
+      .overlay, .quick-search-modal { padding: 10px; align-items: stretch; }
+      .panel-modal { padding: 20px 16px; border-radius: 20px; max-height: calc(100dvh - 20px); }
+      .quick-search-content { height: calc(100dvh - 20px); border-radius: 20px; }
+      .update-hover { align-items: flex-start; }
+      #update-title { left: 0; right: auto; }
     }
   </style>
   <script src="analytics.js" defer></script>
 </head>
 <body>
-  <div class="dashboard-container">
+  <div class="container">
     <header class="topbar">
       <div id="thiagoLogo" class="signature" title="Thiago Luz">
         <span class="signature-mark"></span>
         <span>THIAGO LUZ</span>
       </div>
-      <div class="top-actions">
-        <button id="quickSearchBtn" class="quick-search-btn" type="button" title="Abrir busca rápida">
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <span>Busca rápida</span>
-        </button>
-        <button id="openHiddenBtn" class="ghost-btn" type="button" title="Recursos internos">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18"></path><path d="M3 12h18"></path></svg>
-          Recursos internos
-        </button>
-      </div>
+      <button id="quickSearchBtn" class="quick-search-btn" type="button" title="Abrir busca rápida">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span>Busca rápida</span>
+      </button>
     </header>
 
     <section class="hero" aria-labelledby="mainTitle">
-      <div class="hero-main">
-        <div class="eyebrow">Central de trabalho</div>
+      <div class="panel hero-main">
+        <div class="kicker">Central de trabalho</div>
         <h1 id="mainTitle">Hub de Ferramentas</h1>
-        <p class="hero-subtitle">Busque uma ferramenta ou comece por uma ação rápida.</p>
-        <div class="tool-search">
+        <p class="subtitle">Busque uma ferramenta ou comece por uma ação rápida.</p>
+        <div class="search-box">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           <input id="toolSearchInput" type="search" placeholder="Buscar: scraper, câmara, checklist, preço, cotação..." autocomplete="off">
         </div>
         <div class="action-grid" aria-label="Ações rápidas">
-          <a class="action-tile" href="scraper-ar.html"><span><strong>Buscar preços</strong><span>Scraper oficial</span></span><span class="quick-arrow">→</span></a>
-          <a class="action-tile" href="simulador-gabinete.html"><span><strong>Montar câmara</strong><span>Simulador 3D</span></span><span class="quick-arrow">→</span></a>
-          <a class="action-tile" href="comparador-ar.html"><span><strong>Comparar ar</strong><span>Ofertas por loja</span></span><span class="quick-arrow">→</span></a>
-          <a class="action-tile" href="precificacao-ar.html"><span><strong>Precificar SKU</strong><span>Site x 365</span></span><span class="quick-arrow">→</span></a>
-          <a class="action-tile" href="cotacoes.html"><span><strong>Cotação express</strong><span>Infraestrutura</span></span><span class="quick-arrow">→</span></a>
-          <a class="action-tile" href="CheckList.html"><span><strong>Gerar checklist</strong><span>PDF técnico</span></span><span class="quick-arrow">→</span></a>
+          <a class="action-tile" href="scraper-ar.html"><span><strong>Buscar preços</strong><span>Scraper oficial</span></span><span class="arrow">→</span></a>
+          <a class="action-tile" href="simulador-gabinete.html"><span><strong>Montar câmara</strong><span>Simulador 3D</span></span><span class="arrow">→</span></a>
+          <a class="action-tile" href="comparador-ar.html"><span><strong>Comparar ar</strong><span>Ofertas por loja</span></span><span class="arrow">→</span></a>
+          <a class="action-tile" href="precificacao-ar.html"><span><strong>Precificar SKU</strong><span>Site x 365</span></span><span class="arrow">→</span></a>
+          <a class="action-tile" href="cotacoes.html"><span><strong>Cotação express</strong><span>Infraestrutura</span></span><span class="arrow">→</span></a>
+          <a class="action-tile" href="CheckList.html"><span><strong>Gerar checklist</strong><span>PDF técnico</span></span><span class="arrow">→</span></a>
         </div>
       </div>
 
-      <aside class="hero-side" aria-label="Acesso rápido">
+      <aside class="panel hero-side" aria-label="Acesso por objetivo">
         <div>
-          <div class="side-kicker">Próximo passo</div>
+          <div class="kicker">Próximo passo</div>
           <div class="side-title">Use pelo objetivo, não pelo nome.</div>
           <p class="side-desc">Atalhos para as rotinas mais comuns do dia a dia.</p>
           <div class="quick-stack">
-            <a class="quick-link" href="#arTitle">
-              <span><strong>Analisar mercado</strong><span>Scraper, comparação e precificação</span></span>
-              <span class="quick-arrow">↓</span>
-            </a>
-            <a class="quick-link" href="#camaraTitle">
-              <span><strong>Orçar câmara fria</strong><span>Simulador, corte e checklist</span></span>
-              <span class="quick-arrow">↓</span>
-            </a>
-            <a class="quick-link" href="#" onclick="openHiddenToolsPanel(); return false;">
-              <span><strong>Recursos internos</strong><span>Extensão, códigos e utilitários</span></span>
-              <span class="quick-arrow">→</span>
-            </a>
+            <a class="quick-link" href="#arTitle"><span><strong>Analisar mercado</strong><span>Scraper, comparação e precificação</span></span><span class="arrow">↓</span></a>
+            <a class="quick-link" href="#camaraTitle"><span><strong>Orçar câmara fria</strong><span>Simulador, corte e checklist</span></span><span class="arrow">↓</span></a>
           </div>
         </div>
         <p class="side-note">Dica: use a busca acima para filtrar os cards da página.</p>
@@ -1023,10 +217,7 @@
 
     <section aria-labelledby="camaraTitle">
       <div class="section-head">
-        <div>
-          <div class="eyebrow">Orçamento técnico</div>
-          <h2 id="camaraTitle" class="section-title">Câmara fria</h2>
-        </div>
+        <div><div class="kicker">Orçamento técnico</div><h2 id="camaraTitle" class="section-title">Câmara fria</h2></div>
         <p class="section-note">Cálculo, checklist e apoio visual para vender melhor.</p>
       </div>
       <div class="bento-grid" id="gridCamara"></div>
@@ -1034,34 +225,27 @@
 
     <section aria-labelledby="arTitle">
       <div class="section-head">
-        <div>
-          <div class="eyebrow">Mercado e preço</div>
-          <h2 id="arTitle" class="section-title">Ar-condicionado</h2>
-        </div>
+        <div><div class="kicker">Mercado e preço</div><h2 id="arTitle" class="section-title">Ar-condicionado</h2></div>
         <p class="section-note">Scrapers, comparação de ofertas e precificação.</p>
       </div>
       <div class="bento-grid" id="gridAr"></div>
     </section>
 
     <footer class="meta-footer">
-      <div class="footer-card">
+      <div>
         <div class="status-line"><span class="status-dot"></span> Online</div>
-        <p class="footer-small">Mantido por Thiago Luz desde 16/09/2024.</p>
+        <p class="footer-small">criado em 16/09/2024.</p>
       </div>
-      <div class="footer-card">
-        <div class="update-label">Última atualização</div>
-        <div class="update-hover">
-          <div id="update-datetime" tabindex="0" aria-describedby="update-title">18/06/2026 às 15:51</div>
-          <div id="update-title" role="tooltip">Topo útil</div>
-        </div>
-        <div id="update-desc">Topo do Hub transformado em central de trabalho com busca e atalhos rápidos.</div>
+      <div class="update-hover">
+        <div id="update-datetime" tabindex="0" aria-describedby="update-title">18/06/2026 às 18:46</div>
+        <div id="update-title" role="tooltip">Busca rápida ajustada</div>
       </div>
     </footer>
   </div>
 
   <div id="quickSearchModal" class="quick-search-modal" role="dialog" aria-modal="true" aria-label="Busca rápida">
-    <div class="quick-search-modal-content">
-      <button class="quick-search-modal-close" id="closeQuickSearchBtn" type="button" aria-label="Fechar busca rápida">&times;</button>
+    <div class="quick-search-content">
+      <button class="quick-search-close" id="closeQuickSearchBtn" type="button" aria-label="Fechar busca rápida">&times;</button>
       <iframe id="quickSearchIframe" src="" title="Busca rápida"></iframe>
     </div>
   </div>
@@ -1078,28 +262,28 @@
     const svgScraper = `<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><polyline points="8 11 10 13 14 9"></polyline></svg>`;
 
     const SCRAPER_LABS = [
-      { nome: "Scraper Clima Rio", desc: "Teste individual da loja Clima Rio.", arquivo: "scraper-climario.html", color: "#f59e0b" },
-      { nome: "Scraper Frigelar", desc: "Teste individual da loja Frigelar.", arquivo: "scraper-frigelar.html", color: "#22c55e" },
-      { nome: "Scraper Leveros", desc: "Teste individual da loja Leveros.", arquivo: "scraper-leveros.html", color: "#fb923c" },
-      { nome: "Scraper Central Ar", desc: "Teste individual da loja Central Ar.", arquivo: "scraper-centralar.html", color: "#ec4899" },
-      { nome: "Scraper Dufrio", desc: "Teste individual da loja Dufrio.", arquivo: "scraper-dufrio.html", color: "#38bdf8" },
-      { nome: "Scraper FrioPeças", desc: "Teste individual da loja FrioPeças.", arquivo: "scraper-friopecas.html", color: "#60a5fa" },
-      { nome: "Scraper Polo Ar", desc: "Teste individual da loja Polo Ar.", arquivo: "scraper-poloar.html", color: "#ef4444" },
-      { nome: "Scraper WebContinental", desc: "Teste individual da loja WebContinental.", arquivo: "scraper-webcontinental.html", color: "#14b8a6" }
+      { nome: 'Scraper Clima Rio', desc: 'Teste individual da loja Clima Rio.', arquivo: 'scraper-climario.html', color: '#f59e0b' },
+      { nome: 'Scraper Frigelar', desc: 'Teste individual da loja Frigelar.', arquivo: 'scraper-frigelar.html', color: '#22c55e' },
+      { nome: 'Scraper Leveros', desc: 'Teste individual da loja Leveros.', arquivo: 'scraper-leveros.html', color: '#fb923c' },
+      { nome: 'Scraper Central Ar', desc: 'Teste individual da loja Central Ar.', arquivo: 'scraper-centralar.html', color: '#ec4899' },
+      { nome: 'Scraper Dufrio', desc: 'Teste individual da loja Dufrio.', arquivo: 'scraper-dufrio.html', color: '#38bdf8' },
+      { nome: 'Scraper FrioPeças', desc: 'Teste individual da loja FrioPeças.', arquivo: 'scraper-friopecas.html', color: '#60a5fa' },
+      { nome: 'Scraper Polo Ar', desc: 'Teste individual da loja Polo Ar.', arquivo: 'scraper-poloar.html', color: '#ef4444' },
+      { nome: 'Scraper WebContinental', desc: 'Teste individual da loja WebContinental.', arquivo: 'scraper-webcontinental.html', color: '#14b8a6' }
     ];
 
     const ferramentas = [
-      { nome: "Simulador 3D", categoria: "Câmara fria", desc: "Visualize o gabinete e gere o cálculo de painéis para orçamento.", arquivo: "simulador-gabinete.html", icone: svgBox3D, color: "#38bdf8", slug: "gabinete", category: "camara" },
-      { nome: "Plano de corte", categoria: "Câmara fria", desc: "Otimize o aproveitamento de painéis PIR/EPS e reduza desperdícios.", arquivo: "plano-corte.html", icone: svgCorte, color: "#f97316", slug: "corte", category: "camara" },
-      { nome: "Checklist em PDF", categoria: "Câmara fria", desc: "Padronize o levantamento de dados e gere checklist para orçamento.", arquivo: "CheckList.html", icone: svgChecklist, color: "#22c55e", slug: "checklist", category: "camara" },
-      { nome: "Scraper Oficial", categoria: "Análise de mercado", desc: "Busque preços nas lojas monitoradas e organize referências comerciais.", arquivo: "scraper-ar.html", icone: svgScraper, color: "#f59e0b", slug: "scraper", category: "ar" },
-      { nome: "Comparador de preços", categoria: "Ar-condicionado", desc: "Compare ofertas entre lojas e encontre a melhor referência para venda.", arquivo: "comparador-ar.html", icone: svgComparar, color: "#818cf8", slug: "comparador", category: "ar" },
-      { nome: "Precificação", categoria: "Site x 365", desc: "Ajuste valores entre site e 365 com cálculo proporcional por SKU.", arquivo: "precificacao-ar.html", icone: svgPrecificar, color: "#0ea5e9", slug: "precificacao", category: "ar" },
-      { nome: "Laboratório de Scrapers", categoria: "Testes", badge: "Laboratório", desc: "Valide cada loja individualmente antes de usar no Scraper Oficial.", arquivo: "#laboratorios", icone: svgScraper, color: "#22c55e", slug: "scraper-labs", category: "ar", isLabGroup: true },
-      { nome: "Extrator de Códigos", categoria: "Utilitário", desc: "Cole uma lista e extraia códigos com quantidade em estoque.", arquivo: "itens-quantidade.html", icone: svgFiltro, color: "#d946ef", slug: "extracao", category: "hidden" },
-      { nome: "Preços ao Vivo", categoria: "Extensão", badge: "Em produção", desc: "Visualize ofertas capturadas pela extensão nas abas abertas.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>`, color: "#22c55e", slug: "precos-vivo", category: "hidden" },
-      { nome: "Cotação Express", categoria: "Infraestrutura", desc: "Gere orçamentos rápidos de infraestrutura para instalação.", arquivo: "cotacoes.html", icone: svgCotar, color: "#a78bfa", slug: "cotacao", category: "hidden" },
-      { nome: "Baixar Extensão", categoria: "Sistema", desc: "Baixe a extensão do Hub para instalar no Chrome ou Edge.", arquivo: "baixar-extensao.html", icone: svgDownload, color: "#94a3b8", slug: "download", category: "hidden" }
+      { nome: 'Simulador 3D', categoria: 'Câmara fria', desc: 'Visualize o gabinete e gere o cálculo de painéis para orçamento.', arquivo: 'simulador-gabinete.html', icone: svgBox3D, color: '#38bdf8', slug: 'gabinete', category: 'camara' },
+      { nome: 'Plano de corte', categoria: 'Câmara fria', desc: 'Otimize o aproveitamento de painéis PIR/EPS e reduza desperdícios.', arquivo: 'plano-corte.html', icone: svgCorte, color: '#f97316', slug: 'corte', category: 'camara' },
+      { nome: 'Checklist em PDF', categoria: 'Câmara fria', desc: 'Padronize o levantamento de dados e gere checklist para orçamento.', arquivo: 'CheckList.html', icone: svgChecklist, color: '#22c55e', slug: 'checklist', category: 'camara' },
+      { nome: 'Scraper Oficial', categoria: 'Análise de mercado', desc: 'Busque preços nas lojas monitoradas e organize referências comerciais.', arquivo: 'scraper-ar.html', icone: svgScraper, color: '#f59e0b', slug: 'scraper', category: 'ar' },
+      { nome: 'Comparador de preços', categoria: 'Ar-condicionado', desc: 'Compare ofertas entre lojas e encontre a melhor referência para venda.', arquivo: 'comparador-ar.html', icone: svgComparar, color: '#818cf8', slug: 'comparador', category: 'ar' },
+      { nome: 'Precificação', categoria: 'Site x 365', desc: 'Ajuste valores entre site e 365 com cálculo proporcional por SKU.', arquivo: 'precificacao-ar.html', icone: svgPrecificar, color: '#0ea5e9', slug: 'precificacao', category: 'ar' },
+      { nome: 'Laboratório de Scrapers', categoria: 'Testes', badge: 'Laboratório', desc: 'Valide cada loja individualmente antes de usar no Scraper Oficial.', arquivo: '#laboratorios', icone: svgScraper, color: '#22c55e', slug: 'scraper-labs', category: 'ar', isLabGroup: true },
+      { nome: 'Extrator de Códigos', categoria: 'Utilitário', desc: 'Cole uma lista e extraia códigos com quantidade em estoque.', arquivo: 'itens-quantidade.html', icone: svgFiltro, color: '#d946ef', slug: 'extracao', category: 'hidden' },
+      { nome: 'Preços ao Vivo', categoria: 'Extensão', badge: 'Em produção', desc: 'Visualize ofertas capturadas pela extensão nas abas abertas.', arquivo: 'precos-ao-vivo.html', icone: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>', color: '#22c55e', slug: 'precos-vivo', category: 'hidden' },
+      { nome: 'Cotação Express', categoria: 'Infraestrutura', desc: 'Gere orçamentos rápidos de infraestrutura para instalação.', arquivo: 'cotacoes.html', icone: svgCotar, color: '#a78bfa', slug: 'cotacao', category: 'hidden' },
+      { nome: 'Baixar Extensão', categoria: 'Sistema', desc: 'Baixe a extensão do Hub para instalar no Chrome ou Edge.', arquivo: 'baixar-extensao.html', icone: svgDownload, color: '#94a3b8', slug: 'download', category: 'hidden' }
     ];
 
     function openToolItem(f) {
@@ -1108,123 +292,10 @@
       window.location.href = f.arquivo;
     }
 
-    function closePanel(panelId) {
-      const panel = document.getElementById(panelId);
-      if (!panel) return;
-      panel.classList.remove('is-open', 'active');
-      document.body.style.overflow = '';
-    }
-
-    function openLabsPanel() {
-      const panel = document.getElementById('labsOverlay') || createLabsPanel();
-      panel.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeLabsPanel() { closePanel('labsOverlay'); }
-
-    function openHiddenToolsPanel() {
-      const panel = document.getElementById('hiddenToolsOverlay') || createHiddenToolsPanel();
-      panel.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeHiddenToolsPanel() { closePanel('hiddenToolsOverlay'); }
-
-    function createLabsPanel() {
-      const overlay = document.createElement('div');
-      overlay.id = 'labsOverlay';
-      overlay.className = 'labs-overlay';
-      overlay.setAttribute('role', 'dialog');
-      overlay.setAttribute('aria-modal', 'true');
-      overlay.setAttribute('aria-labelledby', 'labsTitle');
-      overlay.innerHTML = `
-        <div class="labs-panel">
-          <div class="labs-head">
-            <div>
-              <div class="labs-kicker">Área de testes</div>
-              <div class="labs-title" id="labsTitle">Laboratório de Scrapers</div>
-              <div class="labs-desc">Cada loja é tratada como uma fonte de consulta. Use esta área para testar scrapers individuais antes de centralizar a análise.</div>
-            </div>
-            <button class="labs-close" type="button" aria-label="Fechar Laboratório de Scrapers" data-close-labs>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-          <div class="labs-grid">
-            ${SCRAPER_LABS.map(lab => `
-              <a class="lab-card" href="${lab.arquivo}" style="--lab-color: ${lab.color}">
-                <div class="lab-card-top"><div class="icon-box">${svgScraper}</div></div>
-                <div>
-                  <div class="lab-card-title">${lab.nome}</div>
-                  <div class="lab-card-desc">${lab.desc}</div>
-                </div>
-                <div class="lab-card-meta">Abrir scraper</div>
-              </a>
-            `).join('')}
-          </div>
-        </div>
-      `;
-      overlay.addEventListener('click', (event) => {
-        if (event.target === overlay || event.target.closest('[data-close-labs]')) closeLabsPanel();
-      });
-      document.body.appendChild(overlay);
-      return overlay;
-    }
-
-    function createHiddenToolsPanel() {
-      const hiddenTools = ferramentas.filter(tool => tool.category === 'hidden');
-      const overlay = document.createElement('div');
-      overlay.id = 'hiddenToolsOverlay';
-      overlay.className = 'labs-overlay';
-      overlay.setAttribute('role', 'dialog');
-      overlay.setAttribute('aria-modal', 'true');
-      overlay.setAttribute('aria-labelledby', 'hiddenToolsTitle');
-      overlay.innerHTML = `
-        <div class="labs-panel">
-          <div class="labs-head">
-            <div>
-              <div class="labs-kicker">Recursos internos</div>
-              <div class="labs-title" id="hiddenToolsTitle">Ferramentas internas</div>
-              <div class="labs-desc">Utilitários de apoio que não precisam ocupar a tela principal, mas continuam disponíveis no Hub.</div>
-            </div>
-            <button class="labs-close" type="button" aria-label="Fechar ferramentas internas" data-close-hidden-tools>
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-          </div>
-          <div class="labs-grid">
-            ${hiddenTools.map(tool => `
-              <a class="lab-card" href="${tool.arquivo}" data-tool-slug="${tool.slug}" style="--lab-color: ${tool.color}">
-                <div class="lab-card-top">
-                  <div class="icon-box">${tool.icone}</div>
-                  ${tool.badge ? `<span class="lab-card-badge">${tool.badge}</span>` : ''}
-                </div>
-                <div>
-                  <div class="lab-card-title">${tool.nome}</div>
-                  <div class="lab-card-desc">${tool.desc}</div>
-                </div>
-                <div class="lab-card-meta">Abrir ferramenta</div>
-              </a>
-            `).join('')}
-          </div>
-        </div>
-      `;
-      overlay.addEventListener('click', (event) => {
-        const toolCard = event.target.closest('[data-tool-slug]');
-        if (toolCard) {
-          event.preventDefault();
-          openToolItem(ferramentas.find(tool => tool.slug === toolCard.dataset.toolSlug));
-          return;
-        }
-        if (event.target === overlay || event.target.closest('[data-close-hidden-tools]')) closeHiddenToolsPanel();
-      });
-      document.body.appendChild(overlay);
-      return overlay;
-    }
-
     function renderCards() {
       const gridC = document.getElementById('gridCamara');
       const gridA = document.getElementById('gridAr');
-      ferramentas.forEach((f) => {
+      ferramentas.forEach(f => {
         if (f.category === 'hidden') return;
         const card = document.createElement('div');
         card.className = 'bento-card';
@@ -1235,24 +306,8 @@
         card.setAttribute('aria-label', `Abrir ${f.nome}`);
         card.style.setProperty('--card-color', f.color);
         card.addEventListener('click', () => openToolItem(f));
-        card.addEventListener('keydown', (event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openToolItem(f);
-          }
-        });
-        card.innerHTML = `
-          <div class="card-top">
-            <div class="icon-box">${f.icone}</div>
-            ${f.badge ? `<div class="badge">${f.badge}</div>` : ''}
-          </div>
-          <div>
-            <div class="card-category">${f.categoria}</div>
-            <div class="card-title">${f.nome}</div>
-            <div class="card-desc">${f.desc}</div>
-            <div class="card-action">Abrir ferramenta</div>
-          </div>
-        `;
+        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openToolItem(f); } });
+        card.innerHTML = `<div class="card-top"><div class="icon-box">${f.icone}</div>${f.badge ? `<div class="badge">${f.badge}</div>` : ''}</div><div><div class="card-category">${f.categoria}</div><div class="card-title">${f.nome}</div><div class="card-desc">${f.desc}</div><div class="card-action">Abrir ferramenta</div></div>`;
         if (f.category === 'camara') gridC.appendChild(card);
         if (f.category === 'ar') gridA.appendChild(card);
       });
@@ -1260,27 +315,64 @@
 
     function setupToolSearch() {
       const input = document.getElementById('toolSearchInput');
-      if (!input) return;
-      input.addEventListener('input', () => {
+      input?.addEventListener('input', () => {
         const term = input.value.trim().toLowerCase();
-        document.querySelectorAll('.bento-card').forEach(card => {
-          card.classList.toggle('is-hidden', term && !card.dataset.search.includes(term));
-        });
+        document.querySelectorAll('.bento-card').forEach(card => card.classList.toggle('is-hidden', term && !card.dataset.search.includes(term)));
       });
+    }
+
+    function createLabsPanel() {
+      const overlay = document.createElement('div');
+      overlay.id = 'labsOverlay';
+      overlay.className = 'overlay';
+      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="kicker">Área de testes</div><div class="modal-title">Laboratório de Scrapers</div><div class="modal-desc">Teste cada loja individualmente antes de centralizar a análise.</div></div><button class="close-btn" type="button" data-close-labs>&times;</button></div><div class="labs-grid">${SCRAPER_LABS.map(lab => `<a class="lab-card" href="${lab.arquivo}" style="--lab-color:${lab.color}"><div class="lab-card-top"><div class="icon-box">${svgScraper}</div></div><div><div class="lab-card-title">${lab.nome}</div><div class="lab-card-desc">${lab.desc}</div></div><div class="lab-card-meta">Abrir scraper</div></a>`).join('')}</div></div>`;
+      overlay.addEventListener('click', e => { if (e.target === overlay || e.target.closest('[data-close-labs]')) closePanel('labsOverlay'); });
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    function createHiddenToolsPanel() {
+      const hiddenTools = ferramentas.filter(tool => tool.category === 'hidden');
+      const overlay = document.createElement('div');
+      overlay.id = 'hiddenToolsOverlay';
+      overlay.className = 'overlay';
+      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="kicker">Recursos internos</div><div class="modal-title">Ferramentas internas</div><div class="modal-desc">Utilitários ocultos da tela principal.</div></div><button class="close-btn" type="button" data-close-hidden-tools>&times;</button></div><div class="labs-grid">${hiddenTools.map(tool => `<a class="lab-card" href="${tool.arquivo}" data-tool-slug="${tool.slug}" style="--lab-color:${tool.color}"><div class="lab-card-top"><div class="icon-box">${tool.icone}</div>${tool.badge ? `<span class="lab-card-badge">${tool.badge}</span>` : ''}</div><div><div class="lab-card-title">${tool.nome}</div><div class="lab-card-desc">${tool.desc}</div></div><div class="lab-card-meta">Abrir ferramenta</div></a>`).join('')}</div></div>`;
+      overlay.addEventListener('click', e => {
+        const toolCard = e.target.closest('[data-tool-slug]');
+        if (toolCard) { e.preventDefault(); openToolItem(ferramentas.find(tool => tool.slug === toolCard.dataset.toolSlug)); return; }
+        if (e.target === overlay || e.target.closest('[data-close-hidden-tools]')) closePanel('hiddenToolsOverlay');
+      });
+      document.body.appendChild(overlay);
+      return overlay;
+    }
+
+    function openLabsPanel() {
+      const panel = document.getElementById('labsOverlay') || createLabsPanel();
+      panel.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openHiddenToolsPanel() {
+      const panel = document.getElementById('hiddenToolsOverlay') || createHiddenToolsPanel();
+      panel.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel(id) {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      panel.classList.remove('is-open', 'active');
+      document.body.style.overflow = '';
     }
 
     function setupSecretAccess() {
       const signature = document.getElementById('thiagoLogo');
       let clicks = [];
-      if (!signature) return;
-      signature.addEventListener('click', () => {
+      signature?.addEventListener('click', () => {
         const now = Date.now();
         clicks = clicks.filter(time => now - time <= 2000);
         clicks.push(now);
-        if (clicks.length >= 3) {
-          clicks = [];
-          openHiddenToolsPanel();
-        }
+        if (clicks.length >= 3) { clicks = []; openHiddenToolsPanel(); }
       });
     }
 
@@ -1289,29 +381,23 @@
       const iframe = document.getElementById('quickSearchIframe');
       const openBtn = document.getElementById('quickSearchBtn');
       const closeBtn = document.getElementById('closeQuickSearchBtn');
-      const open = () => {
-        iframe.src = iframe.src || 'scraper-dufrio.html';
+      openBtn?.addEventListener('click', () => {
+        iframe.src = 'scraper-dufrio.html';
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
-      };
-      const close = () => {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-      };
-      openBtn?.addEventListener('click', open);
-      closeBtn?.addEventListener('click', close);
-      modal?.addEventListener('click', (event) => { if (event.target === modal) close(); });
+      });
+      closeBtn?.addEventListener('click', () => closePanel('quickSearchModal'));
+      modal?.addEventListener('click', e => { if (e.target === modal) closePanel('quickSearchModal'); });
     }
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        closeLabsPanel();
-        closeHiddenToolsPanel();
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closePanel('labsOverlay');
+        closePanel('hiddenToolsOverlay');
         closePanel('quickSearchModal');
       }
     });
 
-    document.getElementById('openHiddenBtn')?.addEventListener('click', openHiddenToolsPanel);
     renderCards();
     setupToolSearch();
     setupSecretAccess();
