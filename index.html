@@ -11,7 +11,6 @@
 
     :root {
       --bg-base: #0b0d10;
-      --bg-soft: #10141a;
       --bg-card: #121820;
       --bg-card-hover: #151d27;
       --line: rgba(148, 163, 184, 0.16);
@@ -21,7 +20,6 @@
       --text-soft: #c6ced8;
       --blue: #38bdf8;
       --green: #22c55e;
-      --amber: #f59e0b;
       --font-outfit: 'Outfit', sans-serif;
     }
 
@@ -52,7 +50,7 @@
       mask-image: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent 75%);
     }
 
-    a { color: inherit; }
+    a { color: inherit; text-decoration: none; }
     button { font-family: inherit; }
 
     .dashboard-container {
@@ -135,7 +133,7 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
       gap: 24px;
       align-items: stretch;
       margin-bottom: 44px;
@@ -243,45 +241,82 @@
       gap: 22px;
     }
 
-    .side-label {
-      color: var(--text-muted);
+    .side-kicker {
+      color: var(--blue);
       font-size: 11px;
       font-weight: 900;
       letter-spacing: 1.5px;
       text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
-    .side-number {
-      margin-top: 10px;
+    .side-title {
       color: var(--text-main);
-      font-size: 42px;
+      font-size: 24px;
       font-weight: 900;
-      letter-spacing: -1.8px;
-      line-height: 1;
+      letter-spacing: -0.8px;
+      line-height: 1.08;
+      margin-bottom: 8px;
     }
 
     .side-desc {
-      margin-top: 8px;
       color: var(--text-muted);
       font-size: 13px;
       line-height: 1.45;
       font-weight: 600;
     }
 
-    .source-strip {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
+    .quick-stack {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
     }
 
-    .source-chip {
-      padding: 6px 9px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+    .quick-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.035);
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(255,255,255,0.055);
+    }
+
+    .quick-link strong {
+      display: block;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .quick-link span {
       color: var(--text-muted);
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 700;
+    }
+
+    .quick-arrow {
+      color: var(--blue);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .side-note {
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.45;
     }
 
     .section-head {
@@ -348,6 +383,7 @@
 
     .bento-card:focus-visible,
     .lab-card:focus-visible,
+    .quick-link:focus-visible,
     button:focus-visible {
       outline: 2px solid var(--blue);
       outline-offset: 3px;
@@ -356,10 +392,6 @@
     [data-id="gabinete"] { grid-column: span 2; min-height: 260px; }
     [data-id="gabinete"] .card-title { font-size: 30px; letter-spacing: -1px; }
     [data-id="gabinete"] .card-desc { max-width: 520px; font-size: 15px; }
-    [data-id="comparador"],
-    [data-id="precificacao"],
-    [data-id="scraper"],
-    [data-id="scraper-labs"] { grid-column: span 1; }
 
     .card-top {
       display: flex;
@@ -611,54 +643,6 @@
       white-space: nowrap;
     }
 
-    .install-guide {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,0.035);
-      color: var(--text-muted);
-      overflow: hidden;
-    }
-
-    .install-guide summary {
-      padding: 14px 16px;
-      color: var(--text-main);
-      cursor: pointer;
-      list-style: none;
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-    }
-
-    .install-guide summary::-webkit-details-marker { display: none; }
-
-    .install-guide-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      padding: 0 16px 14px;
-    }
-
-    .install-guide strong {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--text-main);
-      font-size: 12px;
-      font-weight: 900;
-    }
-
-    .install-guide ol { padding-left: 18px; }
-    .install-guide li { margin-bottom: 6px; font-size: 12px; font-weight: 600; line-height: 1.4; }
-    .install-guide p {
-      padding: 12px 16px 14px;
-      border-top: 1px solid var(--line);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.45;
-    }
-
     .quick-search-modal-content {
       position: relative;
       width: min(1180px, 100%);
@@ -774,7 +758,6 @@
 
       .top-actions { justify-content: flex-start; width: 100%; }
       .quick-search-btn, .ghost-btn { flex: 1 1 auto; }
-
       .hero-main,
       .hero-side { border-radius: 22px; }
       .hero-main { padding: 24px; }
@@ -791,7 +774,7 @@
       .labs-panel { padding: 20px 16px; border-radius: 20px; max-height: calc(100dvh - 20px); }
       .labs-head { position: sticky; top: -20px; z-index: 1; margin: -20px -16px 18px; padding: 16px; background: rgba(15,20,27,0.94); border-bottom: 1px solid var(--line); }
       .labs-title { font-size: 22px; }
-      .labs-grid, .install-guide-grid { grid-template-columns: 1fr; }
+      .labs-grid { grid-template-columns: 1fr; }
       .quick-search-modal-content { height: calc(100dvh - 20px); border-radius: 20px; }
     }
 
@@ -841,25 +824,27 @@
         </div>
       </div>
 
-      <aside class="hero-side" aria-label="Resumo do Hub">
+      <aside class="hero-side" aria-label="Acesso rápido">
         <div>
-          <div class="side-label">Ferramentas no painel</div>
-          <div class="side-number">11</div>
-          <p class="side-desc">Entre recursos principais, laboratórios de teste e utilitários internos.</p>
-        </div>
-        <div>
-          <div class="side-label">Fontes de mercado</div>
-          <div class="source-strip" aria-label="Lojas monitoradas">
-            <span class="source-chip">Dufrio</span>
-            <span class="source-chip">Frigelar</span>
-            <span class="source-chip">Leveros</span>
-            <span class="source-chip">Central Ar</span>
-            <span class="source-chip">FrioPeças</span>
-            <span class="source-chip">Polo Ar</span>
-            <span class="source-chip">WebContinental</span>
-            <span class="source-chip">Clima Rio</span>
+          <div class="side-kicker">Acesso rápido</div>
+          <div class="side-title">Comece pelo que você mais usa.</div>
+          <p class="side-desc">Atalhos diretos para consulta de mercado, orçamento técnico e cotação express.</p>
+          <div class="quick-stack">
+            <a class="quick-link" href="scraper-ar.html">
+              <span><strong>Scraper Oficial</strong><span>Pesquisar preços agora</span></span>
+              <span class="quick-arrow">→</span>
+            </a>
+            <a class="quick-link" href="simulador-gabinete.html">
+              <span><strong>Simulador 3D</strong><span>Montar câmara fria</span></span>
+              <span class="quick-arrow">→</span>
+            </a>
+            <a class="quick-link" href="cotacoes.html">
+              <span><strong>Cotação Express</strong><span>Infraestrutura rápida</span></span>
+              <span class="quick-arrow">→</span>
+            </a>
           </div>
         </div>
+        <p class="side-note">As lojas aparecem apenas dentro dos scrapers e comparadores, como fontes de consulta.</p>
       </aside>
     </section>
 
@@ -892,9 +877,9 @@
       </div>
       <div class="footer-card">
         <div class="update-label">Última atualização</div>
-        <div id="update-title">Redesign autoral do Hub</div>
-        <div id="update-desc">A página inicial recebeu uma identidade mais sóbria e pessoal, mantendo Hub de Ferramentas e THIAGO LUZ como assinatura principal.</div>
-        <div id="update-datetime">18/06/2026 às 15:11</div>
+        <div id="update-title">Acesso rápido no Hub</div>
+        <div id="update-desc">O resumo lateral da página inicial foi substituído por atalhos diretos para as ferramentas mais usadas.</div>
+        <div id="update-datetime">18/06/2026 às 15:22</div>
       </div>
     </footer>
   </div>
@@ -932,12 +917,10 @@
       { nome: "Simulador 3D", categoria: "Câmara fria", desc: "Visualize o gabinete e gere o cálculo de painéis para orçamento.", arquivo: "simulador-gabinete.html", icone: svgBox3D, color: "#38bdf8", slug: "gabinete", category: "camara" },
       { nome: "Plano de corte", categoria: "Câmara fria", desc: "Otimize o aproveitamento de painéis PIR/EPS e reduza desperdícios.", arquivo: "plano-corte.html", icone: svgCorte, color: "#f97316", slug: "corte", category: "camara" },
       { nome: "Checklist em PDF", categoria: "Câmara fria", desc: "Padronize o levantamento de dados e gere checklist para orçamento.", arquivo: "CheckList.html", icone: svgChecklist, color: "#22c55e", slug: "checklist", category: "camara" },
-
       { nome: "Scraper Oficial", categoria: "Análise de mercado", desc: "Busque preços nas lojas monitoradas e organize referências comerciais.", arquivo: "scraper-ar.html", icone: svgScraper, color: "#f59e0b", slug: "scraper", category: "ar" },
       { nome: "Comparador de preços", categoria: "Ar-condicionado", desc: "Compare ofertas entre lojas e encontre a melhor referência para venda.", arquivo: "comparador-ar.html", icone: svgComparar, color: "#818cf8", slug: "comparador", category: "ar" },
       { nome: "Precificação", categoria: "Site x 365", desc: "Ajuste valores entre site e 365 com cálculo proporcional por SKU.", arquivo: "precificacao-ar.html", icone: svgPrecificar, color: "#0ea5e9", slug: "precificacao", category: "ar" },
       { nome: "Laboratório de Scrapers", categoria: "Testes", badge: "Laboratório", desc: "Valide cada loja individualmente antes de usar no Scraper Oficial.", arquivo: "#laboratorios", icone: svgScraper, color: "#22c55e", slug: "scraper-labs", category: "ar", isLabGroup: true },
-
       { nome: "Extrator de Códigos", categoria: "Utilitário", desc: "Cole uma lista e extraia códigos com quantidade em estoque.", arquivo: "itens-quantidade.html", icone: svgFiltro, color: "#d946ef", slug: "extracao", category: "hidden" },
       { nome: "Preços ao Vivo", categoria: "Extensão", badge: "Em produção", desc: "Visualize ofertas capturadas pela extensão nas abas abertas.", arquivo: "precos-ao-vivo.html", icone: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>`, color: "#22c55e", slug: "precos-vivo", category: "hidden" },
       { nome: "Cotação Express", categoria: "Infraestrutura", desc: "Gere orçamentos rápidos de infraestrutura para instalação.", arquivo: "cotacoes.html", icone: svgCotar, color: "#a78bfa", slug: "cotacao", category: "hidden" },
@@ -1048,32 +1031,6 @@
               </a>
             `).join('')}
           </div>
-          <details class="install-guide">
-            <summary>Como instalar a extensão</summary>
-            <div class="install-guide-grid">
-              <div>
-                <strong>Chrome</strong>
-                <ol>
-                  <li>Baixe e descompacte a extensão.</li>
-                  <li>Acesse chrome://extensions.</li>
-                  <li>Ative o Modo do desenvolvedor.</li>
-                  <li>Clique em "Carregar sem compactação".</li>
-                  <li>Selecione a pasta que contém o manifest.json.</li>
-                </ol>
-              </div>
-              <div>
-                <strong>Edge</strong>
-                <ol>
-                  <li>Baixe e descompacte a extensão.</li>
-                  <li>Acesse edge://extensions.</li>
-                  <li>Ative o Modo de desenvolvedor.</li>
-                  <li>Clique em "Carregar sem pacote" ou "Load unpacked".</li>
-                  <li>Selecione a pasta que contém o manifest.json.</li>
-                </ol>
-              </div>
-            </div>
-            <p>O navegador carrega a pasta descompactada, não o arquivo .zip diretamente.</p>
-          </details>
         </div>
       `;
       overlay.addEventListener('click', (event) => {
