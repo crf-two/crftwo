@@ -1,0 +1,1 @@
+Remover placeholder antes do merge.
