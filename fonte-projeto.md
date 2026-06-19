@@ -5,6 +5,8 @@ Resumo do Hub de Ferramentas Dufrio.
 Repositório: `crf2two/crftwo`
 Site: https://crf2two.github.io/crftwo/
 
+Importante: a fonte não depende do site estar público. Quando o link do Pages não abrir, use o próprio repositório GitHub como fonte, principalmente `AGENTS.md` e `index.html`.
+
 Fonte principal: `AGENTS.md`.
 
 O `index.html` é a porta de entrada do Hub e lista ferramentas de Câmara Fria, Ar-condicionado, scrapers, precificação, cotação, extensão e utilitários internos.
