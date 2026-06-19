@@ -1,1 +1,1 @@
-window.LATEST_LOG = { message: 'Botão de busca rápida ajustado', dateIso: '2026-06-19T18:16:01-03:00' };
+window.LATEST_LOG = { message: 'Ajuste visual aplicado', dateIso: '2026-06-19T18:21:00-03:00' };
