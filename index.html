@@ -75,7 +75,8 @@
     .command-panel {
       position: relative;
       z-index: 20;
-      margin-bottom: 28px;
+      max-width: 1040px;
+      margin: 0 auto 32px;
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 24px;
@@ -129,67 +130,81 @@
     .result-meta { color: var(--blue); font-size: 10px; font-weight: 900; letter-spacing: 1.1px; text-transform: uppercase; }
     .result-desc, .search-empty { color: var(--muted); font-size: 12px; font-weight: 650; line-height: 1.35; }
 
-    .section { margin-top: 30px; }
-    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
-    .section-title { font-size: 18px; font-weight: 900; letter-spacing: -.35px; }
+    .section { margin: 34px auto 0; }
+    .section-head { width: min(100%, 828px); display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 0 auto 14px; }
+    .section-title { font-size: 19px; font-weight: 900; letter-spacing: -.35px; }
     .section-count { color: rgba(135,147,163,.72); font-size: 11px; font-weight: 850; }
-    .tool-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+    .tool-grid {
+      width: min(100%, 828px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 260px));
+      grid-auto-rows: 260px;
+      justify-content: center;
+      gap: 16px;
+    }
     .tool-card {
       position: relative;
-      min-height: 162px;
-      grid-column: span 2;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 20px;
-      padding: 18px;
+      gap: 16px;
+      padding: 20px;
       border: 1px solid var(--line);
-      border-radius: 22px;
-      background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.022)), var(--card);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.046), rgba(255,255,255,.020)), var(--card);
       color: var(--text);
       overflow: hidden;
       transition: .18s ease;
     }
-    .tool-card::before { content: ''; position: absolute; inset: 0; border-top: 2px solid var(--card-color); opacity: .82; pointer-events: none; }
-    .tool-card:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--card-color) 46%, var(--line)); background: var(--card-hover); box-shadow: 0 18px 44px rgba(0,0,0,.25); }
-    .tool-card.featured { min-height: 220px; grid-column: span 4; background: linear-gradient(145deg, rgba(18,27,38,.98), rgba(12,18,26,.94)); }
-    .tool-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-    .icon-box { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px; color: var(--card-color); background: color-mix(in srgb, var(--card-color) 12%, transparent); border: 1px solid color-mix(in srgb, var(--card-color) 32%, transparent); }
+    .tool-card::before { content: ''; position: absolute; inset: 0; border-top: 3px solid var(--card-color); opacity: .82; pointer-events: none; }
+    .tool-card:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--card-color) 52%, var(--line)); background: var(--card-hover); box-shadow: 0 22px 54px rgba(0,0,0,.30); }
+    .tool-card.featured { grid-column: span 2; grid-row: span 2; padding: 28px; border-radius: 22px; background: linear-gradient(145deg, rgba(18,27,38,.98), rgba(12,18,26,.94)); }
+    .tool-top { position: relative; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .icon-box { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; color: var(--card-color); background: color-mix(in srgb, var(--card-color) 12%, transparent); border: 1px solid color-mix(in srgb, var(--card-color) 32%, transparent); }
+    .tool-card.featured .icon-box { width: 54px; height: 54px; border-radius: 15px; }
     .icon-box svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .tool-kind { color: var(--card-color); font-size: 10px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; }
-    .tool-name { margin-top: 9px; font-size: 21px; line-height: 1.05; font-weight: 900; letter-spacing: -.55px; }
-    .tool-card.featured .tool-name { font-size: clamp(28px, 4vw, 42px); letter-spacing: -1.5px; }
-    .tool-short { margin-top: 8px; max-width: 520px; color: var(--muted); font-size: 13px; font-weight: 650; line-height: 1.4; }
+    .tool-card.featured .icon-box svg { width: 26px; height: 26px; }
+    .tool-kind { color: var(--card-color); font-size: 10px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; text-align: right; }
+    .tool-body { position: relative; z-index: 1; display: grid; gap: 9px; }
+    .tool-name { font-size: 21px; line-height: 1.02; font-weight: 900; letter-spacing: -.65px; }
+    .tool-card.featured .tool-name { font-size: clamp(38px, 5vw, 58px); letter-spacing: -2.2px; max-width: 560px; }
+    .tool-short { max-width: 520px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.35; transition: .16s ease; }
+    .tool-card.featured .tool-short { font-size: 15px; color: rgba(203,213,225,.72); }
     .tool-action { display: inline-flex; align-items: center; gap: 7px; width: max-content; color: var(--soft); font-size: 12px; font-weight: 900; }
     .tool-action::after { content: '→'; color: var(--card-color); }
     .detail-pop {
       position: absolute;
-      left: 14px;
-      right: 14px;
-      bottom: 14px;
-      z-index: 3;
+      left: 20px;
+      right: 20px;
+      bottom: 54px;
+      z-index: 2;
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(6px);
       pointer-events: none;
-      padding: 12px;
-      border: 1px solid rgba(148,163,184,.18);
-      border-radius: 14px;
-      background: rgba(5,8,13,.94);
       color: var(--soft);
       font-size: 12px;
-      font-weight: 650;
-      line-height: 1.4;
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      font-weight: 700;
+      line-height: 1.38;
       transition: .16s ease;
     }
+    .tool-card.featured .detail-pop { left: 28px; right: 28px; bottom: 70px; font-size: 14px; max-width: 540px; }
+    .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: .12; }
     .tool-card:hover .detail-pop, .tool-card:focus-within .detail-pop { opacity: 1; transform: translateY(0); }
 
-    .lab-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-    .lab-card { min-height: 112px; grid-column: span 1; padding: 15px; border-radius: 18px; }
-    .lab-card .tool-name { font-size: 15px; letter-spacing: -.2px; }
+    .lab-grid {
+      width: min(100%, 848px);
+      grid-template-columns: repeat(4, minmax(0, 200px));
+      grid-auto-rows: 170px;
+      gap: 12px;
+    }
+    .lab-card { padding: 16px; border-radius: 16px; }
+    .lab-card .tool-name { font-size: 16px; letter-spacing: -.25px; }
     .lab-card .tool-short { font-size: 11.5px; }
-    .lab-card .icon-box { width: 34px; height: 34px; border-radius: 12px; }
+    .lab-card .icon-box { width: 34px; height: 34px; border-radius: 10px; }
     .lab-card .icon-box svg { width: 18px; height: 18px; }
+    .lab-card .detail-pop { left: 16px; right: 16px; bottom: 48px; font-size: 11.5px; }
 
     .overlay, .quick-search-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(3,6,10,.78); backdrop-filter: blur(16px); }
     .overlay.is-open, .quick-search-modal.active { display: flex; }
@@ -214,9 +229,10 @@
     #update-datetime { margin-top: 4px; color: rgba(139,150,165,.58); font-size: 10px; font-weight: 700; cursor: help; }
 
     @media (max-width: 980px) {
-      .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .tool-card, .tool-card.featured { grid-column: span 1; min-height: 168px; }
-      .lab-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .tool-grid { width: min(100%, 536px); grid-template-columns: repeat(2, minmax(0, 260px)); grid-auto-rows: 250px; }
+      .tool-card.featured { grid-column: span 2; grid-row: span 1; }
+      .lab-grid { width: min(100%, 536px); grid-template-columns: repeat(2, minmax(0, 260px)); grid-auto-rows: 170px; }
+      .section-head { width: min(100%, 536px); }
       .topbar { align-items: flex-start; }
       .brand { flex-direction: column; align-items: flex-start; gap: 6px; }
       .brand-divider { display: none; }
@@ -229,10 +245,12 @@
       .command-search input { height: 54px; font-size: 16px; }
       .search-dropdown { left: 9px; right: 9px; }
       .section-head { align-items: flex-start; flex-direction: column; gap: 4px; }
-      .tool-grid, .lab-grid { grid-template-columns: 1fr; }
-      .tool-card, .tool-card.featured, .lab-card { min-height: auto; }
-      .detail-pop { position: static; opacity: 1; transform: none; margin-top: 12px; display: none; }
+      .tool-grid, .lab-grid { width: 100%; grid-template-columns: 1fr; grid-auto-rows: auto; }
+      .tool-card, .tool-card.featured, .lab-card { grid-column: span 1; grid-row: span 1; min-height: 220px; aspect-ratio: auto; }
+      .tool-card.featured .tool-name { font-size: clamp(32px, 11vw, 44px); }
+      .detail-pop { position: static; opacity: 1; transform: none; margin-top: 8px; display: none; }
       .tool-card:focus-within .detail-pop { display: block; }
+      .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: 1; }
       .overlay, .quick-search-modal { padding: 10px; align-items: stretch; }
       .panel-modal { padding: 20px 16px; border-radius: 20px; max-height: calc(100dvh - 20px); }
       .quick-search-content { height: calc(100dvh - 20px); border-radius: 20px; }
@@ -301,8 +319,8 @@
         <p class="footer-small">criado em 16/09/2024.</p>
       </div>
       <div class="update-hover">
-        <div id="update-datetime" tabindex="0" aria-describedby="update-title">19/06/2026 às 17:46</div>
-        <div id="update-title" role="tooltip">Hub operacional simplificado</div>
+        <div id="update-datetime" tabindex="0" aria-describedby="update-title">19/06/2026 às 17:57</div>
+        <div id="update-title" role="tooltip">Cards centralizados</div>
       </div>
     </footer>
   </div>
@@ -329,9 +347,9 @@
       updates: [
         {
           date: '19/06/2026',
-          time: '17:46',
-          title: 'Hub operacional simplificado',
-          description: 'Index redesenhado como painel interno, com busca inteligente, categorias diretas e laboratório de scrapers visível.'
+          time: '17:57',
+          title: 'Cards centralizados',
+          description: 'Cards do Hub centralizados em grade visual mais limpa, com destaque maior para a ferramenta mais usada.'
         }
       ]
     };
@@ -380,7 +398,7 @@
           <div class="icon-box">${item.icone || svgScraper}</div>
           <span class="tool-kind">${item.categoria || item.loja || 'Ferramenta'}</span>
         </div>
-        <div>
+        <div class="tool-body">
           <div class="tool-name">${item.nome}</div>
           <p class="tool-short">${item.short}</p>
           <span class="tool-action">Abrir</span>
@@ -473,7 +491,7 @@
       const overlay = document.createElement('div');
       overlay.id = 'hiddenToolsOverlay';
       overlay.className = 'overlay';
-      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="modal-title">Ferramentas internas</div><div class="modal-desc">Recursos ocultos da tela principal.</div></div><button class="close-btn" type="button" data-close-hidden-tools>&times;</button></div><div class="hidden-grid">${hiddenTools.map(tool => `<a class="tool-card lab-card" href="${tool.arquivo}" style="--card-color:${tool.color}"><div class="tool-top"><div class="icon-box">${tool.icone}</div><span class="tool-kind">${tool.categoria}</span></div><div><div class="tool-name">${tool.nome}</div><p class="tool-short">${tool.short}</p><span class="tool-action">Abrir</span></div><div class="detail-pop">${tool.detail}</div></a>`).join('')}</div></div>`;
+      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="modal-title">Ferramentas internas</div><div class="modal-desc">Recursos ocultos da tela principal.</div></div><button class="close-btn" type="button" data-close-hidden-tools>&times;</button></div><div class="hidden-grid">${hiddenTools.map(tool => `<a class="tool-card lab-card" href="${tool.arquivo}" style="--card-color:${tool.color}"><div class="tool-top"><div class="icon-box">${tool.icone}</div><span class="tool-kind">${tool.categoria}</span></div><div class="tool-body"><div class="tool-name">${tool.nome}</div><p class="tool-short">${tool.short}</p><span class="tool-action">Abrir</span></div><div class="detail-pop">${tool.detail}</div></a>`).join('')}</div></div>`;
       overlay.addEventListener('click', event => { if (event.target === overlay || event.target.closest('[data-close-hidden-tools]')) closePanel('hiddenToolsOverlay'); });
       document.body.appendChild(overlay);
       return overlay;
