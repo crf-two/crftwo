@@ -1,1 +1,1 @@
-Ajusta layout dos cards
+Corrige hover e nome do Scraper Ar
