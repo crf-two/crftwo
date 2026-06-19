@@ -169,29 +169,28 @@
     .tool-kind { color: var(--card-color); font-size: 10px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; text-align: right; }
     .tool-body { position: relative; z-index: 1; display: grid; gap: 9px; }
     .tool-name { font-size: 21px; line-height: 1.02; font-weight: 900; letter-spacing: -.65px; }
-    .tool-card.featured .tool-name { font-size: clamp(38px, 5vw, 58px); letter-spacing: -2.2px; max-width: 560px; }
-    .tool-short { max-width: 520px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.35; transition: .16s ease; }
+    .tool-card.featured .tool-name { font-size: clamp(34px, 4.4vw, 52px); letter-spacing: -2px; max-width: 560px; }
+    .tool-short { max-width: 520px; max-height: 4.2em; overflow: hidden; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.35; transition: opacity .16s ease, max-height .16s ease, margin .16s ease; }
     .tool-card.featured .tool-short { font-size: 15px; color: rgba(203,213,225,.72); }
     .tool-action { display: inline-flex; align-items: center; gap: 7px; width: max-content; color: var(--soft); font-size: 12px; font-weight: 900; }
     .tool-action::after { content: '→'; color: var(--card-color); }
     .detail-pop {
-      position: absolute;
-      left: 20px;
-      right: 20px;
-      bottom: 54px;
-      z-index: 2;
+      position: static;
+      z-index: 1;
       opacity: 0;
-      transform: translateY(6px);
+      max-height: 0;
+      overflow: hidden;
+      transform: none;
       pointer-events: none;
       color: var(--soft);
       font-size: 12px;
       font-weight: 700;
       line-height: 1.38;
-      transition: .16s ease;
+      transition: opacity .16s ease, max-height .16s ease, margin .16s ease;
     }
-    .tool-card.featured .detail-pop { left: 28px; right: 28px; bottom: 70px; font-size: 14px; max-width: 540px; }
-    .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: .12; }
-    .tool-card:hover .detail-pop, .tool-card:focus-within .detail-pop { opacity: 1; transform: translateY(0); }
+    .tool-card.featured .detail-pop { font-size: 14px; max-width: 540px; }
+    .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: 0; max-height: 0; margin: 0; }
+    .tool-card:hover .detail-pop, .tool-card:focus-within .detail-pop { opacity: 1; max-height: 110px; margin-top: 2px; }
 
     .lab-grid {
       width: min(100%, 848px);
@@ -204,7 +203,7 @@
     .lab-card .tool-short { font-size: 11.5px; }
     .lab-card .icon-box { width: 34px; height: 34px; border-radius: 10px; }
     .lab-card .icon-box svg { width: 18px; height: 18px; }
-    .lab-card .detail-pop { left: 16px; right: 16px; bottom: 48px; font-size: 11.5px; }
+    .lab-card .detail-pop { font-size: 11.5px; }
 
     .overlay, .quick-search-modal { position: fixed; inset: 0; z-index: 1000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(3,6,10,.78); backdrop-filter: blur(16px); }
     .overlay.is-open, .quick-search-modal.active { display: flex; }
@@ -248,9 +247,8 @@
       .tool-grid, .lab-grid { width: 100%; grid-template-columns: 1fr; grid-auto-rows: auto; }
       .tool-card, .tool-card.featured, .lab-card { grid-column: span 1; grid-row: span 1; min-height: 220px; aspect-ratio: auto; }
       .tool-card.featured .tool-name { font-size: clamp(32px, 11vw, 44px); }
-      .detail-pop { position: static; opacity: 1; transform: none; margin-top: 8px; display: none; }
-      .tool-card:focus-within .detail-pop { display: block; }
-      .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: 1; }
+      .detail-pop { display: none; }
+      .tool-card:hover .tool-short, .tool-card:focus-within .tool-short { opacity: 1; max-height: none; }
       .overlay, .quick-search-modal { padding: 10px; align-items: stretch; }
       .panel-modal { padding: 20px 16px; border-radius: 20px; max-height: calc(100dvh - 20px); }
       .quick-search-content { height: calc(100dvh - 20px); border-radius: 20px; }
@@ -260,7 +258,7 @@
     }
   </style>
   <script src="analytics.js" defer></script>
-  <script src="ultimo_log.js"></script>
+  <script src="ultimo_log.js?v=202606191812"></script>
 </head>
 <body>
   <div class="container">
@@ -319,8 +317,8 @@
         <p class="footer-small">criado em 16/09/2024.</p>
       </div>
       <div class="update-hover">
-        <div id="update-datetime" tabindex="0" aria-describedby="update-title">19/06/2026 às 17:57</div>
-        <div id="update-title" role="tooltip">Cards centralizados</div>
+        <div id="update-datetime" tabindex="0" aria-describedby="update-title">19/06/2026 às 18:12</div>
+        <div id="update-title" role="tooltip">Scraper Ar Condicionado ajustado</div>
       </div>
     </footer>
   </div>
@@ -347,9 +345,9 @@
       updates: [
         {
           date: '19/06/2026',
-          time: '17:57',
-          title: 'Cards centralizados',
-          description: 'Cards do Hub centralizados em grade visual mais limpa, com destaque maior para a ferramenta mais usada.'
+          time: '18:12',
+          title: 'Scraper Ar Condicionado ajustado',
+          description: 'Nome do card atualizado e hover corrigido para não sobrepor informações.'
         }
       ]
     };
@@ -366,7 +364,7 @@
     ];
 
     const ferramentas = [
-      { nome: 'Scraper Oficial', categoria: 'Ar-condicionado', short: 'Busca geral de ar-condicionado.', detail: 'Pesquisa preços nas lojas monitoradas e organiza resultados para comparação comercial.', arquivo: 'scraper-ar.html', icone: svgScraper, color: '#f59e0b', slug: 'scraper', category: 'ar', featured: true, aliases: 'ar condicionado split inverter preço busca mercado lojas' },
+      { nome: 'Scraper Ar Condicionado', categoria: 'Ar-condicionado', short: 'Busca geral de ar-condicionado.', detail: 'Pesquisa preços nas lojas monitoradas e organiza resultados para comparação comercial.', arquivo: 'scraper-ar.html', icone: svgScraper, color: '#f59e0b', slug: 'scraper', category: 'ar', featured: true, aliases: 'scraper oficial ar condicionado split inverter preço busca mercado lojas' },
       { nome: 'Comparador de preços', categoria: 'Ar-condicionado', short: 'Compara ofertas entre lojas.', detail: 'Mostra referências por loja para ajudar a entender preço, disponibilidade e oportunidade.', arquivo: 'comparador-ar.html', icone: svgComparar, color: '#818cf8', slug: 'comparador', category: 'ar', aliases: 'comparar comparação ofertas lojas ar condicionado' },
       { nome: 'Precificação', categoria: 'Site x 365', short: 'Calcula Site x 365.', detail: 'Ajusta valores entre site e Dynamics 365 com cálculo proporcional por SKU.', arquivo: 'precificacao-ar.html', icone: svgPrecificar, color: '#0ea5e9', slug: 'precificacao', category: 'ar', aliases: 'preço precificar sku 365 site dynamics' },
       { nome: 'Simulador 3D', categoria: 'Câmara fria', short: 'Monta câmara fria.', detail: 'Visualiza o gabinete e gera apoio de cálculo de painéis para orçamento.', arquivo: 'simulador-gabinete.html', icone: svgBox3D, color: '#38bdf8', slug: 'gabinete', category: 'camara', aliases: 'camara fria gabinete simulador 3d painel' },
@@ -401,9 +399,9 @@
         <div class="tool-body">
           <div class="tool-name">${item.nome}</div>
           <p class="tool-short">${item.short}</p>
+          <div class="detail-pop">${item.detail}</div>
           <span class="tool-action">Abrir</span>
         </div>
-        <div class="detail-pop">${item.detail}</div>
       `;
       return card;
     }
@@ -491,7 +489,7 @@
       const overlay = document.createElement('div');
       overlay.id = 'hiddenToolsOverlay';
       overlay.className = 'overlay';
-      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="modal-title">Ferramentas internas</div><div class="modal-desc">Recursos ocultos da tela principal.</div></div><button class="close-btn" type="button" data-close-hidden-tools>&times;</button></div><div class="hidden-grid">${hiddenTools.map(tool => `<a class="tool-card lab-card" href="${tool.arquivo}" style="--card-color:${tool.color}"><div class="tool-top"><div class="icon-box">${tool.icone}</div><span class="tool-kind">${tool.categoria}</span></div><div class="tool-body"><div class="tool-name">${tool.nome}</div><p class="tool-short">${tool.short}</p><span class="tool-action">Abrir</span></div><div class="detail-pop">${tool.detail}</div></a>`).join('')}</div></div>`;
+      overlay.innerHTML = `<div class="panel-modal"><div class="modal-head"><div><div class="modal-title">Ferramentas internas</div><div class="modal-desc">Recursos ocultos da tela principal.</div></div><button class="close-btn" type="button" data-close-hidden-tools>&times;</button></div><div class="hidden-grid">${hiddenTools.map(tool => `<a class="tool-card lab-card" href="${tool.arquivo}" style="--card-color:${tool.color}"><div class="tool-top"><div class="icon-box">${tool.icone}</div><span class="tool-kind">${tool.categoria}</span></div><div class="tool-body"><div class="tool-name">${tool.nome}</div><p class="tool-short">${tool.short}</p><div class="detail-pop">${tool.detail}</div><span class="tool-action">Abrir</span></div></a>`).join('')}</div></div>`;
       overlay.addEventListener('click', event => { if (event.target === overlay || event.target.closest('[data-close-hidden-tools]')) closePanel('hiddenToolsOverlay'); });
       document.body.appendChild(overlay);
       return overlay;
