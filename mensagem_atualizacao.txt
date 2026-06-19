@@ -1,4 +1,1 @@
-Integração de download dinâmico da extensão via JSZip e remoção de arquivo zip estático do repositório
-
-
-
+Simplifica layout operacional do Hub
