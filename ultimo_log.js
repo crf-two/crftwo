@@ -1,4 +1,4 @@
-window.LATEST_LOG = { message: 'Scrapers individuais em painel', dateIso: '2026-06-19T19:12:00-03:00' };
+window.LATEST_LOG = { message: 'Adiciona conceito visual ChatGPT do Hub', dateIso: '2026-06-22T16:23:22-03:00' };
 
 (function organizarScrapersIndividuais() {
   var labs = [
