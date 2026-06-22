@@ -1,1 +1,344 @@
-teste
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0f14">
+  <title>Hub — Conceito ChatGPT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --bg-deep: #080b0f;
+      --surface: #111821;
+      --surface-2: #151d28;
+      --surface-3: #1a2430;
+      --line: rgba(148, 163, 184, .18);
+      --line-strong: rgba(177, 190, 207, .32);
+      --text: #edf2f7;
+      --muted: #98a6b7;
+      --quiet: #687789;
+      --accent: #c88f3d;
+      --accent-2: #6aa8a0;
+      --danger: #c86a5a;
+      --radius: 18px;
+      --shadow: 0 28px 80px rgba(0, 0, 0, .32);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        radial-gradient(circle at 14% 10%, rgba(200,143,61,.10), transparent 340px),
+        radial-gradient(circle at 82% 18%, rgba(106,168,160,.08), transparent 360px),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+      background-size: 56px 56px, 56px 56px, auto, auto, auto;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .shell { width: min(1380px, calc(100% - 32px)); margin: 0 auto; padding: 22px 0 36px; }
+    .layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .rail {
+      position: sticky;
+      top: 18px;
+      min-height: calc(100vh - 44px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(10, 14, 19, .78);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .brand { display: grid; gap: 8px; user-select: none; }
+    .brand button { width: max-content; border: 0; background: transparent; color: var(--text); text-align: left; }
+    .brand-name { font-size: 36px; line-height: .88; font-weight: 800; letter-spacing: -1.8px; }
+    .brand-sub { font-family: 'IBM Plex Mono', monospace; color: var(--quiet); font-size: 10px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
+    .nav { display: grid; gap: 7px; }
+    .nav a, .nav button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 38px;
+      padding: 9px 10px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-align: left;
+    }
+    .nav a:hover, .nav button:hover { color: var(--text); background: rgba(255,255,255,.04); border-color: var(--line); }
+    .nav small { font-family: 'IBM Plex Mono', monospace; color: var(--quiet); font-size: 10px; }
+    .rail-note { margin-top: auto; padding: 13px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.025); }
+    .rail-note strong { display: block; font-size: 13px; margin-bottom: 6px; }
+    .rail-note span { color: var(--muted); font-size: 12px; line-height: 1.4; }
+    .main { min-width: 0; display: grid; gap: 18px; }
+    .topline {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(12, 17, 23, .78);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .intro-eyebrow { font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .intro h1 { margin-top: 5px; font-size: clamp(30px, 4vw, 56px); line-height: .95; letter-spacing: -2.4px; font-weight: 800; max-width: 760px; }
+    .intro p { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.45; max-width: 720px; }
+    .status-card { width: 230px; border: 1px solid var(--line); border-radius: 18px; padding: 14px; background: #0d131a; }
+    .status-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); }
+    .pulse { width: 8px; height: 8px; border-radius: 999px; background: var(--accent-2); box-shadow: 0 0 0 5px rgba(106,168,160,.11); }
+    .status-card strong { display: block; margin-top: 12px; font-size: 21px; line-height: 1; letter-spacing: -.7px; }
+    .status-card span { display: block; margin-top: 7px; color: var(--quiet); font-size: 12px; line-height: 1.35; }
+    .command {
+      position: relative;
+      border: 1px solid var(--line-strong);
+      border-radius: 24px;
+      background: #0f151d;
+      padding: 10px;
+      box-shadow: 0 18px 54px rgba(0,0,0,.26);
+    }
+    .command-inner { position: relative; }
+    .command input {
+      width: 100%;
+      height: 64px;
+      padding: 0 18px 0 56px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 17px;
+      outline: none;
+      background: #0a0f15;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .command input:focus { border-color: rgba(200,143,61,.55); box-shadow: 0 0 0 4px rgba(200,143,61,.09); }
+    .command svg { position: absolute; left: 20px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%); color: var(--accent); fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .results { display: none; position: absolute; z-index: 20; left: 10px; right: 10px; top: calc(100% - 4px); border: 1px solid var(--line-strong); border-radius: 18px; overflow: hidden; background: #0b1016; box-shadow: var(--shadow); }
+    .results.open { display: block; }
+    .result { width: 100%; border: 0; border-bottom: 1px solid rgba(255,255,255,.07); background: transparent; color: var(--text); padding: 13px 15px; text-align: left; display: grid; gap: 4px; }
+    .result:hover, .result.active { background: rgba(200,143,61,.10); }
+    .result strong { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+    .result em { color: var(--accent); font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-style: normal; text-transform: uppercase; letter-spacing: 1px; }
+    .result span { color: var(--muted); font-size: 12px; }
+    .work-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; align-items: start; }
+    .panel { border: 1px solid var(--line); border-radius: 24px; background: rgba(13, 19, 27, .82); box-shadow: var(--shadow); overflow: hidden; }
+    .panel-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 18px 18px 0; }
+    .panel-head h2 { font-size: 19px; letter-spacing: -.5px; }
+    .panel-head span { font-family: 'IBM Plex Mono', monospace; color: var(--quiet); font-size: 11px; font-weight: 700; }
+    .cards { padding: 18px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: 145px; gap: 12px; }
+    .tool {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)), var(--surface);
+      overflow: hidden;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+    .tool::before { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--tool-color); opacity: .75; }
+    .tool:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--tool-color) 48%, var(--line)); background: var(--surface-2); }
+    .tool.large { grid-column: span 4; grid-row: span 2; padding: 22px; }
+    .tool.medium { grid-column: span 3; }
+    .tool.small { grid-column: span 2; }
+    .tool-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+    .tool-tag { font-family: 'IBM Plex Mono', monospace; color: var(--tool-color); font-size: 10px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; }
+    .tool-code { color: var(--quiet); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
+    .tool h3 { font-size: 20px; line-height: 1.02; letter-spacing: -.7px; max-width: 92%; }
+    .tool.large h3 { font-size: clamp(34px, 4.6vw, 58px); letter-spacing: -2.6px; max-width: 700px; }
+    .tool p { margin-top: 8px; color: var(--muted); font-size: 13px; line-height: 1.36; max-width: 580px; }
+    .tool.large p { font-size: 15px; }
+    .tool-action { display: inline-flex; width: max-content; align-items: center; gap: 7px; margin-top: 12px; color: var(--text); font-size: 12px; font-weight: 800; }
+    .tool-action::after { content: '↗'; color: var(--tool-color); }
+    .side-stack { display: grid; gap: 18px; }
+    .ops { padding: 18px; display: grid; gap: 12px; }
+    .ops-item { border: 1px solid var(--line); border-radius: 16px; padding: 14px; background: rgba(255,255,255,.025); }
+    .ops-item small { display: block; font-family: 'IBM Plex Mono', monospace; color: var(--quiet); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .ops-item strong { display: block; margin-top: 7px; font-size: 17px; }
+    .ops-item span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .quick-actions a, .quick-actions button { min-height: 46px; border: 1px solid var(--line); border-radius: 14px; background: #111821; color: var(--text); font-size: 12px; font-weight: 800; }
+    .quick-actions a { display: grid; place-items: center; text-align: center; padding: 10px; }
+    .quick-actions a:hover, .quick-actions button:hover { border-color: var(--line-strong); background: var(--surface-3); }
+    .scrapers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 18px; }
+    .scraper { border: 1px solid var(--line); border-radius: 15px; padding: 13px; background: rgba(255,255,255,.022); min-height: 104px; display: flex; flex-direction: column; justify-content: space-between; }
+    .scraper:hover { background: rgba(255,255,255,.04); border-color: var(--line-strong); }
+    .scraper strong { font-size: 14px; line-height: 1.1; }
+    .scraper span { color: var(--quiet); font-family: 'IBM Plex Mono', monospace; font-size: 10px; }
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 18px; z-index: 100; background: rgba(0,0,0,.72); }
+    .modal.open { display: flex; }
+    .modal-box { width: min(900px, 100%); max-height: min(760px, 86vh); overflow: auto; border: 1px solid var(--line-strong); border-radius: 24px; background: #0e141b; box-shadow: var(--shadow); padding: 20px; }
+    .modal-head { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+    .modal-head h2 { font-size: 25px; }
+    .close { width: 42px; height: 42px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.05); color: var(--text); font-size: 22px; }
+    .hidden-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+    .footer { color: var(--quiet); font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 4px 0; }
+    @media (max-width: 1180px) { .layout { grid-template-columns: 1fr; } .rail { position: static; min-height: auto; flex-direction: row; align-items: center; } .rail-note { display: none; } .nav { grid-template-columns: repeat(4, auto); display: grid; margin-left: auto; } .work-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 780px) { .shell { width: min(100% - 22px, 1380px); padding-top: 12px; } .rail { border-radius: 18px; padding: 14px; display: grid; } .nav { grid-template-columns: 1fr 1fr; margin-left: 0; } .topline { grid-template-columns: 1fr; border-radius: 18px; } .status-card { width: 100%; } .command input { height: 58px; font-size: 16px; } .cards { grid-template-columns: 1fr; grid-auto-rows: auto; } .tool, .tool.large, .tool.medium, .tool.small { grid-column: span 1; grid-row: span 1; min-height: 178px; } .tool.large h3 { font-size: clamp(33px, 12vw, 48px); } .scrapers { grid-template-columns: 1fr 1fr; } .quick-actions { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .brand-name { font-size: 32px; } .intro h1 { font-size: 34px; } .panel-head { align-items: flex-start; flex-direction: column; } .scrapers { grid-template-columns: 1fr; } .tool { min-height: 160px; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="layout">
+      <aside class="rail">
+        <div class="brand">
+          <button id="secretLogo" type="button" aria-label="Hub"><span class="brand-name">Hub</span></button>
+          <span class="brand-sub">conceito chatgpt · operação</span>
+        </div>
+        <nav class="nav" aria-label="Navegação principal">
+          <a href="#ferramentas">Ferramentas <small>06</small></a>
+          <a href="#scrapers">Scrapers <small>08</small></a>
+          <button id="hiddenBtn" type="button">Internas <small>04</small></button>
+          <button id="quickBtn" type="button">Busca Dufrio <small>↗</small></button>
+        </nav>
+        <div class="rail-note"><strong>Decisão visual</strong><span>Sem neon, sem hero de marketing e sem card decorativo. A interface prioriza busca, leitura rápida e rotina de uso.</span></div>
+      </aside>
+
+      <main class="main">
+        <section class="topline" aria-label="Resumo do Hub">
+          <div class="intro">
+            <div class="intro-eyebrow">Painel de trabalho</div>
+            <h1>Ferramentas abertas em poucos segundos.</h1>
+            <p>Conceito independente para testar uma direção mais técnica, escura e madura para o Hub. O foco é operação diária: buscar, abrir e seguir trabalhando.</p>
+          </div>
+          <div class="status-card">
+            <div class="status-row"><span>STATUS</span><span class="pulse"></span></div>
+            <strong>Online</strong>
+            <span>Protótipo visual separado. Não substitui o index principal.</span>
+          </div>
+        </section>
+
+        <section class="command" aria-label="Busca de ferramentas">
+          <div class="command-inner">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="search" type="search" placeholder="Digite scraper, corte, checklist, preço, 365, câmara..." autocomplete="off" aria-controls="results">
+          </div>
+          <div id="results" class="results" role="listbox"></div>
+        </section>
+
+        <div class="work-grid">
+          <section id="ferramentas" class="panel">
+            <div class="panel-head"><div><h2>Mesa principal</h2><span>cards por importância</span></div></div>
+            <div id="toolGrid" class="cards"></div>
+          </section>
+
+          <aside class="side-stack">
+            <section class="panel ops">
+              <div class="ops-item"><small>Última atualização</small><strong>Conceito visual ChatGPT</strong><span>Protótipo criado para comparação com o projeto do Antigravity.</span></div>
+              <div class="ops-item"><small>Direção</small><strong>Premium técnico</strong><span>Grafite, âmbar, verde petróleo, linhas secas e hierarquia prática.</span></div>
+              <div class="quick-actions">
+                <a href="scraper-ar.html">Scraper oficial</a>
+                <a href="simulador-gabinete.html">Simulador 3D</a>
+                <button id="hiddenBtn2" type="button">Ferramentas internas</button>
+                <a href="index.html">Index atual</a>
+              </div>
+            </section>
+          </aside>
+        </div>
+
+        <section id="scrapers" class="panel">
+          <div class="panel-head"><div><h2>Scrapers individuais</h2><span>lojas monitoradas</span></div></div>
+          <div id="scraperGrid" class="scrapers"></div>
+        </section>
+        <div class="footer">Protótipo independente · criado para avaliação visual · não altera as ferramentas reais</div>
+      </main>
+    </div>
+  </div>
+
+  <div id="hiddenModal" class="modal" role="dialog" aria-modal="true" aria-label="Ferramentas internas">
+    <div class="modal-box">
+      <div class="modal-head"><div><h2>Ferramentas internas</h2><p style="color:var(--muted);margin-top:6px">Acesso preservado por botão e clique triplo no nome Hub.</p></div><button class="close" data-close type="button">&times;</button></div>
+      <div id="hiddenGrid" class="hidden-grid"></div>
+    </div>
+  </div>
+
+  <div id="quickModal" class="modal" role="dialog" aria-modal="true" aria-label="Busca rápida Dufrio">
+    <div class="modal-box" style="height:min(760px,86vh);padding:0;overflow:hidden"><button class="close" data-close-quick type="button" style="position:absolute;right:28px;top:28px;z-index:2">&times;</button><iframe id="quickFrame" title="Busca Dufrio" src="" style="width:100%;height:100%;border:0;background:#0b0f14"></iframe></div>
+  </div>
+
+  <script>
+    const tools = [
+      { name: 'Scraper Ar Condicionado', tag: 'Ar-condicionado', code: 'AR-01', desc: 'Busca geral de ar-condicionado nas lojas monitoradas para comparação rápida.', url: 'scraper-ar.html', color: '#c88f3d', size: 'large', terms: 'scraper oficial ar condicionado preço lojas mercado' },
+      { name: 'Comparador de preços', tag: 'Ar-condicionado', code: 'AR-02', desc: 'Compara ofertas entre lojas e ajuda a validar oportunidade comercial.', url: 'comparador-ar.html', color: '#8e9cc9', size: 'medium', terms: 'comparador preços ofertas lojas ar condicionado' },
+      { name: 'Precificação', tag: 'Site x 365', code: 'AR-03', desc: 'Ajuste de valores entre site e Dynamics 365 por SKU.', url: 'precificacao-ar.html', color: '#6aa8a0', size: 'small', terms: 'precificação sku 365 site dynamics' },
+      { name: 'Simulador 3D', tag: 'Câmara fria', code: 'CF-01', desc: 'Visualização e apoio de cálculo para gabinete de câmara fria.', url: 'simulador-gabinete.html', color: '#7fb0c2', size: 'medium', terms: 'simulador gabinete camara fria 3d painel' },
+      { name: 'Plano de corte', tag: 'Câmara fria', code: 'CF-02', desc: 'Otimização de painéis PIR/EPS para reduzir sobra.', url: 'plano-corte.html', color: '#d08a54', size: 'small', terms: 'plano corte painel pir eps camara fria' },
+      { name: 'Checklist em PDF', tag: 'Câmara fria', code: 'CF-03', desc: 'Levantamento técnico padronizado com geração de PDF.', url: 'CheckList.html', color: '#7aaa6a', size: 'small', terms: 'checklist check list pdf orçamento camara fria' }
+    ];
+    const hiddenTools = [
+      { name: 'Extrator de Códigos', tag: 'Utilitário', code: 'IN-01', desc: 'Extrai códigos e quantidades em estoque.', url: 'itens-quantidade.html', color: '#b178bb', size: 'small', terms: 'extrator códigos estoque quantidade' },
+      { name: 'Preços ao Vivo', tag: 'Extensão', code: 'IN-02', desc: 'Mostra ofertas capturadas pela extensão.', url: 'precos-ao-vivo.html', color: '#7aaa6a', size: 'small', terms: 'preços vivo extensão ofertas' },
+      { name: 'Cotação Express', tag: 'Infraestrutura', code: 'IN-03', desc: 'Orçamentos rápidos de infraestrutura.', url: 'cotacoes.html', color: '#9f8bd0', size: 'small', terms: 'cotação express infraestrutura orçamento' },
+      { name: 'Baixar Extensão', tag: 'Sistema', code: 'IN-04', desc: 'Download da extensão para Chrome ou Edge.', url: 'baixar-extensao.html', color: '#9aa7b8', size: 'small', terms: 'baixar extensão chrome edge' }
+    ];
+    const scrapers = [
+      ['Scraper Dufrio','scraper-dufrio.html','Dufrio'], ['Scraper Clima Rio','scraper-climario.html','Clima Rio'], ['Scraper Frigelar','scraper-frigelar.html','Frigelar'], ['Scraper Leveros','scraper-leveros.html','Leveros'], ['Scraper Central Ar','scraper-centralar.html','Central Ar'], ['Scraper FrioPeças','scraper-friopecas.html','FrioPeças'], ['Scraper Polo Ar','scraper-poloar.html','Polo Ar'], ['Scraper WebContinental','scraper-webcontinental.html','WebContinental']
+    ];
+    const norm = text => String(text || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const card = item => `<a class="tool ${item.size}" href="${item.url}" style="--tool-color:${item.color}"><div class="tool-top"><span class="tool-tag">${item.tag}</span><span class="tool-code">${item.code}</span></div><div><h3>${item.name}</h3><p>${item.desc}</p><span class="tool-action">Abrir</span></div></a>`;
+    document.getElementById('toolGrid').innerHTML = tools.map(card).join('');
+    document.getElementById('hiddenGrid').innerHTML = hiddenTools.map(card).join('');
+    document.getElementById('scraperGrid').innerHTML = scrapers.map(([name, url, loja]) => `<a class="scraper" href="${url}"><strong>${name}</strong><span>${loja}</span></a>`).join('');
+    const allItems = [...tools, ...hiddenTools, ...scrapers.map(([name,url,loja]) => ({ name, url, tag:'Scraper individual', code:loja, desc:'Abrir scraper individual da loja.', terms: loja }))].map(item => ({ ...item, search: norm(`${item.name} ${item.tag} ${item.code} ${item.desc} ${item.terms}`) }));
+    const search = document.getElementById('search');
+    const results = document.getElementById('results');
+    let active = -1;
+    let matches = [];
+    function closeResults(){ results.classList.remove('open'); active = -1; }
+    function openItem(item){ if(item?.url) window.location.href = item.url; }
+    function draw(){
+      const q = norm(search.value.trim());
+      results.innerHTML = '';
+      if(!q) return closeResults();
+      matches = allItems.filter(item => item.search.includes(q)).slice(0, 7);
+      results.classList.add('open');
+      if(!matches.length){ results.innerHTML = '<div class="result"><strong>Nada encontrado</strong><span>Tente buscar por loja, ferramenta ou categoria.</span></div>'; return; }
+      matches.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'result';
+        btn.type = 'button';
+        btn.innerHTML = `<strong><span>${item.name}</span><em>${item.tag || item.code}</em></strong><span>${item.desc}</span>`;
+        btn.addEventListener('mouseenter', () => { active = index; mark(); });
+        btn.addEventListener('click', () => openItem(item));
+        results.appendChild(btn);
+      });
+    }
+    function mark(){ results.querySelectorAll('.result').forEach((el,i)=>el.classList.toggle('active', i===active)); }
+    search.addEventListener('input', draw);
+    search.addEventListener('focus', draw);
+    search.addEventListener('keydown', e => { if(!results.classList.contains('open')) return; if(e.key==='Escape') return closeResults(); if(!matches.length) return; if(e.key==='ArrowDown'){ e.preventDefault(); active=(active+1)%matches.length; mark(); } if(e.key==='ArrowUp'){ e.preventDefault(); active=(active-1+matches.length)%matches.length; mark(); } if(e.key==='Enter'){ e.preventDefault(); openItem(matches[Math.max(active,0)]); } });
+    document.addEventListener('click', e => { if(!e.target.closest('.command')) closeResults(); });
+    const hiddenModal = document.getElementById('hiddenModal');
+    const quickModal = document.getElementById('quickModal');
+    function openHidden(){ hiddenModal.classList.add('open'); document.body.style.overflow='hidden'; }
+    function openQuick(){ document.getElementById('quickFrame').src='scraper-dufrio.html'; quickModal.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeModal(){ hiddenModal.classList.remove('open'); quickModal.classList.remove('open'); document.body.style.overflow=''; }
+    document.getElementById('hiddenBtn').addEventListener('click', openHidden);
+    document.getElementById('hiddenBtn2').addEventListener('click', openHidden);
+    document.getElementById('quickBtn').addEventListener('click', openQuick);
+    document.querySelectorAll('[data-close],[data-close-quick]').forEach(btn => btn.addEventListener('click', closeModal));
+    document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if(e.target === modal) closeModal(); }));
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+    let taps = [];
+    document.getElementById('secretLogo').addEventListener('click', () => { const now = Date.now(); taps = taps.filter(t => now - t < 1800); taps.push(now); if(taps.length >= 3){ taps = []; openHidden(); } });
+  </script>
+</body>
+</html>
