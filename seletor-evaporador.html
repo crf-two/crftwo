@@ -7,7 +7,7 @@
   <title>Seletor UC x Evaporador</title>
   <link rel="stylesheet" href="hub-workbench.css">
   <style>
-    .selector-main{display:grid;grid-template-columns:minmax(280px,420px) minmax(0,1fr);gap:12px;margin-top:12px;align-items:start}.topbar.selector-top{grid-template-columns:1fr auto}.back-link{min-height:36px;border:1px solid var(--line2);background:var(--row);color:var(--text);display:grid;place-items:center;padding:8px 12px;font-size:12px;font-weight:800}.back-link:hover{background:var(--hover)}.panel-body{padding:12px}.control-grid{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{color:var(--quiet);font-size:10px;font-weight:850;letter-spacing:.8px;text-transform:uppercase}.field select{width:100%;height:42px;border:1px solid var(--line2);background:#0f1113;color:var(--text);outline:none;padding:0 10px;font-size:14px;font-weight:720}.field select:focus{border-color:var(--accent)}.command-row{display:grid;gap:8px;margin-top:12px}.calc-button{min-height:42px;border:1px solid var(--accent);background:#17120b;color:var(--text);font-size:12px;font-weight:850;letter-spacing:.4px;text-transform:uppercase}.calc-button:hover{background:#1e170e}.result-body{display:grid;gap:12px;padding:12px}.result-text{min-height:282px;border:1px solid var(--line);background:#101214;color:var(--text);padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font:650 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.detail-box{border:1px solid var(--line);background:var(--row);padding:11px;color:var(--muted);font-size:12px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}.rule-grid{display:grid;gap:1px;background:var(--line)}.rule-item{display:grid;gap:5px;background:var(--row);padding:11px}.rule-item strong{font-size:12px;color:var(--text)}.rule-item span{font-size:12px;color:var(--muted);line-height:1.35}.wide{grid-column:1/-1}#modoResultado{color:var(--accent);font-weight:850;text-transform:uppercase}@media(max-width:860px){.selector-main{grid-template-columns:1fr}.topbar.selector-top{grid-template-columns:1fr}.back-link{width:100%}.result-text{min-height:auto}}@media(max-width:480px){.wrap{width:min(100% - 20px,1280px)}.panel-body,.result-body{padding:10px}.field select{height:46px;font-size:15px}.calc-button{min-height:46px}.result-text{font-size:12.5px}.detail-box{font-size:12px}}
+    .selector-main{display:grid;grid-template-columns:minmax(280px,420px) minmax(0,1fr);gap:12px;margin-top:12px;align-items:start}.topbar.selector-top{grid-template-columns:1fr auto}.back-link{min-height:36px;border:1px solid var(--line2);background:var(--row);color:var(--text);display:grid;place-items:center;padding:8px 12px;font-size:12px;font-weight:800}.back-link:hover{background:var(--hover)}.panel-body{padding:12px}.control-grid{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{color:var(--quiet);font-size:10px;font-weight:850;letter-spacing:.8px;text-transform:uppercase}.field select{width:100%;height:42px;border:1px solid var(--line2);background:#0f1113;color:var(--text);outline:none;padding:0 10px;font-size:14px;font-weight:720}.field select:focus{border-color:var(--accent)}.command-row{display:grid;gap:8px;margin-top:12px}.calc-button{min-height:42px;border:1px solid var(--accent);background:#17120b;color:var(--text);font-size:12px;font-weight:850;letter-spacing:.4px;text-transform:uppercase}.calc-button:hover{background:#1e170e}.result-body{display:grid;gap:12px;padding:12px}.result-text{min-height:282px;border:1px solid var(--line);background:#101214;color:var(--text);padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;font:650 13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.detail-box{border:1px solid var(--line);background:var(--row);padding:11px;color:var(--muted);font-size:12px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}#modoResultado{color:var(--accent);font-weight:850;text-transform:uppercase}@media(max-width:860px){.selector-main{grid-template-columns:1fr}.topbar.selector-top{grid-template-columns:1fr}.back-link{width:100%}.result-text{min-height:auto}}@media(max-width:480px){.wrap{width:min(100% - 20px,1280px)}.panel-body,.result-body{padding:10px}.field select{height:46px;font-size:15px}.calc-button{min-height:46px}.result-text{font-size:12.5px}.detail-box{font-size:12px}}
   </style>
 </head>
 <body>
@@ -25,36 +25,27 @@
         <div class="panel-head"><h2>Parâmetros</h2><span class="mono">catálogo</span></div>
         <div class="panel-body">
           <div class="control-grid">
-            <div class="field"><label for="uc">UC</label><select id="uc"></select></div>
-            <div class="field"><label for="evap">Evaporação</label><select id="evap"></select></div>
-            <div class="field"><label for="amb">Ambiente</label><select id="amb"></select></div>
-            <div class="field"><label for="perfil">Perfil do evaporador</label><select id="perfil"></select></div>
+            <div class="field"><label for="uc">UC DANFOSS</label><select id="uc" autocomplete="off"></select></div>
+            <div class="field"><label for="evap">TEMPERATURA DE EVAPORAÇÃO</label><select id="evap" autocomplete="off"></select></div>
+            <div class="field"><label for="amb">TEMPERATURA AMBIENTE</label><select id="amb" autocomplete="off"></select></div>
+            <div class="field"><label for="perfil">PERFIL EVAPORADOR</label><select id="perfil" autocomplete="off"></select></div>
           </div>
           <div class="command-row"><button class="calc-button" id="manual">Dimensionar evaporador</button></div>
         </div>
       </section>
 
       <section class="panel">
-        <div class="panel-head"><h2>Resultado técnico</h2><span id="modoResultado" class="mono">auto</span></div>
+        <div class="panel-head"><h2>Resultado técnico</h2><span id="modoResultado" class="mono">aguardando</span></div>
         <div class="result-body">
           <pre class="result-text" id="saida"></pre>
           <div class="detail-box" id="detalhes"></div>
-        </div>
-      </section>
-
-      <section class="panel wide">
-        <div class="panel-head"><h2>Critério de seleção</h2><span class="mono">TRN / FTBN</span></div>
-        <div class="rule-grid">
-          <div class="rule-item"><strong>Automático</strong><span>Prioriza médio perfil TRN. Se não atender, seleciona baixo perfil FTBN.</span></div>
-          <div class="rule-item"><strong>Médio perfil</strong><span>Filtra apenas evaporadores TRN.</span></div>
-          <div class="rule-item"><strong>Baixo perfil</strong><span>Filtra apenas evaporadores FTBN.</span></div>
         </div>
       </section>
     </main>
 
     <footer class="foot mono"><span class="status-line"><i class="dot"></i> Online</span><span>Seletor UC x Evaporador</span></footer>
   </div>
-  <script src="seletor-evaporador-dados.js"></script>
-  <script src="seletor-evaporador-app.js"></script>
+  <script src="seletor-evaporador-dados.js?v=202606242018"></script>
+  <script src="seletor-evaporador-app.js?v=202606242018"></script>
 </body>
 </html>
