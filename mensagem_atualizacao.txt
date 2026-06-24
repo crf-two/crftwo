@@ -1,1 +1,1 @@
-Seletor inicia sem seleção preenchida
+Atualiza rotulos e remove criterio
