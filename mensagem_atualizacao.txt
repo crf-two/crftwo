@@ -1,1 +1,1 @@
-Mostra tipo do evaporador no seletor
+Seletor inicia sem seleção preenchida
