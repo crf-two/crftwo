@@ -1,1 +1,1 @@
-Ajusta hierarquia visual do Workbench
+Otimiza Seletor UC x Evaporador no mobile
