@@ -1,4 +1,4 @@
-window.LATEST_LOG = { message: 'Aplica Workbench como index oficial', dateIso: '2026-06-24T19:21:00-03:00' };
+window.LATEST_LOG = { message: 'Adiciona FTBN ao Seletor UC x Evaporador', dateIso: '2026-06-24T19:18:22-03:00' };
 
 (function iniciarWorkbench() {
   var tools = [
@@ -8,7 +8,7 @@ window.LATEST_LOG = { message: 'Aplica Workbench como index oficial', dateIso: '
     { code:'04', name:'Comparador de preços', desc:'Análise de ofertas entre lojas e referências de mercado.', cat:'Ar-condicionado', url:'comparador-ar.html', level:'support', terms:'comparador comparação preços ofertas ar condicionado' },
     { code:'05', name:'Checklist em PDF', desc:'Levantamento técnico padronizado.', cat:'Câmara fria', url:'CheckList.html', level:'support', terms:'checklist check list pdf orçamento câmara fria' },
     { code:'06', name:'Precificação', desc:'Cálculo Site x 365 por SKU.', cat:'Site x 365', url:'precificacao-ar.html', level:'support', terms:'precificação sku 365 site dynamics' },
-    { code:'07', name:'Seletor UC x Evaporador', desc:'Cruza UC Danfoss com evaporador Trineva compatível.', cat:'Câmara fria', url:'seletor-evaporador.html', level:'support', terms:'seletor uc evaporador danfoss trineva câmara fria' }
+    { code:'07', name:'Seletor UC x Evaporador', desc:'Cruza UC Danfoss com evaporadores Trineva TRN/FTBN.', cat:'Câmara fria', url:'seletor-evaporador.html', level:'support', terms:'seletor uc evaporador danfoss trineva câmara fria trn ftbn' }
   ];
 
   var hidden = [
